@@ -1,0 +1,78 @@
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+axis equal image,
+xmin=-.24,
+xmax=1.06,
+%xlabel={$x$},
+ymin=-0.25,
+ymax=1.2,
+%ylabel={$z$},
+axis line style={draw=none},
+tick style={draw=none},
+ticks=none,
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white}
+]
+%\draw [mycolor0,decorate,decoration={brace,amplitude=2pt},xshift=-.1mm,yshift=-.9mm] (axis cs:0,0) -- (axis cs:-.0706,.0052) node [black,rotate=81.9-90,midway,yshift=-6mm]  {$\projmat{a}\vec{v}$};
+% (cos(tmp/180*pi),-sin(tmp/180*pi))
+\draw[mycolor0] (axis cs:-.0706,.0052) -- (axis cs:-.0706-.0050,.0052-.0705) coordinate (D1) -- (axis cs:-.0706-.0050*1.5,.0052-.0705*1.5);
+\draw[mycolor0] (axis cs:0,0) -- (axis cs:0-.0050,0-.0705) coordinate (D2) -- (axis cs:0-.0050*1.5,0-.0705*1.5);
+\draw[dimen,-,mycolor0] (D1) -- (D2) node [rotate=-4.0596,yshift=-4mm,black] {$\norm{\projmat{\flat{a}} \vec{\flat{v}}}$};
+\draw[dimen,rotate=-4.0596,<-,mycolor0] (D1) -- ++(-8pt,0);
+\draw[dimen,rotate=-4.0596,<-,mycolor0] (D2) -- ++(+8pt,0);
+
+\draw[fill=mycolor2!10,draw=mycolor2] (axis cs:0,1+.14142) arc [start angle=90, end angle=450,radius={transformdirectionx(.14142)}] -- cycle;
+\draw[mycolor3,dashed] (axis cs:0,1) arc [start angle=90, end angle=55,radius={transformdirectionx(1)}];
+\draw[mycolor3,dashed] (axis cs:0,1) arc [start angle=90, end angle=105,radius={transformdirectionx(1)}];
+\addplot[mycolor0, dashed, forget plot]
+table[row sep=crcr] {%
+	.1409	.99\\
+	.0703	-.0048\\
+};
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.2652) arc [start angle=90, end angle=-4,radius={transformdirectionx(.70711/8*3)}] -- (axis cs:0,0) -- cycle;
+\draw (axis cs:0.1294,0.1124) node[rotate=0] {$\delta_{\max}$};
+% (.1714*cos(40.965/180*pi),.1714*sin(40.965/180*pi))
+\draw [mycolor0] (axis cs:-.0706-0.0705,.0052+0.0050) -- (axis cs:-.0706-0.0655,.0052+0.0755) -- (axis cs:-.0706+.0050,.0052+0.0705);
+% (-.07071*cos((90-tmp)/180*pi),-.07071*sin((90-tmp)/180*pi)) -- (-.1*cos((45-tmp)/180*pi),-.1*sin((45-tmp)/180*pi)) -- (-.07071*cos(tmp/180*pi),.07071*sin(tmp/180*pi))
+(axis cs:-.0706-0.0655,.0052+0.0755)
+(axis cs:-.0706-0.0705,.0052+0.0050)
+
+\addplot[mycolor0, dashed, forget plot]
+table[row sep=crcr] {%
+	0	1\\
+	-.0706	.0052\\
+};
+\draw (axis cs:.16+1/20,1.02) node[rotate=0] {$\vec{\flat{a}}$};
+\addplot[->, very thick, mycolor2, forget plot]
+table[row sep=crcr] {%
+	0	1\\
+	.1409	.99\\
+};
+\draw (axis cs:.83+0.1247,-.055-.0088) node[rotate=0] {$s \uvec{\flat{a}}$};
+% (.125*cos((90-tmp)/180*pi),.125*sin((90-tmp)/180*pi))
+\addplot[->, very thick, mycolor1, forget plot]
+table[row sep=crcr] {%
+	0	0\\
+	.8454	-.06\\
+};
+\addplot[very thick, dashed, mycolor1, forget plot]
+table[row sep=crcr] {%
+	0	0\\
+	-.4227	.03\\
+};
+\draw (axis cs:0,1.05) node[rotate=0] {$\vec{\flat{v}}$};
+\addplot[->, very thick, mycolor3, forget plot]
+table[row sep=crcr] {%
+0	0\\
+0	1\\
+};
+\end{axis}
+\end{tikzpicture}%

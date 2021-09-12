@@ -1,0 +1,107 @@
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+axis equal image,
+xmin=-.0125,
+xmax=.5125,
+%tick align=outside,
+%xlabel={$x$},
+ymin=-.01,
+ymax=1.01,
+%ylabel={$y$},
+zmin=-.005,
+zmax=.2005,
+%zlabel={$z$},
+view={15}{25},
+axis line style={draw=none},
+tick style={draw=none},
+ticks=none,
+%axis x line*=bottom,
+%axis y line*=left,
+%axis z line*=left,
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+every outer z axis line/.append style={white!40!black},
+every z tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white}
+]
+\draw [mycolor0] (axis cs:0,.75,.05) -- (axis cs:0,.75+.05,.05) -- (axis cs:0,.75+.05,0);
+\addplot3[area legend, draw=black!40!mycolor5, fill=mycolor5, fill opacity=0.4, forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+-0			1		0\\
+-0			0			0\\
+.5			0		0\\
+.5			1		0\\
+}--cycle;
+
+%\addplot3 [->,very thick,color=mycolor5]
+%table[row sep=crcr] {%
+%	0	0	0\\
+%	0	0	1\\
+%};
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.75+.2,0) arc [start angle=90, end angle=26.5651,radius={transformdirectionx(.2)}] -- (axis cs:0,.75,0) -- cycle;
+\draw (axis cs:.1051/1.6,.75+.1701/1.6,0) node[rotate=0] {$\delta$};
+
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,0+.24,0) arc [start angle=90, end angle=63.4349,radius={transformdirectionx(.24)}] -- (axis cs:0,0,0) -- cycle;
+\draw (axis cs:.0460/1.15,0+.1946/1.15) node[rotate=0] {$\varphi$};
+
+% axis
+\addplot3 [white!40!black, forget plot]
+table[row sep=crcr] {%
+	0	0	.2\\
+	0	1	.2\\
+	.5	1	.2\\
+	.5	1	0\\
+};
+\addplot3 [white!40!black, forget plot]
+table[row sep=crcr] {%
+0	1	0\\
+0	1	.2\\
+};
+
+\addplot3 [dashed, mycolor0, forget plot]
+table[row sep=crcr] {%
+	0	.75	.2\\
+	0	.75	0\\
+};
+
+\addplot3 [dashed,very thick, mycolor3, forget plot]
+table[row sep=crcr] {%
+	0	.75	0\\
+	0	1	0\\
+};
+\addplot3 [->, very thick, mycolor1, forget plot]
+table[row sep=crcr] {%
+	0	0	0\\
+	0.5	1	0\\
+};
+\addplot3 [->, very thick, mycolor2, forget plot]
+table[row sep=crcr] {%
+	0	.75	0\\
+	0.5	1	0\\
+};
+\addplot3 [->, densely dotted, very thick, mycolor3, forget plot]
+table[row sep=crcr] {%
+	0	0	0\\
+	0	.75	.2\\
+};
+\addplot3 [->, very thick, mycolor3, forget plot]
+table[row sep=crcr] {%
+	0	0	0\\
+	0	.75	0\\
+};
+\addplot3 [->, very thick, mycolor5, forget plot]
+table[row sep=crcr] {%
+	0	0	0\\
+	0	0	.2\\
+};
+
+\end{axis}
+\end{tikzpicture}%

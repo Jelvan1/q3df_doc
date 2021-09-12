@@ -1,0 +1,59 @@
+\section{Field of view}
+\label{app:fov}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm} 
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/fov_1D}
+		\caption{}
+	\end{subfigure}%
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm} 
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/fov_1D_}
+		\caption{}
+	\end{subfigure}%
+	\caption{TODO}
+	\label{fig:fov}
+\end{figure}
+Field of view $\Lambda_x$\footnote{The field of view $\Lambda_x$ is expressed in radians, while \texttt{cg\_fov} in degrees.} (\texttt{cg\_fov})
+\begin{align*}
+w &= 2\tan\frac{\Lambda_x}{2}\\
+S &= \frac{W}{w} = \frac{W}{2\tan\frac{\Lambda_x}{2}}
+\end{align*}
+with $W = 640$ the width of the default screen \texttt{SCREEN\_WIDTH}.
+
+$\alpha$ is the desired yaw angle and $\gamma$ current viewing direction
+\begin{align*}
+x &=
+\begin{cases}
+-\tan\frac{\Lambda_x}{2}, & \gamma - \alpha  \le -\frac{\Lambda_x}{2}, \\
+\tan(\gamma - \alpha), & \abs{\gamma - \alpha} < \frac{\Lambda_x}{2},\\
+\tan\frac{\Lambda_x}{2}, & \gamma - \alpha \ge \frac{\Lambda_x}{2},
+\end{cases}
+\end{align*}
+
+\begin{align*}
+X &= \frac{W}{2} + \frac{W}{2}\frac{x}{\tan\frac{\Lambda_x}{2}},\\
+X &=
+\begin{cases}
+0, & \gamma - \alpha  \le -\frac{\Lambda_x}{2}, \\
+\frac{W}{2} + \frac{W}{2}\frac{\tan(\gamma - \alpha)}{\tan\frac{\Lambda}{2}}, & \abs{\gamma - \alpha} < \frac{\Lambda_x}{2},\\
+W, & \gamma - \alpha \ge \frac{\Lambda_x}{2},
+\end{cases}                                 
+\end{align*}
+
+\begin{align*}
+X_2 - X_1 &= - \frac{\tan(\alpha_{<}-\gamma)}{\tan\left(\frac{\texttt{cg\_fov}}{2}\right)} \frac{\texttt{SCREEN\_WIDTH}}{2} + \frac{\tan(\alpha_{>}-\gamma)}{\tan\left(\frac{\texttt{cg\_fov}}{2}\right)} \frac{\texttt{SCREEN\_WIDTH}}{2}\\
+width &= \frac{\texttt{SCREEN\_WIDTH}}{2} \frac{\tan(\alpha_{>}-\gamma) - \tan(\alpha_{<}-\gamma)}{\tan\left(\frac{\texttt{cg\_fov}}{2}\right)}
+\end{align*}
+
+\begin{align*}
+y &= \tan(\beta-\rho)\\
+Y &= \frac{H}{2} + Sy\\
+y &= 240 + 320\frac{\tan(\beta-\rho)}{\tan\frac{\Lambda}{2}}
+\end{align*}

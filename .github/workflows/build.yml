@@ -1,0 +1,85 @@
+name: build 
+
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+
+  workflow_dispatch:
+
+jobs:
+  ubuntu:
+    name: Quake III DeFRaG Physics
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: main.tex
+          latexmk_shell_escape: true
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: main.pdf
+          if-no-files-found: error
+          retention-days: 5
+
+  release:
+    name: Release
+    if: github.ref == 'refs/heads/master'
+    needs: ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: bin/
+
+      - uses: actions/github-script@v3.1.0
+        id: script
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            // delete latest release
+            try {
+              const release = await github.repos.getReleaseByTag({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag: "master",
+              });
+              console.log(`Found latest release`)
+              await github.repos.deleteRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: release.data.id,
+              });
+              console.log(`Deleted latest release`);
+            } catch (e) {
+              console.log(`Failed deleting latest release: ${e.message}`);
+            }
+
+      - uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          body: "Quake III DeFRaG Physics"
+          draft: false
+          prerelease: false
+          files: |
+            bin/main.pdf
+          name: Latest pdf
+          tag_name: master

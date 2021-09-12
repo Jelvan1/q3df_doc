@@ -1,0 +1,59 @@
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+axis equal image,
+xmin=0,
+xmax=1.475,
+xlabel={$x$},
+ymin=0,
+ymax=.925,
+axis lines = middle,
+ylabel={$y$},
+xlabel near ticks,
+ylabel near ticks,
+axis x line*=bottom,
+axis y line*=left,
+%axis line style={draw=none},
+tick style={draw=none},
+ticks=none,
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white}
+]
+\draw[fill=mycolor2!10,draw=mycolor2] (axis cs:1,.5+.3) arc [start angle=90, end angle=450,radius={transformdirectionx(.3)}] -- cycle;
+
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:1,.5+.2) arc [start angle=90, end angle=90-63.4349,radius={transformdirectionx(.2)}] -- (axis cs:1,.5) -- cycle;
+\draw (axis cs:1+.1051/1.55,.5+.1701/1.55) node[rotate=0] {$\delta$};
+
+%\draw [mycolor0] (axis cs:1,.5+.07071) -- (axis cs:1+.07071,.5+.07071) -- (axis cs:1+.07071,.5);
+
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0+.24,0) arc [start angle=0, end angle=90-63.4349,radius={transformdirectionx(.24)}] -- (axis cs:0,0) -- cycle;
+\draw (axis cs:.1946*1.45,0+.0460*1.45) node[rotate=0] {$\nu$};
+
+\addplot[very thick, dashed, mycolor3, forget plot]
+table[row sep=crcr] {%
+	1	.5\\
+	1.375	.6875\\
+};
+\draw (axis cs:1-.70711/6,.5+.70711/40) node[rotate=0] {$\vec{\flat{v}}_f$};
+\addplot[->, very thick, mycolor3, forget plot]
+table[row sep=crcr] {%
+	0	0\\
+	1	.5\\
+};
+\draw (axis cs:1,.8+.70711/15) node[rotate=0] {$\vec{\fmove}$};
+\draw (axis cs:1.35+.70711/18,.5) node[rotate=0] {$\vec{\rmove}$};
+\addplot[<->, very thick, mycolor2, forget plot]
+table[row sep=crcr] {%
+	1.3	.5\\
+	1	.5\\
+	1	.8\\
+};
+\end{axis}
+\end{tikzpicture}%

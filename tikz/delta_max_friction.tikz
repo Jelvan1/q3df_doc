@@ -1,0 +1,74 @@
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+axis equal image,
+xmin=-.25,
+xmax=1.0,
+%xlabel={$x$},
+ymin=-0.25,
+ymax=1.2,
+%ylabel={$z$},
+axis line style={draw=none},
+tick style={draw=none},
+ticks=none,
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white}
+]
+\draw[mycolor0] (axis cs:.38589,.246916) -- (axis cs:.38589+.03811,.246916-.05956) coordinate (D1) -- (axis cs:.38589+.03811*1.5,.246916-.05956*1.5);
+\draw[mycolor0] (axis cs:0,0) -- (axis cs:0+.03811,0-.05956) coordinate (D2) -- (axis cs:0+.03811*1.5,0-.05956*1.5);
+\draw[dimen,-,mycolor0] (D1) -- (D2) node [rotate=32.61,yshift=-4mm,black] {$\norm{\projmat{\flat{a}} \vec{\flat{v}}_f}$};
+\draw[dimen,rotate=32.61,<-,mycolor0] (D1) -- ++(-8pt,0);
+\draw[dimen,rotate=32.61,<-,mycolor0] (D2) -- ++(+8pt,0);
+
+\draw[fill=mycolor2!10,draw=mycolor2] (axis cs:0,.85+.24) arc [start angle=90, end angle=450,radius={transformdirectionx(.24)}] -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.2652) arc [start angle=90, end angle=32.61,radius={transformdirectionx(.70711/8*3)}] -- (axis cs:0,0) -- cycle;
+\draw (axis cs:.068*1.95,.155*1.95) node[rotate=0] {$\delta_{\max}$};
+\draw [mycolor0] (axis cs:.38589-.05956,.246916-.03811) -- (axis cs:.38589-.09767,.246916+.02145) -- (axis cs:.38589-.03811,.246916+.05956);
+% (-.07071*cos((90-tmp)/180*pi),-.07071*sin((90-tmp)/180*pi)) -- (-.1*cos((45-tmp)/180*pi),-.1*sin((45-tmp)/180*pi)) -- (-.07071*cos(tmp/180*pi),.07071*sin(tmp/180*pi))
+
+\draw[mycolor3,dashed] (axis cs:0,1) arc [start angle=90, end angle=105,radius={transformdirectionx(1)}];
+\draw[mycolor3,dashed] (axis cs:0,1) arc [start angle=90, end angle=55,radius={transformdirectionx(1)}];
+
+\addplot[mycolor0, dashed, forget plot]
+table[row sep=crcr] {%
+	0	.85\\
+	.38589	.246916\\
+};
+\addplot[mycolor0, dashed, forget plot]
+table[row sep=crcr] {%
+	.202158	.979353\\
+	.588048	.376269\\
+};
+\draw (axis cs:.295-.70711/20,1.045-.70711/20) node[rotate=0] {$\vec{\flat{a}}$};
+\addplot[->, very thick, mycolor2, forget plot]
+table[row sep=crcr] {%
+	0	.85\\
+	.202158	.979353\\
+};
+\draw (axis cs:.7084-1/20,.4533+1.5/20) node[rotate=0] {$s \uvec{\flat{a}}$};
+\addplot[->, very thick, mycolor1, forget plot]
+table[row sep=crcr] {%
+	0	0\\
+	0.7084		0.4533\\
+};
+\draw (axis cs:-.07,1-.063) node[rotate=0] {$\vec{\flat{v}}$};
+\addplot[->, very thick, densely dotted, mycolor3, forget plot]
+table[row sep=crcr] {%
+0	0\\
+0	1\\
+};
+\draw (axis cs:-.1,.85-.063) node[rotate=0] {$\vec{\flat{v}}_f$};
+\addplot[->, very thick, mycolor3, forget plot]
+table[row sep=crcr] {%
+0	0\\
+0	.85\\
+};
+\end{axis}
+\end{tikzpicture}%

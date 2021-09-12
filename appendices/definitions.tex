@@ -1,0 +1,77 @@
+\section{Definitions}
+\label{app:definitions}
+
+\subsection*{Vector}
+\cite{dot_product}\\
+An $n$-dimensional vector is represented as
+\[
+\lcr{}{
+\vec{x} =
+\begin{pmatrix}
+x_1 \\ x_2 \\ \vdots \\ x_n
+\end{pmatrix} = \norm{\vec{x}} \uvec{x},
+}{
+\forall i \in \set{1, 2, ..., n}, x_i \in \mathbb{R},
+}
+\]
+where $x_1, x_2, ..., x_n$ are the components of $\vec{x}$. Alternatively, the vector is uniquely defined by its magnitude and direction. The magnitude is described by the \emph{norm}%
+\footnote{The norm $\norm{\cdot}$ represents the Euclidean norm, i.e. $\ell^2$-norm, unless specified otherwise.}
+\[
+\norm{\vec{x}} = \sqrt{\vec{x}^T \vec{x}} = \sqrt{\sum_{i=1}^{n} x_i^2} = x,
+\]
+and its direction with the \emph{unit vector}
+\[
+\lcr{}{
+\uvec{x} = \frac{\vec{x}}{\norm{\vec{x}}},
+}{
+\norm{\uvec{x}} = 1.
+}
+\]
+The \emph{dot product} of two vectors $\vec{a} = \inlinemat{a_1, a_2, \cdots, a_n}^T$ and $\vec{b} = \inlinemat{b_1, b_2, \cdots, b_n}^T$ can be defined both algebraically
+\[
+\vec{a} \cdot \vec{b} = \vec{a}^T \vec{b} = \sum_{i=1}^{n} a_i b_i,
+\]
+and geometrically
+\[
+\vec{a} \cdot \vec{b} = \norm{\vec{a}} \norm{\vec{b}} \cos{\theta},
+\]
+with $\theta$ the angle between the vectors. Note that when $\vec{a}$ and $\vec{b}$ are orthogonal, i.e. $\theta = \pi/2$, the dot product simplifies to
+\[
+\vec{a} \cdot \vec{b} = 0.
+\] 
+%On the other hand, when the vectors are codirectional (i.e. $\theta = 0$), the dot product becomes
+%\[
+%\vec{a} \cdot \vec{b} = \norm{\vec{a}} \norm{\vec{b}}.
+%\]
+
+\subsection*{Normal}
+\cite{euclidean_space,hyperplane,normal}\\
+A hyperplane, which is a flat $(n-1)$-dimensional subset of the $n$-dimensional Euclidean space, can be described by $n-1$ linearly independent in-plane vectors $\vec{x}_1, \vec{x}_2, ..., \vec{x}_{n-1}$ together with a point on this hyperplane $\vec{x}_0$. Hence, its parameterization
+\[
+\vec{r}(\vec{t}) = \vec{x}_0 + \mat{X} \vec{t},
+\]
+with $\mat{X} = \inlinemat{\vec{x}_1, \vec{x}_2, \cdots, \vec{x}_{n-1}}$ and $\vec{t} = \inlinemat{t_1, t_2, \cdots, t_{n-1}}^T$. Any vector in the kernel of $\mat{X}$, i.e. $\mat{X} \vec{n} = \vec{0}$, is perpendicular to the hyperplane and is called a \emph{normal}.
+%linear equation hyperplane?
+
+\subsection*{Projection}
+%\ref{app:projection}
+\cite{projection_matrix}\\
+An orthogonal projection can be performed by a matrix multiplication. To project \emph{onto} the vector $\vec{x}$, the matrix is defined by the outer product
+\begin{align*}
+\lcr{}{
+\projmat{x} = \uvec{x} \uvec{x}^T = \projmat{x}^T =
+\projmat{x}^k,
+}{
+k \in \mathbb{N}^+.
+}
+\end{align*}
+Similarly, to project \emph{along} the vector $\vec{x}$ onto its corresponding hyperplane, the matrix is defined by
+\begin{align*}
+\lcr{}{
+\resprojmat{x} = \mat{I} - \projmat{x} = \resprojmat{x}^T = \resprojmat{x}^k,
+}{
+k \in \mathbb{N}^+,
+}
+\end{align*}
+with $\mat{I}$ the identity matrix.
+%sometimes referred to as \emph{residual maker matrix}

@@ -1,0 +1,49 @@
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+axis equal image,
+xmin=-1.35,
+xmax=1.35,
+%xlabel={$x$},
+ymin=-1.1,
+ymax=1.35,
+%ylabel={$z$},
+%axis line style={draw=none},
+%tick style={draw=none},
+%ticks=none,
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white}
+]
+\draw[draw=mycolor0] (axis cs:0,0+1) arc [start angle=90, end angle=90+360,radius={transformdirectionx(1)}] -- cycle;
+\draw[draw=black] (axis cs:0,0+1) arc [start angle=90, end angle=90+50,radius={transformdirectionx(1)}];
+\draw[draw=black] (axis cs:0,0+1) arc [start angle=90, end angle=90-50,radius={transformdirectionx(1)}];
+
+\def\lijn{.15}
+\draw [mycolor0] (axis cs:\lijn,1) -- (axis cs:\lijn,1-\lijn) -- (axis cs:0,1-\lijn);
+
+\draw [mycolor0,dashed] (axis cs:0,0) -- (axis cs:-1.1918,1);
+\draw [mycolor0,dashed] (axis cs:0,0) -- (axis cs:1.1918,1);
+
+\draw [black] (axis cs:-1.1918,1) -- (axis cs:1.1918,1);
+
+\draw [mycolor0,dashed] (axis cs:0,0) -- (axis cs:0,1);
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.3264*2) arc [start angle=90, end angle=0,radius={transformdirectionx(.3264*2)}] -- (axis cs:0,0) -- cycle;
+\draw (axis cs:0.707*.48,0.707*.48) node[rotate=0] {$\gamma$};
+\draw [mycolor0,dashed] (axis cs:0,0) -- (axis cs:.4663,1);
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:.3264,0) arc [start angle=0, end angle=65,radius={transformdirectionx(.3264)}] -- (axis cs:0,0) -- cycle;
+\draw (axis cs:.8434*.2,.5373*.2) node[rotate=0] {$\alpha$};
+
+\draw[mycolor0] (axis cs:.4663,1) -- (axis cs:.4663,1+\lijn) coordinate (D1) -- (axis cs:.4663,1+\lijn*1.5);
+\draw[mycolor0] (axis cs:0,1) -- (axis cs:0,1+\lijn) coordinate (D2) -- (axis cs:0,1+\lijn*1.5);
+\draw[dimen,-,mycolor0] (D1) -- (D2) node [rotate=0,yshift=-0mm,black] {$x$};
+\draw[dimen,rotate=0,<-,mycolor0] (D1) -- ++(-8pt,0);
+\draw[dimen,rotate=0,<-,mycolor0] (D2) -- ++(+8pt,0);
+\end{axis}
+\end{tikzpicture}%

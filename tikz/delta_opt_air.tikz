@@ -1,0 +1,65 @@
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+axis equal image,
+xmin=-.24,
+xmax=1.06,
+%xlabel={$x$},
+ymin=-0.25,
+ymax=1.2,
+%ylabel={$z$},
+axis line style={draw=none},
+tick style={draw=none},
+ticks=none,
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white}
+]
+%\draw [mycolor0,decorate,decoration={brace,amplitude=10pt},xshift=.707mm,yshift=-.707mm] (axis cs:.5,.5) -- (axis cs:0,0) node [black,rotate=45,midway,yshift=-6mm]  {$\projmat{a} \vec{v}$};
+\draw[mycolor0] (axis cs:.5,.5) -- (axis cs:.5+.05,.5-.05) coordinate (D1) -- (axis cs:.5+.05*1.5,.5-.05*1.5);
+\draw[mycolor0] (axis cs:0,0) -- (axis cs:0+.05,0-.05) coordinate (D2) -- (axis cs:0+.05*1.5,0-.05*1.5);
+\draw[dimen,-,mycolor0] (D1) -- (D2) node [rotate=45,yshift=-0mm,black] {$\norm{\projmat{\flat{a}} \vec{\flat{v}}}$};
+\draw[dimen,rotate=45,<-,mycolor0] (D1) -- ++(-8pt,0);
+\draw[dimen,rotate=45,<-,mycolor0] (D2) -- ++(+8pt,0);
+
+\draw[fill=mycolor2!10,draw=mycolor2] (axis cs:0,1+.14142) arc [start angle=90, end angle=450,radius={transformdirectionx(.14142)}] -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:.1875,.1875) arc [start angle=45, end angle=90,radius={transformdirectionx(.70711/8*3)}] -- (axis cs:0,0) -- cycle;
+\draw (axis cs:.1244,.3003) node[rotate=0] {$\delta_{\opt}$};
+\draw [mycolor0] (axis cs:.4+.05,.5-.05) -- (axis cs:.4,.5) -- (axis cs:.4+.05,.5+.05);
+
+\addplot[mycolor0, dashed, forget plot]
+table[row sep=crcr] {%
+	0	1\\
+	.5	.5\\
+};
+\addplot[mycolor0, dashed, forget plot]
+table[row sep=crcr] {%
+	.1	1.1\\
+	.6	.6\\
+};
+\draw (axis cs:.1+.70711/20,1.1+.70711/20) node[rotate=0] {$\vec{\flat{a}}$};
+\addplot[->, very thick, mycolor2, forget plot]
+table[row sep=crcr] {%
+	0	1\\
+	0.1	1.1\\
+};
+\draw (axis cs:.6+1/20,.615+1/20) node[rotate=0] {$s \uvec{\flat{a}}$};
+\addplot[->, very thick, mycolor1, forget plot]
+table[row sep=crcr] {%
+	0	0\\
+	0.6		0.6\\
+};
+\draw (axis cs:-.07,1-.063) node[rotate=0] {$\vec{\flat{v}}$};
+\addplot[->, very thick, mycolor3, forget plot]
+table[row sep=crcr] {%
+0	0\\
+0	1\\
+};
+\end{axis}
+\end{tikzpicture}%

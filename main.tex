@@ -1,0 +1,238 @@
+\title{Quake III DeFRaG Physics}
+\author{}
+\date{\today}
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{appendix}
+\usepackage{geometry}
+\geometry{
+	a4paper,
+	total={210mm,297mm},
+	left=27.5mm,
+	right=27.5mm,
+	top=27.5mm,
+	bottom=27.5mm,
+}
+\usepackage[english]{babel}
+\usepackage{pgfplots,float,amsmath,amsfonts,amssymb,subcaption,amsthm,mathtools,pdfpages,scalerel,xspace,listings,siunitx}
+\usepackage[normalem]{ulem}
+\usepackage[pdfusetitle,colorlinks=true,plainpages=false]{hyperref}
+\usepackage[all]{tcolorbox}
+\usepackage[nottoc]{tocbibind}
+
+% Fonts
+\usepackage{fourier}
+%\usepackage{kpfonts}
+
+\usepgfplotslibrary{external}
+\usetikzlibrary{3d}
+% https://tex.stackexchange.com/a/353398
+\tikzoption{canvas is plane}[]{\@setOxy#1}
+\def\@setOxy O(#1,#2,#3)x(#4,#5,#6)y(#7,#8,#9)%
+{\def\tikz@plane@origin{\pgfpointxyz{#1}{#2}{#3}}%
+	\def\tikz@plane@x{\pgfpointxyz{#4}{#5}{#6}}%
+	\def\tikz@plane@y{\pgfpointxyz{#7}{#8}{#9}}%
+	\tikz@canvas@is@plane
+}
+\usetikzlibrary{decorations.pathreplacing,patterns,arrows,spy,calc}
+\tikzexternalize[shell escape=-enable-write18,optimize command away=\includepdf]
+\newcommand*{\includetikz}[1]{%
+	\tikzsetnextfilename{#1}%
+	\input{#1.tikz}%
+}
+\pgfdeclarepatternformonly{north east lines wide}{\pgfqpoint{-1pt}{-1pt}}{\pgfqpoint{10pt}{10pt}}{\pgfqpoint{9pt}{9pt}}%
+{
+	\pgfsetlinewidth{0.4pt}
+	\pgfpathmoveto{\pgfqpoint{0pt}{0pt}}
+	\pgfpathlineto{\pgfqpoint{9.1pt}{9.1pt}}
+	\pgfusepath{stroke}
+}
+\tikzset{%
+	body/.style={inner sep=0pt,outer sep=0pt,shape=rectangle,draw,thick,pattern=north east lines wide},
+	dimen/.style={<->,>=latex,thin,every rectangle node/.style={fill=white,midway}},
+	symmetry/.style={dashed,thin},
+}
+%\tikzexternaldisable
+%\tikzset{external/force remake}
+%\usepackage{pdfpages}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{scolium}{Scolium}   %% And a not so common one.
+\newtheorem{definition}{Definition}
+\newenvironment{AMS}{}{}
+\newenvironment{keywords}{}{}
+\renewcommand\qedsymbol{$\blacksquare$}
+
+\newcommand*{\inserteqstrut}[1]{%
+	\rlap{$\displaystyle#1$}%
+	\phantom{\biggesteq}}
+\newcommand*{\inserteqstrutt}[1]{%
+	\rlap{$\displaystyle#1$}%
+	\phantom{\biggesteqq}}
+
+\newlength{\letterwidth}
+\newcommand*{\mathmakeboxlargestof}[3]{%
+	% #1 = first symbol
+	% #2 = second symbol
+	% #3 = what is printed
+	\setlength{\letterwidth}{\maxof{\widthof{$#1$}}{\widthof{$#2$}}}%
+	\mathmakebox[\letterwidth]{\vphantom{#1}\vphantom{#2}#3}%
+}
+
+\newcommand*{\lcr}[3]{%
+\mathmakebox[\textwidth][s]{\mathrlap{#1}\hfill#2\hfill\mathllap{#3}}%
+}
+
+\DeclareRobustCommand{\blueline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor1,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\bluedash}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor1,dashed,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\orangeline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor2,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\greyline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor0,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\greenline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor5,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\blackline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[black,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+
+\DeclareRobustCommand{\thickblueline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor1,solid,line width=2.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\thickCPMorangeline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor2,solid,line width=2.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+
+\DeclareRobustCommand{\greydash}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor0,dashed,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\yellowdenselydottedarrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor3,densely dotted,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
+
+\DeclareRobustCommand{\bluearrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor1,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\orangearrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor2,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\yellowarrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor3,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\purplearrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor4,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\greenarrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor5,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
+
+\DeclareRobustCommand{\greyarea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor0!10,draw=mycolor0] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+\DeclareRobustCommand{\bluearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor1!40,draw=black!40!mycolor1] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+\DeclareRobustCommand{\orangearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor2!40,draw=black!40!mycolor2] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+\DeclareRobustCommand{\greenarea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor5!40,draw=black!40!mycolor5] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+
+\DeclareRobustCommand{\darkbluearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor1,draw=black] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+\DeclareRobustCommand{\lightorangearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor2!10,draw=mycolor2] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+\DeclareRobustCommand{\darkorangearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor2,draw=black] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+\DeclareRobustCommand{\darkgreyarea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor0!60,draw=mycolor0] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+
+\newcommand*{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand*{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand*{\set}[1]{\left\{#1\right\}}
+\renewcommand*{\vec}[1]{\boldsymbol{#1}}
+\newcommand*{\uvec}[1]{\vec{\hat{#1}}}
+\newcommand*{\mat}[1]{\boldsymbol{#1}}
+\newcommand*{\projmat}[1]{\mat{P}_{\vec{#1}}}
+\newcommand*{\resprojmat}[1]{\mat{M}_{\vec{#1}}}
+\makeatletter
+\newcommand*{\inlinemat}[2][~]{%
+	\left(%
+	\def\nextitem{\def\nextitem{#1}}%
+	\@for \el:=#2\do{\nextitem\el}%
+	\right)%
+}
+\makeatother
+\renewcommand*{\flat}[1]{\uline{#1}}
+
+\DeclareMathOperator{\acos}{acos}
+\DeclareMathOperator{\atan}{atan}
+\DeclareMathOperator{\opt}{opt}
+\DeclareMathOperator{\yaw}{yaw}
+\DeclareMathOperator{\cmd}{cmd}
+\DeclareMathOperator{\fmove}{fm}
+\DeclareMathOperator{\rmove}{rm}
+\DeclareMathOperator{\umove}{um}
+\DeclareMathOperator{\fumove}{fum}
+
+\newlength\figureheight
+\newlength\figurewidth
+
+\definecolor{mycolor0}{rgb}{.4,.4,.4}%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+\definecolor{mycolor3}{rgb}{0.92900,0.69400,0.12500}%
+\definecolor{mycolor4}{rgb}{0.49400,0.18400,0.55600}%
+\definecolor{mycolor5}{rgb}{0.46600,0.67400,0.18800}%
+
+\definecolor{cgazgreen}{rgb}{0,1,0}%
+\definecolor{cgazdarkgreen}{rgb}{0,0.25,0.25}%
+\definecolor{cgazyellow}{rgb}{1,1,0}%
+\definecolor{cgazgrey}{rgb}{0.25,0.25,0.25}%
+
+\newcommand*{\highlightcgazgreen}[1]{\colorbox{cgazgreen!50}{$\displaystyle#1$}}
+\newcommand*{\highlightcgazdarkgreen}[1]{\colorbox{cgazdarkgreen!50}{$\displaystyle#1$}}
+\newcommand*{\highlightcgazyellow}[1]{\colorbox{cgazyellow!50}{$\displaystyle#1$}}
+\newcommand*{\highlightcgazgrey}[1]{\colorbox{cgazgrey!50}{$\displaystyle#1$}}
+
+\definecolor{bgcolor}{rgb}{0.047058824,0.047058824,0.058823529}
+\definecolor{commentcolor}{rgb}{0.364705882,0.352941176,0.4}
+\definecolor{fgcolor}{rgb}{0.541176471,0.541176471,0.576470588}
+\definecolor{identifiercolor}{rgb}{0.266666667,0.635294118,0.862745098}
+\definecolor{keywordcolor}{rgb}{0.764705882,0.231372549,0.270588235}
+\definecolor{stringcolor}{rgb}{0.792156863,0.623529412,0.37254902}
+
+% https://tex.stackexchange.com/questions/20890/define-an-escape-underscore-environment
+\makeatletter
+\DeclareRobustCommand*{\escapeus}[1]{%
+	\begingroup\@activeus\scantokens{#1\endinput}\endgroup}
+\begingroup\lccode`\~=`\_\relax
+\lowercase{\endgroup\def\@activeus{\catcode`\_=\active \let~\_}}
+\makeatother
+
+% https://tex.stackexchange.com/questions/486102/problems-with-tcolorbox-and-tikz-external
+%\tcbset{shield externalize}
+\tcbsetforeverylayer{shield externalize}% <--- interim solution before bug fix
+\renewcommand{\theFancyVerbLine}{\ttfamily \textcolor[rgb]{0,0,0}{\scriptsize \arabic{FancyVerbLine}}}
+\newtcbinputlisting[]{\codeFromFile}[3][]{%
+	listing engine=minted,
+	listing file={#3},
+	listing only,
+	listing remove caption=false,
+	minted language=C,
+	colframe=mycolor0!30,
+	colback=mycolor0!10,
+	borderline west={8mm}{-4mm}{mycolor0!30},
+	breakable,
+	enhanced,
+	top=0mm,
+	bottom=0mm,
+	before skip=.75\baselineskip,
+	after skip=.75\baselineskip,
+	attach boxed title to bottom center={yshift=-.75\baselineskip},
+	minipage boxed title,
+	boxed title style={blanker},
+	title={\captionof{listing}{Code snippet from \href{https://github.com/id-Software/Quake-III-Arena/blob/master/#3}{\texttt{\escapeus{#3}}}.}}, % TODO: URL with line range
+	minted options={
+		%frame=single,
+		%rulecolor=\color{mycolor0!10},
+		fontsize=\footnotesize,
+		linenos=true,
+		stripall=true,
+		numbersep=2mm,
+		#2},
+	arc=0pt,
+	outer arc=0pt,
+	boxrule=1pt,
+	#1}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\include{sections/fundamentals}
+\include{sections/cgaz}
+\include{sections/snap}
+\include{sections/TODO}
+
+\begin{appendices}
+	\include{appendices/definitions}
+	\include{appendices/code}
+	\include{appendices/derivations}
+	\include{appendices/fov}
+\end{appendices}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

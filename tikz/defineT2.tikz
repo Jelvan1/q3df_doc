@@ -1,0 +1,43 @@
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+axis equal image,
+xmin=-1.1,
+xmax=1.1,
+xlabel={$x$},
+ymin=-1.1,
+ymax=1.1,
+ylabel={$z$},
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white}
+]
+\addplot[thick, black!40!mycolor5, forget plot]
+table[row sep=crcr] {%
+-1	0\\
+1	0\\
+};
+\addplot[thick, black!40!mycolor2, forget plot]
+table[row sep=crcr] {%
+-0.70711	-0.70711\\
+0.70711		0.70711\\
+};
+
+\addplot[->,very thick,color=mycolor5]
+table[row sep=crcr] {%
+	0	0\\
+	0	1\\
+};
+\addplot[->,very thick,color=mycolor2]
+table[row sep=crcr] {%
+	0	0\\
+	-0.70711	0.70711\\
+};
+\end{axis}
+\end{tikzpicture}%

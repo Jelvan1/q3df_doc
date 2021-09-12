@@ -1,0 +1,149 @@
+\section{Fundamentals}
+\label{sec:fundamentals}
+\cite{hl_physics}
+
+\subsection{Input}
+% Appendix \ref{app:angle_vectors}
+
+\subsection{Friction}
+Before any acceleration comes into play, friction is applied first. The amount of friction depends on the player's speed $v$, the friction factor $c$%
+% TODO: don't use footnotes for c, T and d)
+\footnote{On the ground the friction factor $c=6$ (\texttt{pm\_friction}), but in the air $c=0$.} and the frame-time $T$\footnote{The frame-time $T = 1 / \qty{125}{fps} = \qty{0.008}{s}$.}. At lower speeds, the stopspeed limit $d$\footnote{The stopspeed limit $d = \qty{100}{ups}$ (\texttt{pm\_stopspeed}).} kicks in and brings the player to a complete stop faster. The current velocity vector before and after friction is applied can then be defined as respectively
+\begin{align*}
+\vec{v} =
+\begin{pmatrix}
+v_x \\ v_y \\ v_z
+\end{pmatrix} = v \uvec{v},
+&&
+\vec{v}_f =
+\begin{pmatrix}
+v_{fx} \\ v_{fy} \\ v_{fz}
+\end{pmatrix} = v_f \uvec{v},
+\end{align*}
+with the same direction $\uvec{v}$ and the magnitude relation
+\begin{align}
+\label{eq:vf}
+v_f = (1 - \iota cT) v,
+\end{align}
+assuming $cT \le 1$ and where
+\begin{align*}
+\iota = \max\left(1, \min\left(\frac{d}{\flat{v}}, \frac{1}{cT}\right)\right)\protect\footnotemark{}.
+\end{align*}
+\footnotetext{This is a simple clamping operation.}%
+This means that, without acceleration, the current velocity either remains unchanged or decreases over time ($0 \le v_f \le v$).
+
+% Appendix \ref{app:friction}
+
+\subsection{Acceleration}
+This would not be an interesting game without the ability to increase speed and change direction. So let's define the acceleration vector as
+\begin{align*}
+\vec{a} &=
+\begin{pmatrix}
+a_x \\ a_y \\ a_z
+\end{pmatrix} = a \uvec{a},
+\end{align*}
+and the resulting new velocity becomes
+\begin{align*}
+\vec{r} &= \vec{v}_{f} + \vec{a} =
+\begin{pmatrix}
+r_x \\ r_y \\ r_z
+\end{pmatrix} = r \uvec{r}.
+\end{align*}
+The relation between all defined vectors is summarized in Figure \ref{fig:delta_phi}, where the normal of the (horizontal) $xy$-plane (\greenarea) is defined as
+\begin{align*}
+\vec{\flat{n}} &=
+\begin{pmatrix}
+0\\0\\1
+\end{pmatrix}.
+\end{align*}
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm}
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/delta_phi}
+		\caption{}
+	\end{subfigure}%
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{9.5cm}
+		\setlength\figurewidth{9.5cm}
+		\includetikz{tikz/delta_phi3d}
+		\caption{}
+	\end{subfigure}%
+	\caption{The surface normal $\vec{\flat{n}}$ (\greenarrow), the current velocity $\vec{v}_f$ (\yellowdenselydottedarrow) and its projection $\vec{\flat{v}}_f$ (\yellowarrow), the projected acceleration $\vec{\flat{a}}$ (\orangearrow) and the resulting new velocity $\vec{\flat{r}}$ (\bluearrow). (a) is the top view of (b).}
+	\label{fig:delta_phi}
+\end{figure}
+
+The matrix that projects all vectors orthogonally onto the $xy$-plane (\greenarea) is then
+\begin{align*}
+\resprojmat{\flat{n}} = \mat{I} - \vec{\flat{n}} \vec{\flat{n}}^T &=
+\begin{pmatrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0 & 0
+\end{pmatrix}
+\end{align*}
+Hence, the current velocity vectors projected to the $xy$-plane become
+\begin{align*}
+\vec{\flat{v}} &= \resprojmat{\flat{n}} \vec{v}\hphantom{_f} =
+\begin{pmatrix}
+\mathmakebox[\widthof{$v_{fx}$}]{v_x} \\ v_y \\0
+\end{pmatrix} = \mathmakebox[\widthof{$\flat{v}_f$}]{\flat{v}} \uvec{\flat{v}},\\
+\vec{\flat{v}}_f &= \resprojmat{\flat{n}} \vec{v}_f =
+\begin{pmatrix}
+v_{fx} \\ v_{fy} \\0
+\end{pmatrix} = \flat{v}_f \uvec{\flat{v}}
+\end{align*}
+and the projected equivalent of equation \eqref{eq:vf} is
+\begin{align}
+\label{eq:flat_vf}
+\flat{v}_f = (1 - \iota cT) \flat{v}.
+\end{align}
+Likewise, the projected acceleration vector is
+\begin{align}
+\label{eq:accel_direction}
+\vec{\flat{a}} = \resprojmat{\flat{n}} \vec{a} =
+\begin{pmatrix}
+a_x \\ a_y \\0
+\end{pmatrix} = \flat{a} \uvec{\flat{a}},
+\end{align}
+with a magnitude
+\begin{align}
+\label{eq:sAT}
+\flat{a} = sAT,
+\end{align}
+where $A$ is some dimensionless constant depending on the player state\footnote{In the air, $A = 1$ (\texttt{pm\_airaccelerate}), while on the ground $A = 10$ and $A = 15$ (\texttt{pm\_accelerate}) for VQ3 and CPM, respectively.} and $s$ is the wishspeed limit (e.g. $\texttt{g\_speed} = \qty{320}{ups}$ on a flat surface under normal conditions, see more details in Section \ref{sec:movementkeys}). In the same way, the projection of the resulting new velocity becomes
+\begin{align*}
+\vec{\flat{r}} = \resprojmat{\flat{n}} \vec{r} =
+\begin{pmatrix}
+r_x \\ r_y \\0
+\end{pmatrix} = \flat{r} \uvec{\flat{r}}.
+\end{align*}
+
+Thus, to project a vector onto the current velocity vector $\vec{\flat{v}}$ lying on the surface (\greenarea), it becomes
+\begin{alignat*}{4}
+\projmat{\flat{v}} &= \uvec{\flat{v}} \uvec{\flat{v}}^T &&= \frac{\vec{\flat{v}} \vec{\flat{v}}^T}{\vec{\flat{v}}^T \vec{\flat{v}}} &&= \frac{1}{v_x^2 + v_y^2}
+\begin{pmatrix}
+v_x^2 & v_x v_y & 0\\
+v_x v_y & v_y^2 & 0\\
+0 & 0 & 0\\
+\end{pmatrix},\\
+%&&&= \frac{\vec{\flat{v}}_f \vec{\flat{v}}_f^T}{\vec{\flat{v}}_f^T \vec{\flat{v}}_f} &&= \frac{\resprojmat{\flat{n}}\vec{v}_f\vec{v}_f^T\resprojmat{\flat{n}}^T}{\vec{v}_f^T\resprojmat{\flat{n}}\vec{v}_f} &&= \projmat{\flat{v}_f}^T = \projmat{\flat{v}_f}^k, \qquad k \in \mathbb{N}^+,\\
+%
+\norm{\projmat{\flat{v}} \vec{\flat{r}}} &= \mathmakebox[0pt][l]{\sqrt{\vec{\flat{r}}^T \projmat{\flat{v}} \vec{\flat{r}}} = \sqrt{\vec{\flat{r}}^T \uvec{\flat{v}} \uvec{\flat{v}}^T \vec{\flat{r}}} = \vec{\flat{r}}^T \uvec{\flat{v}} = \flat{r} \cos\varphi,}
+\end{alignat*}
+where $\varphi$ represents the angle between the current velocity $\vec{\flat{v}}$ and the new velocity $\vec{\flat{r}}$. Likewise, to project a vector onto the acceleration vector $\vec{\flat{a}}$, we need to multiply with
+\begin{align*}
+\projmat{\flat{a}} &= \uvec{\flat{a}} \uvec{\flat{a}}^T = \frac{\vec{\flat{a}} \vec{\flat{a}}^T}{\vec{\flat{a}}^T \vec{\flat{a}}} =
+%\begin{pmatrix}
+%\cos^2\delta & \cos\delta\sin\delta & 0\\
+%\cos\delta\sin\delta & \sin^2\delta & 0\\
+%0 & 0 & 0
+%\end{pmatrix} =
+\projmat{\flat{a}}^T = \projmat{\flat{a}}^k, \qquad k \in \mathbb{N}^+,\\
+%
+\norm{\projmat{\flat{a}} \vec{\flat{v}}_f} &= \sqrt{\vec{\flat{v}}_f^T \projmat{\flat{a}} \vec{\flat{v}}_f} = \sqrt{\vec{\flat{v}}_f^T \uvec{\flat{a}} \uvec{\flat{a}}^T \vec{\flat{v}}_f} = \vec{\flat{v}}_f^T \uvec{\flat{a}} = \flat{v}_f \cos\delta,
+\end{align*}
+where $\delta$ represents the angle between the acceleration $\vec{\flat{a}}$ and the velocity $\vec{\flat{v}}$.
