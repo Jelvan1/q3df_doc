@@ -1,0 +1,104 @@
+\section{RR ranking system}
+\label{sec:ranking}
+\cite{rr_ranking_system}\\
+\noindent\fbox{\parbox{\textwidth}{A good map score is created by having many strong competitors, small (your time)/(fastest time by someone else), and not placing under people, especially under weak opponents.
+
+Your overall score is the sum of your 10 best individual map scores, plus 1/2 of the next 10 scores, plus 1/4 of the next 10 scores, and so on. You should focus on your top 50 maps, which add to 97\% of your overall score.
+
+A bad time will never decrease your score; it just won't affect it.}}
+
+\begin{equation}k \sim 1\end{equation}
+\begin{equation}b \sim 5\end{equation}
+\begin{equation}c \sim 0.1\end{equation}
+\begin{equation}d \sim 1.1\end{equation}
+\begin{equation}g \sim 0.9\end{equation}
+%\begin{equation}c \sim 0.2\end{equation}
+\begin{equation}m \sim 10\end{equation}
+\begin{equation}I_{y} = \text{player }y \text{'s overall score} = \frac{\sqrt[m]2 - 1}{\sqrt[m]2} \sum_{x = 0}2^{-x/m} M_x \end{equation}
+The summation is taken in score order, with $M_0$ being the highest score.
+\begin{equation}R = \frac{\text{your time}}{\text{fastest time by someone else}}\end{equation}
+%\begin{equation}P(x) = x^{-\ln x}\end{equation} log-normal. this works, but the tail is too short. decent players can still set terrible times.
+\begin{equation}P(x) = e^{-1/x}x^{-d}\end{equation}
+%\begin{equation}S(x) = c x^{-b\ln x}\end{equation}. basically, a different expected run distribution.
+%\begin{equation}S(x) = 1/(1+x)^1.1}\end{equation}. this could work too, after the harmonic function is turned into an additive one. note that we need S(x) = 0 for x < 0.
+%S(x) = 1 for x > 0, S(x) = 0 for x < 0. also could work.
+\begin{equation}S(x) = \int_{0}^{x} P(y)dy\end{equation}
+%\begin{equation}L(x) = \frac12 \text{erf}\left(\ln x - \frac12\right) + \frac12\end{equation} %for log-normal
+\begin{equation}L(x) = S(x) / S(\infty) = \Gamma_n (d - 1, 1/x)\end{equation}
+%https://www.wolframalpha.com/input/?i=(integrate+e%5E(-1%2Fx)x%5E(-j)+from+0+to+y)
+$\Gamma_n$ is the normalized upper incomplete gamma function.
+
+\begin{equation}H_y = I_y^{g}\end{equation}
+\begin{equation}N(x) = \sum_{i \ne y}\left[H_i P(k H_i x) \prod_{h \ne y, h \ne i} \left(1 - L(k H_h x)\right)\right]\end{equation}
+%\begin{equation}Q(x) = S(R(1 + x) - 1) N(x)\end{equation}
+\begin{equation}Q(x) = P\left(b\left(\frac1x - 1\right)\right) N\left(\frac1{xR} - 1\right)\end{equation}
+
+\begin{equation}M = \text{individual map time score} = \left(\frac{\int_{x=0}^1 Q(x)\sqrt{x/(1-x)} dx}{\int_{x = 0}^1 Q(x) dx}\right)^2\end{equation}
+\begin{equation}F = e^{-M} + c \sum_{i < y} e^{-I_i}\end{equation}
+\begin{equation}E = \text{placement-corrected map score} = -\ln F / (1 - F)\end{equation}
+$M$ depends on $I_i$, whose initial condition is $I_i = 1$. If there's only one player on a map, then $M=0$. You should use your library's integration function for $M$.
+
+$0 < g < 1$: this is a tool for forcing convergence, taking in a person's $I_i$ and deciding that their distribution should look closer to the default distribution than $I_i$ says. 1 is more faithful.$g < 1$ because people who don't play much are given low scores, but their distribution is not as bad as it would seem.
+
+$b > 0$: given an unknown racer, this says what his expected time is. Higher $b$ means that the unknown racer is more likely to set really good times. Using $P(x)$ as our model is probably wrong here, but I haven't checked other models.
+
+$k > 0$: given a specific racer and his $I_i$, this says what his expected time is. Higher $k$ means that the racer is more likely to set really good times relative to his $I_i$. $b$ and $k$ scale together, so multiplying both of them by the same amount will multiply all time scores by a constant, which changes nothing. However, higher time scores will result in less placement penalty for being defeated by a skilled runner. If $b/k$ changes, I don't know what the effect will be.
+
+$d > 1$: determines how likely it is for a runner to set a really bad time, no matter his skill level. Higher $d$ means less likely to have terrible times.
+
+$c > 0$: How much penalty to give for placement defeats. Higher $c$ raises the penalty.
+
+
+%integral of P is 1, and we also find L: https://www.wolframalpha.com/input/?i=integrate+x%5E(-+ln+x)+e%5E(-1%2F4)+pi%5E(-1%2F2)
+%average is 2.117: https://www.wolframalpha.com/input/?i=integrate+x+x%5E(-+ln+x)+e%5E(-1%2F4)+pi%5E(-1%2F2)
+\pagebreak
+Each map has an optimal time $o$ that nobody can go under. Someone who achieves time $t$ gets score $o / (t - o)$. For example, if the optimum time is 10 seconds, then 11 seconds receives score 10, 10.01 seconds receives score 1000, and 10 seconds receives score $\infty$. However, we don't know the optimal time.
+
+Our tools for calculating your score are $I_i$, the estimated skill of each player on the map, and $R$, the ratio between your time and the best time by someone else. Using only a single time for $R$ makes the model easier to understand, and more resistant to changes in the poorer times, which are more dependent on effort than skill. We use others' times for $R$, because you are compared to your opponents, not yourself. $I_i$ means that a player doesn't need to worry that his poorer times will affect his identity.
+
+The ``competitiveness'' input to the formula is $I_i$. If player $A$ crushes player $B$ on a few maps, and $B$ crushes $A$ on a few maps, then both players will be rated as better than the other. $A$'s score is better than $B$'s score, and $B$'s score is better than $A$'s score, and after a few iterations, $A$'s score will be infinity. So we keep in mind that $I_i$ is not a good measure of runners' scores, only their best scores. It doesn't capture the distribution of scores either.
+
+A player's time on a map has a long tail: getting a good time is rare, but getting a really bad time is common. This is because setting a good time takes grinding, but leaving bad times is easy.
+
+%$P(x)= e^(-1/x) x^{-1.1}$ still had the same problem, Mirio got 3 at reltime 0.6 on a 2-person map, but reltime 1 on a 50 person map also got 3.
+%maybe too sharp a falloff at 0? this meant that no matter how many people there were on a map, you couldn't prove yourself to be good.
+Our model for player times is the distribution $e^{-1/x}x^{-1.1}$. This has two properties: fast decay at $x = 0$, and slow decay at $x = \infty$. The decay at infinity must be super-linear for the distribution to have finite integral, and $x^{-1.1}$ satisfies this.
+
+The chance for a player to achieve (optimal time)$\times (1 + x)$ is modeled as $H_i P(H_i x)$. The decay behavior means that close-to-optimal times are really rare, but really bad times are common. $H_i$ is a sublinear power of $I_i$	 because $I_i$ is an upper bound on performance, and penalizes those who have played few maps, sending their scores to zero. The sublinear growth is necessary for convergence, by drawing their distributions back to the mean.
+
+$W$ is the fastest time on a map, excepting your own. The chance that $W = \text{(optimal time)} \times (1 + x)$ is $N(x)$, the first order statistic.
+
+We'll model your expected times by $P(x)$. $Q(x)$ is the chance that the optimal time is $x\times$(your time). The score formula is (optimal time)/(your time - optimal time), so your estimated score is:
+\begin{equation}\text{expected individual map score} = \frac{\int_{x=0}^1 Q(x)\left(x/(1 - x)\right) dx}{\int_{x = 0}^1 Q(x) dx}\end{equation}
+
+An uncertain score should be penalized over a certain score with the same expectation. This is because we use the top scores to calculate $I_i$. Our end result is:
+
+\begin{equation}M = \left(\frac{\int_{x=0}^1 Q(x)\sqrt{x/(1-x)} dx}{\int_{x = 0}^1 Q(x) dx}\right)^2\end{equation}
+
+
+Note on implementation: the formula for $N(x)$ is $O(n^2)$. This can be improved to $O(n)$ by moving the product outside, but then you have to be careful about dividing by zero.
+
+\pagebreak
+Our distributions are all single-parameter. They take in $H_i = I_c^{0.9}$.
+
+Distributions should have long tails. Any player can set a bad time easily, and they often do so. If you set a really good time relative to someone, and that person has a short tail, then you receive a good score.
+
+We tried $P(x)= x^{-\ln x}$ before. This is a log-normal distribution which was tested to have too short a tail (strong reltimes on low-population maps produce too high of a score). Its growth at 0 is the right rate.
+
+The current distribution is $e^{-1/x}x^{-d}$. The $e^{-1/x}$ creates a strong $0$ at $x = 0$, and the $x^{-d}$ creates a long tail. Its dies at 0 too quickly. Higher $d$ results in shorter tails, which means that runners are expected to set fewer bad times.
+
+Trying to build something with $x^{-\ln x}$ growth at 0 and $x^{-d}$ decay at infinity is a nice idea, but we also need our function to be quickly integrable. We use the CDF to calculate the first order statistic, which restricts the distributions we're allowed to use.
+
+\pagebreak
+Placements: If you're defeated by someone, then consider their $I_i$, and decrease your own score.
+
+Idea: $-\ln (e^{-M} + c\sum_i e^{-I_i})$. This isn't quite right (we want to add distributions again), but it's stateless, which means it's fast to calculate. Getting dominated by many people of high skill doesn't push your score down much. Compared to harmonic sums, the decrease is linear rather than multiplicative.
+
+To avoid negative scores, we apply this transformation at the end: $x \to x / (1 + e^{-x})$. This grows linearly past 0, and shrinks to 0 for negative values. This formula gives us $F$ and $E$.
+
+\pagebreak
+Player aggregate score formula: The main requirement of aggregate weighting is that playing maps will never decrease your score. You should never feel restricted from trying new maps, and setting a garbage time is always better than setting no time. As a consequence, only your best maps count, because your overall score can't be any worse than if we only consider your best maps.
+\begin{equation}\sum_{i} 2^{-i/m} x_i\end{equation}
+$m$ is a constant. The sum iterates over the player's map scores $x_i$ from highest to lowest. Once a player plays $m$ maps, that player has filled out 50\% of his score. Playing $2m$ maps fills out 75\% of his score.
+
+Setting $m$ to a higher value incentivizes people to play more maps. Scoring systems aren't just about deciding who is the best, but also about making them do things. You could automatically increase $m$ as more records are set, but that is for a later discussion.
