@@ -10,5 +10,5 @@ This document is a continuous effort of accurately describing the physics of the
 ## Building
 To generate the pdf, do
 ```
-$ pdflatex -shell-escape -synctex=1 -interaction=nonstopmode main.tex
+$ latexmk -pdflua -shell-escape -synctex=1 -interaction=nonstopmode main.tex
 ```

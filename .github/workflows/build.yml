@@ -1,4 +1,4 @@
-name: build 
+name: build
 
 on:
   pull_request:
@@ -27,6 +27,7 @@ jobs:
         with:
           root_file: main.tex
           latexmk_shell_escape: true
+          latexmk_use_lualatex: true
 
       - uses: actions/upload-artifact@v2
         with:

@@ -1348,7 +1348,7 @@ table[row sep=crcr]{%
 		0	380.8\\
 		180	380.8\\
 	};
-	
+
 	\addplot [color=mycolor1,line width=\linewidthzoom]
 	table[row sep=crcr]{%
 		30	380.8\\

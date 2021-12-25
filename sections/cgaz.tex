@@ -140,17 +140,15 @@ Hence, the angles $\bar{\delta}_{\min}$ and $\bar{\delta}_{\max}$ represent the 
 \end{align}
 Knowing all these angles, we can create a CGazHUD (i.e. a strafe-jump helper), which is divided in 5 regions (see Figure \ref{fig:v_air} and \ref{fig:v_ground}):
 \begin{itemize}
-	\renewcommand{\labelitemi}{$\blacksquare$}
-	\color{cgazgrey!50}\item\color{black} $\delta \in [0, \delta_{\min})$\\
+	\item[\textcolor{cgazgrey!50}{$\blacksquare$}] $\delta \in [0, \delta_{\min})$\\
 	The no-acceleration zone.
-	\color{cgazgreen!50}\item\color{black} $\delta \in [\delta_{\min}, \delta_{\opt})$\\
+	\item[\textcolor{cgazgreen!50}{$\blacksquare$}] $\delta \in [\delta_{\min}, \delta_{\opt})$\\
 	The zone where we do not get the full acceleration $\flat{a}$ yet, as described above. Note that it is not desired for a human to stay inside this zone.
-	\color{cgazdarkgreen!50}\item\color{black} $\delta \in [\delta_{\opt}, \bar{\delta}_{\max})$\\
+	\item[\textcolor{cgazdarkgreen!50}{$\blacksquare$}] $\delta \in [\delta_{\opt}, \bar{\delta}_{\max})$\\
 	The main acceleration zone. Stay for the most part inside this zone, preferably close to the edge between the two green zones to keep the \emph{change in direction} minimal.
-	\color{cgazyellow!50}\item\color{black} $\delta \in [\bar{\delta}_{\max}, \delta_{\max}]$\\
+	\item[\textcolor{cgazyellow!50}{$\blacksquare$}] $\delta \in [\bar{\delta}_{\max}, \delta_{\max}]$\\
 	The turn zone where we no longer gain speed in the direction of the current velocity $\uvec{\flat{v}}$, however the overall speed increases.
-	\renewcommand{\labelitemi}{$\square$}
-	\item $\delta \in (\delta_{\max}, \pi]$\\
+	\item[$\square$] $\delta \in (\delta_{\max}, \pi]$\\
 	The deceleration zone.
 \end{itemize}
 

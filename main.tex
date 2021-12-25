@@ -2,44 +2,37 @@
 \author{}
 \date{\today}
 
-\documentclass[10pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{appendix}
-\usepackage{geometry}
-\geometry{
-	a4paper,
-	total={210mm,297mm},
-	left=27.5mm,
-	right=27.5mm,
-	top=27.5mm,
-	bottom=27.5mm,
-}
-\usepackage[english]{babel}
-\usepackage{pgfplots,float,amsmath,amsfonts,amssymb,subcaption,amsthm,mathtools,pdfpages,scalerel,xspace,listings,siunitx}
-\usepackage[normalem]{ulem}
-\usepackage[pdfusetitle,colorlinks=true,plainpages=false]{hyperref}
-\usepackage[all]{tcolorbox}
-\usepackage[nottoc]{tocbibind}
+\documentclass[10pt]{article}
 
-% Fonts
-\usepackage{fourier}
-%\usepackage{kpfonts}
+\usepackage[a4paper,margin=27.5mm]{geometry}
+\usepackage[english]{babel}
+\usepackage{appendix}
+\usepackage[nottoc]{tocbibind} % add bibliography to toc
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=default}
+\usepackage{mathtools} % updates and extends amsmath
+\usepackage{amssymb} % mathbb
+\usepackage{siunitx} % units
+\usepackage{subcaption} % subfigure
+\usepackage[normalem]{ulem} % uline
+
+\usepackage[pdfusetitle,colorlinks=true]{hyperref} % recommended to load last
+\usepackage[all]{tcolorbox} % listing (requires hyperref)
 
 \usepgfplotslibrary{external}
-\usetikzlibrary{3d}
-% https://tex.stackexchange.com/a/353398
-\tikzoption{canvas is plane}[]{\@setOxy#1}
-\def\@setOxy O(#1,#2,#3)x(#4,#5,#6)y(#7,#8,#9)%
-{\def\tikz@plane@origin{\pgfpointxyz{#1}{#2}{#3}}%
-	\def\tikz@plane@x{\pgfpointxyz{#4}{#5}{#6}}%
-	\def\tikz@plane@y{\pgfpointxyz{#7}{#8}{#9}}%
-	\tikz@canvas@is@plane
+\usetikzlibrary{
+	3d,                        % plot 3D shapes
+	arrows.meta,               % arrow tip library
+	calc,                      % allows advanced coordinate calculations
+	decorations.pathreplacing, % replace to-be-decorated path by another path
+	patterns,                  % patterns for filling areas
+	spy,                       % magnified area
 }
-\usetikzlibrary{decorations.pathreplacing,patterns,arrows,spy,calc}
-\tikzexternalize[shell escape=-enable-write18,optimize command away=\includepdf]
-\newcommand*{\includetikz}[1]{%
-	\tikzsetnextfilename{#1}%
-	\input{#1.tikz}%
+\tikzexternalize
+\newcommand*{\includetikz}[1]{
+	\tikzsetnextfilename{#1} % changes filename of next externalized figure
+	\input{#1.tikz}
 }
 \pgfdeclarepatternformonly{north east lines wide}{\pgfqpoint{-1pt}{-1pt}}{\pgfqpoint{10pt}{10pt}}{\pgfqpoint{9pt}{9pt}}%
 {
@@ -48,24 +41,13 @@
 	\pgfpathlineto{\pgfqpoint{9.1pt}{9.1pt}}
 	\pgfusepath{stroke}
 }
-\tikzset{%
+\tikzset{
 	body/.style={inner sep=0pt,outer sep=0pt,shape=rectangle,draw,thick,pattern=north east lines wide},
 	dimen/.style={<->,>=latex,thin,every rectangle node/.style={fill=white,midway}},
 	symmetry/.style={dashed,thin},
 }
-%\tikzexternaldisable
-%\tikzset{external/force remake}
-%\usepackage{pdfpages}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}{Lemma}
-\newtheorem{proposition}{Proposition}
-\newtheorem{scolium}{Scolium}   %% And a not so common one.
-\newtheorem{definition}{Definition}
-\newenvironment{AMS}{}{}
-\newenvironment{keywords}{}{}
-\renewcommand\qedsymbol{$\blacksquare$}
 
 \newcommand*{\inserteqstrut}[1]{%
 	\rlap{$\displaystyle#1$}%
