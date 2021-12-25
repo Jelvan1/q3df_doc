@@ -24,17 +24,17 @@ axis background/.style={fill=white}
 \draw[mycolor0] (axis cs:.4871*.85,.6129*.85) -- (axis cs:.4871*.85+.0554,.6129*.85-.0440) coordinate (D1) -- (axis cs:.4871*.85+.0554*1.5,.6129*.85-.0440*1.5);
 \draw[mycolor0] (axis cs:0,0) -- (axis cs:0+.0554,0-.0440) coordinate (D2) -- (axis cs:0+.0554*1.5,0-.0440*1.5);
 \draw[dimen,-,mycolor0] (D1) -- (D2) node [rotate=51.5260,yshift=-0mm,black] {$\norm{\projmat{\flat{a}} \vec{\flat{v}}_f}$};
-\draw[dimen,rotate=51.5260,<-,mycolor0] (D1) -- ++(-8pt,0);
-\draw[dimen,rotate=51.5260,<-,mycolor0] (D2) -- ++(+8pt,0);
+\draw[dimen,rotate=51.5260,<-,mycolor0] (D1) -- ++(axis direction cs:-.0707,0);
+\draw[dimen,rotate=51.5260,<-,mycolor0] (D2) -- ++(axis direction cs:+.0707,0);
 
-\draw[fill=mycolor2!10,draw=mycolor2] (axis cs:0,.85+.24) arc [start angle=90, end angle=450,radius={transformdirectionx(.24)}] -- cycle;
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.2652) arc [start angle=90, end angle=51.5260,radius={transformdirectionx(.70711/8*3)}] -- (axis cs:0,0) -- cycle;
+\draw[fill=mycolor2!10,draw=mycolor2] (axis cs:0,.85+.24) arc [start angle=90, end angle=450,radius=.24] -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.2652) arc [start angle=90, end angle=51.5260,radius=.70711/8*3] -- (axis cs:0,0) -- cycle;
 \draw (axis cs:.0565*1.95,.1618*1.95) node[rotate=0] {$\delta_{\min}$};
 \draw [mycolor0] (axis cs:.4871*.85-.0440,.6129*.85-.0554) -- (axis cs:.4871*.85-.0994,.6129*.85-.0114) -- (axis cs:.4871*.85-.0554,.6129*.85+.0440);
 % (-.07071*cos((90-tmp)/180*pi),-.07071*sin((90-tmp)/180*pi)) -- (-.1*cos((45-tmp)/180*pi),-.1*sin((45-tmp)/180*pi)) -- (-.07071*cos(tmp/180*pi),.07071*sin(tmp/180*pi))
 
-\draw[mycolor3,dashed] (axis cs:0,1) arc [start angle=90, end angle=105,radius={transformdirectionx(1)}];
-\draw[mycolor3,dashed] (axis cs:0,1) arc [start angle=90, end angle=55,radius={transformdirectionx(1)}];
+\draw[mycolor3,dashed] (axis cs:0,1) arc [start angle=90, end angle=105,radius=1];
+\draw[mycolor3,dashed] (axis cs:0,1) arc [start angle=90, end angle=55,radius=1];
 
 \addplot[mycolor0, dashed, forget plot]
 table[row sep=crcr] {%

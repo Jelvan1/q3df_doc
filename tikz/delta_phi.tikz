@@ -23,7 +23,7 @@ axis background/.style={fill=white}
 ]
 \draw [mycolor0] (axis cs:0,1+.07071) -- (axis cs:.07071,1+.07071) -- (axis cs:.07071,1);
 
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.75+.2) arc [start angle=90, end angle=26.5651,radius={transformdirectionx(.2)}] -- (axis cs:0,.75) -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.75+.2) arc [start angle=90, end angle=26.5651,radius=.2] -- (axis cs:0,.75) -- cycle;
 \draw (axis cs:.1051/1.6,.75+.1701/1.6) node[rotate=0] {$\delta$};
 \addplot[dashed,very thick, mycolor3, forget plot]
 table[row sep=crcr] {%
@@ -34,10 +34,10 @@ table[row sep=crcr] {%
 \draw[mycolor0] (axis cs:0,0) -- (axis cs:-.0707,0) coordinate (D1) -- (axis cs:-.0707*1.5,0);
 \draw[mycolor0] (axis cs:.5,1) -- (axis cs:-.0707,1) coordinate (D2) -- (axis cs:-.0707*1.5,1);
 \draw[dimen,-,mycolor0] (D1) -- (D2) node [rotate=90,yshift=-0mm,black] {$\norm{\projmat{v} \vec{\flat{r}}}$};
-\draw[dimen,rotate=-90,<-,mycolor0] (D1) -- ++(-8pt,0);
-\draw[dimen,rotate=-90,<-,mycolor0] (D2) -- ++(+8pt,0);
+\draw[dimen,rotate=-90,<-,mycolor0] (D1) -- ++(axis direction cs:-.0707,0);
+\draw[dimen,rotate=-90,<-,mycolor0] (D2) -- ++(axis direction cs:+.0707,0);
 
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,0+.24) arc [start angle=90, end angle=63.4349,radius={transformdirectionx(.24)}] -- (axis cs:0,0) -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,0+.24) arc [start angle=90, end angle=63.4349,radius=.24] -- (axis cs:0,0) -- cycle;
 \draw (axis cs:.0460/1.15,0+.1946/1.15) node[rotate=0] {$\varphi$};
 
 

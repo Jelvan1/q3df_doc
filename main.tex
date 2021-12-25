@@ -10,7 +10,7 @@
 \usepackage[nottoc]{tocbibind} % add bibliography to toc
 
 \usepackage{pgfplots}
-\pgfplotsset{compat=default}
+\pgfplotsset{compat=1.18} % latest version on 2021-12-25
 \usepackage{mathtools} % updates and extends amsmath
 \usepackage{amssymb} % mathbb
 \usepackage{siunitx} % units
@@ -69,34 +69,36 @@
 \mathmakebox[\textwidth][s]{\mathrlap{#1}\hfill#2\hfill\mathllap{#3}}%
 }
 
-\DeclareRobustCommand{\blueline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor1,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\bluedash}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor1,dashed,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\orangeline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor2,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\greyline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor0,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\greenline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor5,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\blackline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[black,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+% vertical centering of inline tikz with [baseline=-\the\dimexpr\fontdimen22\textfont2\relax]
+% https://tex.stackexchange.com/questions/59658/use-of-tikzpicture-matrix-in-align-or-gather-environment/59660#comment126261_59660
+\DeclareRobustCommand{\blueline}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[mycolor1,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\bluedash}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[mycolor1,dashed,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\orangeline}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[mycolor2,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\greyline}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[mycolor0,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\greenline}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[mycolor5,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\blackline}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[black,solid,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}
 
-\DeclareRobustCommand{\thickblueline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor1,solid,line width=2.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\thickCPMorangeline}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor2,solid,line width=2.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\thickblueline}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[mycolor1,solid,line width=2.0pt](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\thickCPMorangeline}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[mycolor2,solid,line width=2.0pt](0,0) -- (5mm,0);}\tikzexternalenable}
 
-\DeclareRobustCommand{\greydash}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[mycolor0,dashed,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\yellowdenselydottedarrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor3,densely dotted,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\greydash}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[mycolor0,dashed,line width=1.0pt](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\yellowdenselydottedarrow}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[->,mycolor3,densely dotted,very thick](0,0) -- (5mm,0);}\tikzexternalenable}
 
-\DeclareRobustCommand{\bluearrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor1,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\orangearrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor2,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\yellowarrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor3,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\purplearrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor4,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
-\DeclareRobustCommand{\greenarrow}{\raisebox{2pt}{\tikzexternaldisable\tikz{\draw[->,mycolor5,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}}
+\DeclareRobustCommand{\bluearrow}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[->,mycolor1,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\orangearrow}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[->,mycolor2,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\yellowarrow}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[->,mycolor3,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\purplearrow}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[->,mycolor4,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}
+\DeclareRobustCommand{\greenarrow}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax]{\draw[->,mycolor5,solid,very thick](0,0) -- (5mm,0);}\tikzexternalenable}
 
-\DeclareRobustCommand{\greyarea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor0!10,draw=mycolor0] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
-\DeclareRobustCommand{\bluearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor1!40,draw=black!40!mycolor1] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
-\DeclareRobustCommand{\orangearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor2!40,draw=black!40!mycolor2] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
-\DeclareRobustCommand{\greenarea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor5!40,draw=black!40!mycolor5] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+\DeclareRobustCommand{\greyarea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor0!10,draw=mycolor0] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
+\DeclareRobustCommand{\bluearea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor1!40,draw=black!40!mycolor1] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
+\DeclareRobustCommand{\orangearea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor2!40,draw=black!40!mycolor2] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
+\DeclareRobustCommand{\greenarea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor5!40,draw=black!40!mycolor5] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
 
-\DeclareRobustCommand{\darkbluearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor1,draw=black] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
-\DeclareRobustCommand{\lightorangearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor2!10,draw=mycolor2] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
-\DeclareRobustCommand{\darkorangearea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor2,draw=black] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
-\DeclareRobustCommand{\darkgreyarea}{\raisebox{-1pt}{\tikzexternaldisable\tikz{\draw[fill=mycolor0!60,draw=mycolor0] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}}
+\DeclareRobustCommand{\darkbluearea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor1,draw=black] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
+\DeclareRobustCommand{\lightorangearea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor2!10,draw=mycolor2] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
+\DeclareRobustCommand{\darkorangearea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor2,draw=black] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
+\DeclareRobustCommand{\darkgreyarea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor0!60,draw=mycolor0] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
 
 \newcommand*{\abs}[1]{\left\lvert#1\right\rvert}
 \newcommand*{\norm}[1]{\left\lVert#1\right\rVert}

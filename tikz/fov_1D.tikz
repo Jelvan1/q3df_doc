@@ -21,9 +21,9 @@ every outer y axis line/.append style={white!40!black},
 every y tick label/.append style={font=\color{white!40!black}},
 axis background/.style={fill=white}
 ]
-\draw[draw=mycolor0] (axis cs:0,0+1) arc [start angle=90, end angle=90+360,radius={transformdirectionx(1)}] -- cycle;
-\draw[draw=black] (axis cs:0,0+1) arc [start angle=90, end angle=90+50,radius={transformdirectionx(1)}];
-\draw[draw=black] (axis cs:0,0+1) arc [start angle=90, end angle=90-50,radius={transformdirectionx(1)}];
+\draw[draw=mycolor0] (axis cs:0,0+1) arc [start angle=90, end angle=90+360,radius=1] -- cycle;
+\draw[draw=black] (axis cs:0,0+1) arc [start angle=90, end angle=90+50,radius=1];
+\draw[draw=black] (axis cs:0,0+1) arc [start angle=90, end angle=90-50,radius=1];
 
 \def\lijn{.15}
 \draw [mycolor0] (axis cs:\lijn,1) -- (axis cs:\lijn,1-\lijn) -- (axis cs:0,1-\lijn);
@@ -34,15 +34,15 @@ axis background/.style={fill=white}
 
 \draw [black] (axis cs:-1.1918,1) -- (axis cs:1.1918,1);
 
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:-.25,.2098) arc [start angle=90+50, end angle=90,radius={transformdirectionx(.3264)}] -- (axis cs:0,0) -- cycle;
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:.25,.2098) arc [start angle=90-50, end angle=90,radius={transformdirectionx(.3264)}] -- (axis cs:0,0) -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:-.25,.2098) arc [start angle=90+50, end angle=90,radius=.3264] -- (axis cs:0,0) -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:.25,.2098) arc [start angle=90-50, end angle=90,radius=.3264] -- (axis cs:0,0) -- cycle;
 \draw (axis cs:-.2,.425) node[rotate=0] {$\frac{\Lambda}{2}$};
 \draw (axis cs:.2,.425) node[rotate=0] {$\frac{\Lambda}{2}$};
 
 \draw[mycolor0] (axis cs:-1.1918,1) -- (axis cs:-1.1918,1+\lijn) coordinate (D1) -- (axis cs:-1.1918,1+\lijn*1.5);
 \draw[mycolor0] (axis cs:1.1918,1) -- (axis cs:1.1918,1+\lijn) coordinate (D2) -- (axis cs:1.1918,1+\lijn*1.5);
 \draw[dimen,-,mycolor0] (D1) -- (D2) node [rotate=0,yshift=-0mm,black] {$w$};
-\draw[dimen,rotate=180,<-,mycolor0] (D1) -- ++(-8pt,0);
-\draw[dimen,rotate=180,<-,mycolor0] (D2) -- ++(+8pt,0);
+\draw[dimen,rotate=180,<-,mycolor0] (D1) -- ++(axis direction cs:-\lijn,0);
+\draw[dimen,rotate=180,<-,mycolor0] (D2) -- ++(axis direction cs:+\lijn,0);
 \end{axis}
 \end{tikzpicture}%

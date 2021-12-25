@@ -46,10 +46,10 @@ x	y	z\\
 %	0	0	0\\
 %	0	0	1\\
 %};
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.75+.2,0) arc [start angle=90, end angle=26.5651,radius={transformdirectionx(.2)}] -- (axis cs:0,.75,0) -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,.75+.2,0) arc [start angle=90, end angle=26.5651,radius=.2] -- (axis cs:0,.75,0) -- cycle;
 \draw (axis cs:.1051/1.6,.75+.1701/1.6,0) node[rotate=0] {$\delta$};
 
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,0+.24,0) arc [start angle=90, end angle=63.4349,radius={transformdirectionx(.24)}] -- (axis cs:0,0,0) -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0,0+.24,0) arc [start angle=90, end angle=63.4349,radius=.24] -- (axis cs:0,0,0) -- cycle;
 \draw (axis cs:.0460/1.15,0+.1946/1.15) node[rotate=0] {$\varphi$};
 
 % axis

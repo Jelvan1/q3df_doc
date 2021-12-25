@@ -1111,7 +1111,7 @@ table[row sep=crcr]{%
 \def\sI{1/\spyfactorI}
 \def\linewidthzoom{\pgflinewidth*\sI*4}
 \def\dashwidth{3pt*\sI}
-\tikzstyle{very densely dashed}=          [dash pattern=on \dashwidth off \dashwidth]
+\pgfplotsset{very densely dashed/.style={dash pattern=on \dashwidth off \dashwidth}}
 \def\pic{
 	\begin{axis}[%
 	width=\figurewidth,

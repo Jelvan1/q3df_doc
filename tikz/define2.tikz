@@ -22,7 +22,7 @@ every outer y axis line/.append style={white!40!black},
 every y tick label/.append style={font=\color{white!40!black}},
 axis background/.style={fill=white}
 ]
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:.25,.25) arc [start angle=45, end angle=90,radius={transformdirectionx(.70711/2)}] -- (axis cs:0,0) -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:.25,.25) arc [start angle=45, end angle=90,radius=.70711/2] -- (axis cs:0,0) -- cycle;
 \draw (axis cs:.0875,.2112) node[rotate=0] {$\phi$};
 \addplot[thick, black!40!mycolor2, forget plot]
 table[row sep=crcr] {%

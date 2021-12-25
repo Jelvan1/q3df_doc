@@ -26,14 +26,14 @@ every outer y axis line/.append style={white!40!black},
 every y tick label/.append style={font=\color{white!40!black}},
 axis background/.style={fill=white}
 ]
-\draw[fill=mycolor2!10,draw=mycolor2] (axis cs:1,.5+.3) arc [start angle=90, end angle=450,radius={transformdirectionx(.3)}] -- cycle;
+\draw[fill=mycolor2!10,draw=mycolor2] (axis cs:1,.5+.3) arc [start angle=90, end angle=450,radius=.3] -- cycle;
 
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:1,.5+.2) arc [start angle=90, end angle=90-63.4349,radius={transformdirectionx(.2)}] -- (axis cs:1,.5) -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:1,.5+.2) arc [start angle=90, end angle=90-63.4349,radius=.2] -- (axis cs:1,.5) -- cycle;
 \draw (axis cs:1+.1051/1.55,.5+.1701/1.55) node[rotate=0] {$\delta$};
 
 %\draw [mycolor0] (axis cs:1,.5+.07071) -- (axis cs:1+.07071,.5+.07071) -- (axis cs:1+.07071,.5);
 
-\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0+.24,0) arc [start angle=0, end angle=90-63.4349,radius={transformdirectionx(.24)}] -- (axis cs:0,0) -- cycle;
+\draw[fill=mycolor0!10,draw=mycolor0] (axis cs:0+.24,0) arc [start angle=0, end angle=90-63.4349,radius=.24] -- (axis cs:0,0) -- cycle;
 \draw (axis cs:.1946*1.45,0+.0460*1.45) node[rotate=0] {$\nu$};
 
 \addplot[very thick, dashed, mycolor3, forget plot]
