@@ -11,7 +11,7 @@ An $n$-dimensional vector is represented as
 x_1 \\ x_2 \\ \vdots \\ x_n
 \end{pmatrix} = \norm{\vec{x}} \uvec{x},
 }{
-\forall i \in \set{1, 2, ..., n}, x_i \in \mathbb{R},
+\forall i \in \set{1, 2, ..., n}, x_i \in \symbb{R},
 }
 \]
 where $x_1, x_2, ..., x_n$ are the components of $\vec{x}$. Alternatively, the vector is uniquely defined by its magnitude and direction. The magnitude is described by the \emph{norm}%
@@ -62,7 +62,7 @@ An orthogonal projection can be performed by a matrix multiplication. To project
 \projmat{x} = \uvec{x} \uvec{x}^T = \projmat{x}^T =
 \projmat{x}^k,
 }{
-k \in \mathbb{N}^+.
+k \in \symbb{N}^+.
 }
 \end{align*}
 Similarly, to project \emph{along} the vector $\vec{x}$ onto its corresponding hyperplane, the matrix is defined by
@@ -70,7 +70,7 @@ Similarly, to project \emph{along} the vector $\vec{x}$ onto its corresponding h
 \lcr{}{
 \resprojmat{x} = \mat{I} - \projmat{x} = \resprojmat{x}^T = \resprojmat{x}^k,
 }{
-k \in \mathbb{N}^+,
+k \in \symbb{N}^+,
 }
 \end{align*}
 with $\mat{I}$ the identity matrix.

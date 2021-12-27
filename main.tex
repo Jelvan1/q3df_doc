@@ -9,14 +9,20 @@
 \usepackage{appendix}
 \usepackage[nottoc]{tocbibind} % add bibliography to toc
 
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18} % latest version on 2021-12-25
 \usepackage{mathtools} % updates and extends amsmath
-\usepackage{amssymb} % mathbb
+\usepackage{amssymb} % blacksquare
 \usepackage{siunitx} % units
-\usepackage{subcaption} % subfigure
 \usepackage[normalem]{ulem} % uline
 
+\usepackage{fontspec}
+% https://tex.stackexchange.com/questions/570548/suppress-warning-by-unicode-math-regarding-mathtools
+\usepackage[bold-style=ISO]{unicode-math} % ISO keeps italic, symbb, symbf
+\setmainfont{Erewhon}
+\setmathfont{Erewhon Math}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18} % latest version on 2021-12-25
+\usepackage{subcaption} % subfigure
 \usepackage[pdfusetitle,colorlinks=true]{hyperref} % recommended to load last
 \usepackage[all]{tcolorbox} % listing (requires hyperref)
 
@@ -103,9 +109,9 @@
 \newcommand*{\abs}[1]{\left\lvert#1\right\rvert}
 \newcommand*{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand*{\set}[1]{\left\{#1\right\}}
-\renewcommand*{\vec}[1]{\boldsymbol{#1}}
+\renewcommand*{\vec}[1]{\symbf{#1}}
 \newcommand*{\uvec}[1]{\vec{\hat{#1}}}
-\newcommand*{\mat}[1]{\boldsymbol{#1}}
+\newcommand*{\mat}[1]{\symbf{#1}}
 \newcommand*{\projmat}[1]{\mat{P}_{\vec{#1}}}
 \newcommand*{\resprojmat}[1]{\mat{M}_{\vec{#1}}}
 \makeatletter
@@ -116,7 +122,7 @@
 	\right)%
 }
 \makeatother
-\renewcommand*{\flat}[1]{\uline{#1}}
+\AtBeginDocument{\renewcommand*{\flat}[1]{\uline{#1}}} % overwrite macro from unicode-math
 
 \DeclareMathOperator{\acos}{acos}
 \DeclareMathOperator{\atan}{atan}
