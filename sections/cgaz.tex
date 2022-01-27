@@ -340,6 +340,60 @@ Air:
 The strafe keys in CPM do not ever affect upmove. Not true
 
 
+\subsection{Speed gains from air strafing}
+\label{sec:speed_gains}
+Acceleration from strafing can be obtained using equation \eqref{eq:sAT}.\\
+From below code, acceleration is applied per axis in direction of unit \texttt{wishdir} with magnitude of \texttt{accelspeed}, i.e. $\uvec{\flat{s}}\flat{a}$.
+\codeFromFile{firstline=256,lastline=258,gobble=1}{code/game/bg_pmove.c}
+Thus, acceleration is dependent on angle $\delta$.\\
+W.l.o.g., assume current velocity $\flat{v}$ is solely on the $x$-axis. Then, $\vec{v_\text{new}}$ becomes
+\begin{align*}
+\vec{v_\text{new}} =
+\begin{pmatrix}
+\flat{v} + \flat{a}\cos\delta\\\flat{a}\sin\delta\\0
+\end{pmatrix}.
+\end{align*}
+Gain in speed $G\left(\flat{v}\ ;\delta \right)$ is given by
+\begin{align*}
+G\left(\flat{v}\ ;\delta \right) &= \norm{\vec{v_\text{new}}} - \flat{v}\\
+&= \sqrt{\left(\flat{v} + \flat{a}\cos\delta \right)^2 + \left(\flat{a}\sin\delta \right)^2} - \flat{v}.
+\end{align*}
+
+Now provided that the player is strafing at $\delta_{\opt}$,
+\begin{align*}
+G\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left(\flat{v} + \flat{a}\cos{\acos\left( \frac{s - \flat{a}}{\flat{v}} \right)} \right)^2 + \left(\flat{a}\sin{\acos\left( \frac{s - \flat{a}}{\flat{v}} \right)} \right)^2} - \flat{v}\\
+&= \sqrt{\left(\flat{v} + \flat{a}\frac{s - \flat{a}}{\flat{v}} \right)^2 + \left(\flat{a}\sqrt{1 - \left( \frac{s - \flat{a}}{\flat{v}} \right)^2} \right)^2} - \flat{v}\ \ldots\ \frac{s - \flat{a}}{\flat{v}} \leq 1\\
+&= \sqrt{\flat{v}^2 + \flat{a}^2 \left( \frac{s - \flat{a}}{\flat{v}} \right)^2 + 2\flat{v}\flat{a}\frac{s - \flat{a}}{\flat{v}} + \flat{a}^2 \left( 1 - \left( \frac{s - \flat{a}}{\flat{v}} \right)^2 \right)} - \flat{v}
+\end{align*}
+\begin{align}
+\label{eq:speed_gain}
+\therefore\ G\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\flat{v}^2 + 2s\flat{a} - \flat{a}^2} - \flat{v},\ \text{where}\ \flat{v}\geq s - \flat{a}.
+\end{align}
+
+For CPM strafing, $s = 320$, $A = 1$. These values are the same for VQ3 strafing. Hence,
+\begin{align*}
+\flat{a} = 320\cdot 1\cdot 0.008 = 2.56
+\end{align*}
+Plugging into \eqref{eq:speed_gain},
+\begin{align*}
+G_{\text{strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 320 \cdot 2.56 - 2.56^2} - \flat{v}\\
+&= \sqrt{\flat{v}^2 + 1631.8464} - \flat{v}
+\end{align*}
+
+For CPM sidestrafing, $s = 30$, $A = 70$. Hence,
+\begin{align*}
+\flat{a} = 30\cdot 70\cdot 0.008 = 16.8
+\end{align*}
+Plugging into \eqref{eq:speed_gain},
+\begin{align*}
+G_{\text{sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 30 \cdot 16.8 - 16.8^2} - \flat{v}\\
+&= \sqrt{\flat{v}^2 + 725.76} - \flat{v}
+\end{align*}
+
+This also presents the question of whether CPM sidestrafing ever becomes superior to normal strafing.\\
+However, it is clear that $G_{\text{strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) > G_{\text{sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right)\ \forall\ \flat{v} \in \symbb{R}$.
+
+
 \subsection{Strafing on icy surfaces}
 \label{sec:icy}
 Acceleration $a = 1$ on a icy surface is identical to the acceleration in the air, however, this is not the entire story. Every frame Gravity $g = 800$ (\texttt{g\_gravity}).
