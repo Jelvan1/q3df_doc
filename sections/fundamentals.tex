@@ -114,7 +114,10 @@ with a magnitude
 \label{eq:sAT}
 \flat{a} = sAT,
 \end{align}
-where $A$ is some dimensionless constant depending on the player state\footnote{In the air, $A = 1$ (\texttt{pm\_airaccelerate}), while on the ground $A = 10$ and $A = 15$ (\texttt{pm\_accelerate}) for VQ3 and CPM, respectively.} and $s$ is the wishspeed limit (e.g. $\texttt{g\_speed} = \qty{320}{ups}$ on a flat surface under normal conditions, see more details in Section \ref{sec:movementkeys}). In the same way, the projection of the resulting new velocity becomes
+where $A$ is some dimensionless constant depending on the player state\footnote{In the air, $A = 1$ (\texttt{pm\_airaccelerate}), while on the ground $A = 10$ and $A = 15$ (\texttt{pm\_accelerate}) for VQ3 and CPM, respectively.} and $s$ is the wishspeed limit (e.g. $\texttt{g\_speed} = \qty{320}{ups}$ on a flat surface under normal conditions, see more details in Section \ref{sec:movementkeys}).\\
+Acceleration magnitude is provided by below code
+\codeFromFile{firstline=251,lastline=251,gobble=1}{code/game/bg_pmove.c}
+In the same way, the projection of the resulting new velocity becomes
 \begin{align*}
 \vec{\flat{r}} = \resprojmat{\flat{n}} \vec{r} =
 \begin{pmatrix}
