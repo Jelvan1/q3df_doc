@@ -1,2 +1,12 @@
 \section{SnapHUD}
 \label{sec:snaphud}
+
+\subsection{Basics}
+\label{sec:basics}
+In order to save resources, the game engine rounds each component of some vectors each frame, as shown by the below code. Albeit a simple change, this largely changes the way the game is played.
+\codeFromFile{firstline=480,lastline=488,gobble=1}{code/qcommon/q_shared.h}
+As player velocity is one of the vectors that is rounded, we can interpret this as rounding the acceleration the player receives each frame, given by
+\begin{align*}
+\flat{a} = sAT,
+\end{align*}
+TODO
