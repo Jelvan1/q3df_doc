@@ -1,2 +1,23 @@
 \section{SnapHUD}
 \label{sec:snaphud}
+
+\subsection{Basics}
+\label{sec:snap_basics}
+In order to save resources, the game engine rounds each component of some vectors each frame, as shown by the below code. Albeit a simple change, this largely changes the way the game is played.
+\codeFromFile{firstline=151,lastline=156}{code/unix/unix_shared.c}
+Since player velocity is one of the vectors that is rounded, we can interpret this as rounding the speed change the player receives each frame, forming
+\begin{align*}
+\round{\vec{a}} &=
+\begin{pmatrix}
+\lfloor a_x\rceil \\ \lfloor a_y\rceil \\ \lfloor a_z\rceil % looks weird with \left and \right
+\end{pmatrix}, & \round{\vec{r}} &=
+\begin{pmatrix}
+\lfloor r_x\rceil \\ \lfloor r_y\rceil \\ \lfloor r_z\rceil
+\end{pmatrix}.
+\end{align*}
+TODO
+
+
+\subsection{Frame rate impact}
+\label{sec:snap_frame_rate}
+TODO
