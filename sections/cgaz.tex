@@ -205,7 +205,7 @@ v_x \\ v_y \\ 0
 		\includetikz{tikz/cmd3d} % TODO: merge cmd3d_2
 		\caption{}
 	\end{subfigure}%
-	\caption{The current velocity $\vec{\flat{v}}_f$ (\yellowarrow), the acceleration $\vec{a}$ (\orangearrow) and the resulting new velocity $\vec{\flat{r}}$ (\bluearrow). (a) is the top view of (b). key plane (\lightorangearea)}
+	\caption{The current velocity $\vec{\flat{v}}_f$ (\yellowarrow), the acceleration $\vec{a}$ (\orangearrow) and the resulting new velocity $\vec{\flat{r}}$ (\bluearrow). (a) is the top view of (b). key plane (\lightorangearea). $\theta = \atan\sqrt{2}$}
 	\label{fig:cmd}
 \end{figure}
 
@@ -346,48 +346,44 @@ Acceleration from strafing can be obtained using equation \eqref{eq:sAT}.\\
 From below code, acceleration is applied per axis in direction of unit \texttt{wishdir} with magnitude of \texttt{accelspeed}, i.e. $\uvec{\flat{s}}\flat{a}$.
 \codeFromFile{firstline=256,lastline=258,gobble=1}{code/game/bg_pmove.c}
 Thus, acceleration is dependent on angle $\delta$.\\
-W.l.o.g., assume current velocity $\flat{v}$ is solely on the $x$-axis. Then, $\vec{v_\text{new}}$ becomes
+W.l.o.g., assume current velocity $\flat{v}$ is solely on the $x$-axis. Then $\vec{v_\text{new}}$ becomes
 \begin{align*}
 \vec{v_\text{new}} =
 \begin{pmatrix}
 \flat{v} + \flat{a}\cos\delta\\\flat{a}\sin\delta\\0
 \end{pmatrix}.
 \end{align*}
-Gain in speed $G\left(\flat{v}\ ;\delta \right)$ is given by
+Given $\delta \in [\delta_{\min}, \delta_{\max}]$, gain in speed\footnote{When strafing at angle $\delta$ to $\vec{\flat{v}}$ for a single frame.} $G\left(\flat{v}\ ;\delta \right)$ is given by
 \begin{align*}
 G\left(\flat{v}\ ;\delta \right) &= \norm{\vec{v_\text{new}}} - \flat{v}\\
-&= \sqrt{\left(\flat{v} + \flat{a}\cos\delta \right)^2 + \left(\flat{a}\sin\delta \right)^2} - \flat{v}.
+&= \sqrt{\left(\flat{v} + \flat{a}\cos\delta \right)^2 + \left(\flat{a}\sin\delta \right)^2} - \flat{v}\\
+&= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos\delta + \flat{a}^2} - \flat{v}.
 \end{align*}
 
 Now provided that the player is strafing at $\delta_{\opt}$,
 \begin{align*}
-G\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left(\flat{v} + \flat{a}\cos{\acos\left( \frac{s - \flat{a}}{\flat{v}} \right)} \right)^2 + \left(\flat{a}\sin{\acos\left( \frac{s - \flat{a}}{\flat{v}} \right)} \right)^2} - \flat{v}\\
-&= \sqrt{\left(\flat{v} + \flat{a}\frac{s - \flat{a}}{\flat{v}} \right)^2 + \left(\flat{a}\sqrt{1 - \left( \frac{s - \flat{a}}{\flat{v}} \right)^2} \right)^2} - \flat{v}\ \ldots\ \frac{s - \flat{a}}{\flat{v}} \leq 1\\
-&= \sqrt{\flat{v}^2 + \flat{a}^2 \left( \frac{s - \flat{a}}{\flat{v}} \right)^2 + 2\flat{v}\flat{a}\frac{s - \flat{a}}{\flat{v}} + \flat{a}^2 \left( 1 - \left( \frac{s - \flat{a}}{\flat{v}} \right)^2 \right)} - \flat{v}
+G\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos{\acos\left( \frac{s - \flat{a}}{\flat{v}} \right)} + \flat{a}^2} - \flat{v}\\
+&= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\frac{s - \flat{a}}{\flat{v}} + \flat{a}^2} - \flat{v}\ \ldots\ \frac{s - \flat{a}}{\flat{v}} \leq 1
 \end{align*}
 \begin{align}
 \label{eq:speed_gain}
 \therefore\ G\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\flat{v}^2 + 2s\flat{a} - \flat{a}^2} - \flat{v},\ \text{where}\ \flat{v}\geq s - \flat{a}.
-\end{align}
+\end{align}\\
 
-For CPM strafing, $s = 320$, $A = 1$. These values are the same for VQ3 strafing. Hence,
+For normal strafing, $s = 320$, $A = 1$. These values are the same for CPM and VQ3. Hence,
 \begin{align*}
-\flat{a} = 320\cdot 1\cdot 0.008 = 2.56
+\flat{a} = 320\cdot 1\cdot 0.008 = 2.56.
 \end{align*}
 Plugging into \eqref{eq:speed_gain},
 \begin{align*}
 G_{\text{strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 320 \cdot 2.56 - 2.56^2} - \flat{v}\\
-&= \sqrt{\flat{v}^2 + 1631.8464} - \flat{v}
+&= \sqrt{\flat{v}^2 + 1631.8464} - \flat{v}.
 \end{align*}
 
-For CPM sidestrafing, $s = 30$, $A = 70$. Hence,
-\begin{align*}
-\flat{a} = 30\cdot 70\cdot 0.008 = 16.8
-\end{align*}
-Plugging into \eqref{eq:speed_gain},
+For CPM sidestrafing, $s = 30$, $A = 70$. Hence, $\flat{a} = 30\cdot 70\cdot 0.008 = 16.8$, and
 \begin{align*}
 G_{\text{sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 30 \cdot 16.8 - 16.8^2} - \flat{v}\\
-&= \sqrt{\flat{v}^2 + 725.76} - \flat{v}
+&= \sqrt{\flat{v}^2 + 725.76} - \flat{v}.
 \end{align*}
 
 This also presents the question of whether CPM sidestrafing ever becomes superior to normal strafing.\\
@@ -612,7 +608,7 @@ with $c = 3$ the friction factor when using flight (\texttt{pm\_flightfriction})
 \norm{\texttt{wishvel}} &= \sqrt{(\fmove \cos\rho)^2 + \rmove^2 + (-\fmove \sin\rho + \umove)^2} = \sqrt{\fmove^2 + \rmove^2 + \umove^2  - 2\fmove\umove\sin\rho},\\
 \norm{\vec{\fmove} + \vec{\rmove} + \vec{\umove}} &= \sqrt{(\fmove \cos\rho + \umove \sin\rho)^2 + \rmove^2 + (-\fmove \sin\rho + \umove \cos\rho)^2} = \sqrt{\fmove^2 + \rmove^2 + \umove^2} = \norm{\vec{\cmd}},
 \end{align*}
-Using the law of cosines $\fumove^2 = \fmove^2 + \umove^2 - 2\fmove\umove\cos(\pi/2 - \rho)$
+Using the law of cosines $\fumove^2 = \fmove^2 + \umove^2 - 2\fmove\umove\cos\left(\frac{\pi}{2} - \rho \right)$ and
 \begin{align*}
 \norm{\texttt{wishvel}} &= \sqrt{\fumove^2 + \rmove^2},
 \end{align*}
