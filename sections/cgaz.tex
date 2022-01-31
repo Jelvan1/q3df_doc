@@ -170,231 +170,12 @@ Knowing all these angles, we can create a CGazHUD (i.e. a strafe-jump helper), w
 	\label{fig:v_ground}
 \end{figure}
 
-\subsection{Influence of movement keys}
-\label{sec:movementkeys}
-\begin{align*}
-\vec{\cmd} =
-\begin{pmatrix}
-\fmove \\ \rmove \\ \umove
-\end{pmatrix}, \qquad \vec{\flat{\cmd}} =
-\begin{pmatrix}
-\fmove \\ \rmove \\ 0
-\end{pmatrix},
-\end{align*}
-The direction of acceleration $\uvec{\flat{a}}$ \eqref{eq:accel_direction} can be chosen by using your mouse and the movement keys. Relative to $\nu = \atan\left(\frac{v_y}{v_x}\right)$
-\begin{align*}
-\uvec{\flat{v}} = \frac{1}{\flat{v}}
-\begin{pmatrix}
-v_x \\ v_y \\ 0
-\end{pmatrix}
-\end{align*}
-
-\begin{figure}[H]
-	\centering
-	\begin{subfigure}[t]{.5\textwidth}
-		\centering
-		\setlength\figureheight{5.5cm}
-		\setlength\figurewidth{5.5cm}
-		\includetikz{tikz/cmd}
-		\caption{}
-	\end{subfigure}%
-	\begin{subfigure}[t]{.5\textwidth}
-		\centering
-		\setlength\figureheight{5.5cm}
-		\setlength\figurewidth{5.5cm}
-		\includetikz{tikz/cmd3d} % TODO: merge cmd3d_2
-		\caption{}
-	\end{subfigure}%
-	\caption{The current velocity $\vec{\flat{v}}_f$ (\yellowarrow), the acceleration $\vec{a}$ (\orangearrow) and the resulting new velocity $\vec{\flat{r}}$ (\bluearrow). (a) is the top view of (b). key plane (\lightorangearea). $\theta = \atan\sqrt{2}$}
-	\label{fig:cmd}
-\end{figure}
-
-% TODO: make projections of 2 vs 1 key combinations
-
-where $\gamma = \delta + \nu$ represents the yaw angle.
-
-Appendix \ref{app:angle_vectors}
-
-The current velocity vector is defined as
-\begin{align*}
-\uvec{\fmove} &=
-\begin{pmatrix}
-	\cos\rho\cos\gamma\\
-	\cos\rho\sin\gamma\\
-	-\sin\rho
-\end{pmatrix},\\
-\uvec{\rmove} &=
-\begin{pmatrix}
-	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
-	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
-	-\sin\sigma\cos\rho
-\end{pmatrix},\\
-\uvec{\umove} &=
-\begin{pmatrix}
-	\cos\sigma\sin\rho\cos\gamma + \sin\sigma\sin\gamma\\
-	\cos\sigma\sin\rho\sin\gamma - \sin\sigma\cos\gamma\\
-	\cos\sigma\cos\rho
-\end{pmatrix},
-\end{align*}
-
-\codeFromFile{firstline=621,lastline=625,gobble=1}{code/game/bg_pmove.c}
-
-\begin{align*}
-\uvec{\flat{\fmove}} &=
-\begin{pmatrix}
-	\cos\rho\cos\gamma\\
-	\cos\rho\sin\gamma\\
-	0
-\end{pmatrix} \frac{1}{\sqrt{\cos^2\rho}} =
-\begin{pmatrix}
-	\cos\gamma\\
-	\sin\gamma\\
-	0
-\end{pmatrix},\\
-\uvec{\flat{\rmove}} &=
-\begin{pmatrix}
-	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
-	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
-	0
-\end{pmatrix} \frac{1}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
-\end{align*}
-
-\begin{align*}
-\uvec{\flat{\fmove}}^T \uvec{\flat{\rmove}} &= \frac{-\sin\sigma\sin\rho\cos^2\gamma + \cos\sigma\sin\gamma\cos\gamma - \sin\sigma\sin\rho\sin^2\gamma - \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}\\
-&= \frac{-\sin\sigma\sin\rho}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}
-\end{align*}
-
-\begin{align*}
-\vec{\flat{\fmove}} + \vec{\flat{\rmove}} = \texttt{wishvel} &= \fmove
-\begin{pmatrix}
-	\cos\gamma\\
-	\sin\gamma\\
-	0
-\end{pmatrix} + \rmove
-\begin{pmatrix}
-	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
-	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
-	0
-\end{pmatrix} \frac{1}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
-\end{align*}
-
-\begin{align*}
-\norm{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \norm{\texttt{wishvel}}^2 = &\fmove^2 \cos^2\gamma + \rmove^2 \frac{\sin^2\sigma\sin^2\rho\cos^2\gamma + \cos^2\sigma\sin^2\gamma - \sin\sigma\cos\sigma\sin\rho\sin\gamma\cos\gamma}{\sin^2\sigma\sin^2\rho + \cos^2\sigma} +\\
-&\fmove^2 \sin^2\gamma + \rmove^2 \frac{\sin^2\sigma\sin^2\rho\sin^2\gamma + \cos^2\sigma\cos^2\gamma + \sin\sigma\cos\sigma\sin\rho\sin\gamma\cos\gamma}{\sin^2\sigma\sin^2\rho + \cos^2\sigma} +\\
-&2\fmove\rmove\frac{-\sin\sigma\sin\rho\cos^2\gamma + \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}} +\\
-&2\fmove\rmove\frac{-\sin\sigma\sin\rho\sin^2\gamma - \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},\\
-%
-= &\fmove^2 + \rmove^2 + 2\fmove\rmove\frac{-\sin\sigma\sin\rho}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
-\end{align*}
-
-Derivative
-\begin{align*}
-\frac{\mathrm{d}}{\mathrm{d}\rho} \norm{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \frac{\mathrm{d}}{\mathrm{d}\rho} \norm{\texttt{wishvel}}^2 = 2\fmove\rmove\frac{-\sin\sigma\cos^2\sigma\cos\rho}{\left( \sin^2\sigma\sin^2\rho + \cos^2\sigma \right)^{3/2}},
-\end{align*}
-This is $0$ when
-\[
-\begin{cases}
-	\rho = \hphantom{-}\frac{\pi}{2} + 2k\pi, &k \in \symbb{N},\\
-	\rho = -\frac{\pi}{2} + 2k\pi, &k \in \symbb{N}.
-\end{cases}
-\]
-
-With optimal $\rho$ filled in, we get
-\begin{align*}
-\uvec{\flat{\fmove}}^T \uvec{\flat{\rmove}} &= -\sin\sigma,\\
-&= \sin\sigma,
-\end{align*}
-\begin{align*}
-\norm{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \norm{\texttt{wishvel}}^2 &= \fmove^2 + \rmove^2 - 2\fmove\rmove\sin\sigma,\\
-&= \fmove^2 + \rmove^2 + 2\fmove\rmove\sin\sigma,
-\end{align*}
-
-Appendix \ref{app:cmd_scale}
-
-\begin{align*}
-\texttt{scale} = \frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}},
-\end{align*}
-
-\begin{align*}
-\texttt{wishspeed} &= \texttt{scale} \norm{\texttt{wishvel}} =
-\frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}} \norm{\texttt{wishvel}},\\
-\norm{\vec{\flat{a}}} &= \flat{a} = AT \texttt{wishspeed} = AT\frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}} \norm{\texttt{wishvel}},
-\end{align*}
-when $\fmove = 127$, $\rmove = 0$ and $\umove = 0$, then $s = 320$ like in the previous section.
-
-Air:
-\begin{align}
-\nonumber
-\norm{\projmat{a} \vec{\flat{v}}_f} + \norm{\vec{\flat{a}}} &= s \norm{\uvec{\flat{a}}},\\
-\nonumber
-\vec{v}_{f}^T\texttt{wishdir} + \texttt{accel}T\texttt{wishspeed} &= \texttt{wishspeed}\norm{wishdir},\\
-\nonumber
-\norm{\vec{\flat{v}}_f} \cos{\delta_{\opt}} + \texttt{accel}T\texttt{wishspeed} &= \texttt{wishspeed},\\
-\nonumber
-\flat{v}_f \cos{\delta_{\opt}} &= \texttt{wishspeed} - \texttt{accel}T\texttt{wishspeed},\\
-\delta_{\opt} &= \acos\left( \frac{\texttt{wishspeed} \left(1 - \texttt{accel}T\right)}{\flat{v}_f} \right).
-\end{align}
-
-\texttt{PM\_Accelerate (wishdir, wishspeed, pm\_airaccelerate);}
-
-The strafe keys in CPM do not ever affect upmove. Not true
-
-
-\subsection{Speed gains from air strafing}
-\label{sec:speed_gains}
-Acceleration from strafing can be obtained using equation \eqref{eq:sAT}.\\
-From below code, acceleration is applied per axis in direction of unit \texttt{wishdir} with magnitude of \texttt{accelspeed}, i.e. $\uvec{\flat{s}}\flat{a}$.
-\codeFromFile{firstline=256,lastline=258,gobble=1}{code/game/bg_pmove.c}
-Thus, acceleration is dependent on angle $\delta$.\\
-W.l.o.g., assume current velocity $\flat{v}$ is solely on the $x$-axis. Then $\vec{v_\text{new}}$ becomes
-\begin{align*}
-\vec{v_\text{new}} =
-\begin{pmatrix}
-\flat{v} + \flat{a}\cos\delta\\\flat{a}\sin\delta\\0
-\end{pmatrix}.
-\end{align*}
-Given $\delta \in [\delta_{\min}, \delta_{\max}]$, gain in speed\footnote{When strafing at angle $\delta$ to $\vec{\flat{v}}$ for a single frame.} $G\left(\flat{v}\ ;\delta \right)$ is given by
-\begin{align*}
-G\left(\flat{v}\ ;\delta \right) &= \norm{\vec{v_\text{new}}} - \flat{v}\\
-&= \sqrt{\left(\flat{v} + \flat{a}\cos\delta \right)^2 + \left(\flat{a}\sin\delta \right)^2} - \flat{v}\\
-&= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos\delta + \flat{a}^2} - \flat{v}.
-\end{align*}
-
-Now provided that the player is strafing at $\delta_{\opt}$,
-\begin{align*}
-G\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos{\acos\left( \frac{s - \flat{a}}{\flat{v}} \right)} + \flat{a}^2} - \flat{v}\\
-&= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\frac{s - \flat{a}}{\flat{v}} + \flat{a}^2} - \flat{v}\ \ldots\ \frac{s - \flat{a}}{\flat{v}} \leq 1
-\end{align*}
-\begin{align}
-\label{eq:speed_gain}
-\therefore\ G\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\flat{v}^2 + 2s\flat{a} - \flat{a}^2} - \flat{v},\ \text{where}\ \flat{v}\geq s - \flat{a}.
-\end{align}\\
-
-For normal strafing, $s = 320$, $A = 1$. These values are the same for CPM and VQ3. Hence,
-\begin{align*}
-\flat{a} = 320\cdot 1\cdot 0.008 = 2.56.
-\end{align*}
-Plugging into \eqref{eq:speed_gain},
-\begin{align*}
-G_{\text{strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 320 \cdot 2.56 - 2.56^2} - \flat{v}\\
-&= \sqrt{\flat{v}^2 + 1631.8464} - \flat{v}.
-\end{align*}
-
-For CPM sidestrafing, $s = 30$, $A = 70$. Hence, $\flat{a} = 30\cdot 70\cdot 0.008 = 16.8$, and
-\begin{align*}
-G_{\text{sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 30 \cdot 16.8 - 16.8^2} - \flat{v}\\
-&= \sqrt{\flat{v}^2 + 725.76} - \flat{v}.
-\end{align*}
-
-This also presents the question of whether CPM sidestrafing ever becomes superior to normal strafing.\\
-However, it is clear that $G_{\text{strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) > G_{\text{sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right)\ \forall\ \flat{v} \in \symbb{R}$.
-
 
 \subsection{Strafing on icy surfaces}
-\label{sec:icy}
-Acceleration $a = 1$ on a icy surface is identical to the acceleration in the air, however, this is not the entire story. Every frame Gravity $g = 800$ (\texttt{g\_gravity}).
+\label{sec:slick}
+Acceleration $A = 1$ on a icy surface is identical to the acceleration in the air, however, this is not the entire story. Every frame Gravity $g = 800$ (\texttt{g\_gravity}).
 \begin{align*}
-v_{f_3} - gT
+v_{f_z} - gT
 \end{align*}
 
 Explain the drifting speed and sticky jump overbounces (graph time for ob with respect to your current velocity, slick top view turn (with(out) jump)).
@@ -416,8 +197,10 @@ n_1\\n_2\\n_3
 \vec{\bar{k}} &=
 \begin{pmatrix}
 -n_1\\-n_2\\\hphantom{-}n_3
-\end{pmatrix},\\
+\end{pmatrix},
+\end{align*}
 %
+\begin{align*}
 \mat{P}_{\perp \vec{n} \rightarrow \vec{n}} = \mat{I} - \vec{n}\vec{n}^T &=
 \begin{pmatrix}
 n_2^2+n_3^2 & -n_1 n_2 & -n_1 n_3\\
@@ -546,10 +329,96 @@ currentspeed &= S2F velocity;
 \label{sec:turnCPM}
 Forwardkey aircontrol, forwardkey CGazHUD strafing, forwardkey side speed gain
 
-Sidestrafe aircontrol applies regular acceleration with an additional change of direction. The new velocity is pulled towards the yaw angle.
+Sidestrafe aircontrol applies regular acceleration with an additional change of direction. The new velocity is pulled towards the yaw angle.\\
+TODO
+
+
+\subsection{Speed gains from air strafing}
+\label{sec:accel_air}
+Acceleration from strafing can be obtained using equation \eqref{eq:sAT}.\\
+From below code, acceleration is applied per axis in direction of unit \texttt{wishdir} with magnitude of \texttt{accelspeed}, i.e. $\uvec{\flat{s}}\flat{a}$.
+\codeFromFile{firstline=256,lastline=258,gobble=1}{code/game/bg_pmove.c}
+Thus, acceleration is dependent on angle $\delta$.\\
+W.l.o.g., assume current velocity $\flat{v}$ is solely on the $x$-axis. Then the resulting new velocity $\vec{r}$ becomes
+\begin{align*}
+\vec{r} =
+\begin{pmatrix}
+\flat{v} + \flat{a}\cos\delta\\\flat{a}\sin\delta\\0
+\end{pmatrix}.
+\end{align*}
+Given $\delta \in [\delta_{\min}, \delta_{\max}]$, function of new velocity\footnote{When strafing at angle $\delta$ to $\vec{\flat{v}}$ for a single frame.} $r\left(\flat{v}\ ;\delta \right)$ is given by
+\begin{align*}
+r\left(\flat{v}\ ;\delta \right) &= \sqrt{\left(\flat{v} + \flat{a}\cos\delta \right)^2 + \left(\flat{a}\sin\delta \right)^2}\\
+&= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos\delta + \flat{a}^2}
+\end{align*}
+and likewise gain in speed $G\left(\flat{v}\ ;\delta \right) = \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos\delta + \flat{a}^2} - \flat{v}$.\\
+
+Now provided that the player is strafing at $\delta_{\opt}$,
+\begin{align*}
+r\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos{\acos\left( \frac{s - \flat{a}}{\flat{v}} \right)} + \flat{a}^2}\\
+&= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\frac{s - \flat{a}}{\flat{v}} + \flat{a}^2}\ \ldots\ \frac{s - \flat{a}}{\flat{v}}\le 1
+\end{align*}
+\begin{align}
+\label{eq:accel_opt_air}
+\therefore\ r\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\flat{v}^2 + 2s\flat{a} - \flat{a}^2},\ \text{where}\ \flat{v}\ge s - \flat{a}.
+\end{align}\\
+
+For normal strafing, $s = 320$, $A = 1$. These values are the same for CPM and VQ3. Hence,
+\begin{align*}
+\flat{a} = 320\cdot 1\cdot 0.008 = 2.56.
+\end{align*}
+Plugging into \eqref{eq:accel_opt_air},
+\begin{align*}
+r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 320 \cdot 2.56 - 2.56^2}\\
+&= \sqrt{\flat{v}^2 + 1631.8464},\ \text{where}\ \flat{v}\ge 317.44.
+\end{align*}
+
+For CPM sidestrafing, $s = 30$, $A = 70$. Hence, $\flat{a} = 30\cdot 70\cdot 0.008 = 16.8$, and
+\begin{align*}
+r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 30 \cdot 16.8 - 16.8^2}\\
+&= \sqrt{\flat{v}^2 + 725.76},\ \text{where}\ \flat{v}\ge 303.2.
+\end{align*}
+
+This also presents the question of whether CPM sidestrafing ever becomes superior to normal strafing.\\
+However, it is clear that $r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) > r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right)\ \forall\ \flat{v} \in \symbb{R}$.
+
+
+\subsection{Speed gains from ground strafing}
+\label{sec:accel_ground}
+Deriving formulas for ground strafing works similarly to air strafing, however friction needs to be accounted for.\\
+As friction is applied before acceleration, $\flat{v}_f = (1 - \iota cT)\flat{v}$. Thus, assuming w.l.o.g. $\flat{v}$ is solely on the $x$-axis,
+\begin{align*}
+\vec{r} =
+\begin{pmatrix}
+(1 - \iota cT)\flat{v} + \flat{a}\cos\delta\\\flat{a}\sin\delta\\0
+\end{pmatrix}.
+\end{align*}
+Then with $\delta \in [\delta_{\min}, \delta_{\max}]$,
+\begin{align*}
+r\left(\flat{v}\ ;\delta \right) = \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2(1 - \iota cT)\flat{v}\flat{a}\cos\delta + \flat{a}^2}
+\end{align*}
+and likewise gain in speed $G\left(\flat{v}\ ;\delta \right) = \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2(1 - \iota cT)\flat{v}\flat{a}\cos\delta + \flat{a}^2} - \flat{v}$.\\
+
+Now provided that the player is strafing at $\delta_{\opt}$,
+\begin{align}
+\label{eq:accel_opt_ground}
+r\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2s\flat{a} - \flat{a}^2},\ \text{where}\ \flat{v}_f\ge s - \flat{a}.
+\end{align}\\
+
+For CPM, $\flat{a} = 320\cdot 15\cdot 0.008 = 38.4$. Hence by \eqref{eq:accel_opt_ground},
+\begin{align*}
+r_{\text{CPM-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 23101.44},\ \text{where}\ \flat{v}_f\ge 281.6.
+\end{align*}
+For VQ3, $\flat{a} = 320\cdot 10\cdot 0.008 = 25.6$. Hence,
+\begin{align*}
+r_{\text{VQ3-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 15728.64},\ \text{where}\ \flat{v}_f\ge 294.4.
+\end{align*}\\
+
+\eqref{eq:accel_opt_ground} can also be used to derive $\flat{v}_{\max}$ from \eqref{eq:flat_v_max}, done in Appendix \ref{app:derive_flat_v_max_alternative}.
 
 
 \subsection{Swimming and flying}
+\label{sec:swim_and_flying}
 After friction is applied, the current velocity vector becomes
 \begin{align*}
 \vec{v}_f &=
