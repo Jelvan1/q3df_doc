@@ -1,23 +1,233 @@
 \section{Miscellaneous}
 \label{sec:misc}
-Features/Phenomenon which didn't fit int any other category.
+Features/Phenomenon which didn't fit into any other category.
+
+
+\subsection{Influence of movement keys}
+\label{sec:movementkeys}
+\begin{align*}
+\vec{\cmd} =
+\begin{pmatrix}
+\fmove \\ \rmove \\ \umove
+\end{pmatrix}, \qquad \vec{\flat{\cmd}} =
+\begin{pmatrix}
+\fmove \\ \rmove \\ 0
+\end{pmatrix},
+\end{align*}
+The direction of acceleration $\uvec{\flat{a}}$ \eqref{eq:accel_direction} can be chosen by using your mouse and the movement keys. Relative to $\nu = \atan\left(\frac{v_y}{v_x}\right)$
+\begin{align*}
+\uvec{\flat{v}} = \frac{1}{\flat{v}}
+\begin{pmatrix}
+v_x \\ v_y \\ 0
+\end{pmatrix}
+\end{align*}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm}
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/cmd}
+		\caption{}
+	\end{subfigure}%
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm}
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/cmd3d} % TODO: merge cmd3d_2
+		\caption{}
+	\end{subfigure}%
+	\caption{The current velocity $\vec{\flat{v}}_f$ (\yellowarrow), the acceleration $\vec{a}$ (\orangearrow) and the resulting new velocity $\vec{\flat{r}}$ (\bluearrow). (a) is the top view of (b). key plane (\lightorangearea). $\theta = \atan\sqrt{2}$}
+	\label{fig:cmd}
+\end{figure}
+
+% TODO: make projections of 2 vs 1 key combinations
+
+where $\gamma = \delta + \nu$ represents the yaw angle.
+
+Appendix \ref{app:angle_vectors}
+
+The current velocity vector is defined as
+\begin{align*}
+\uvec{\fmove} &=
+\begin{pmatrix}
+	\cos\rho\cos\gamma\\
+	\cos\rho\sin\gamma\\
+	-\sin\rho
+\end{pmatrix},\\
+\uvec{\rmove} &=
+\begin{pmatrix}
+	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
+	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
+	-\sin\sigma\cos\rho
+\end{pmatrix},\\
+\uvec{\umove} &=
+\begin{pmatrix}
+	\cos\sigma\sin\rho\cos\gamma + \sin\sigma\sin\gamma\\
+	\cos\sigma\sin\rho\sin\gamma - \sin\sigma\cos\gamma\\
+	\cos\sigma\cos\rho
+\end{pmatrix},
+\end{align*}
+
+\codeFromFile{firstline=621,lastline=625,gobble=1}{code/game/bg_pmove.c}
+
+\begin{align*}
+\uvec{\flat{\fmove}} &=
+\begin{pmatrix}
+	\cos\rho\cos\gamma\\
+	\cos\rho\sin\gamma\\
+	0
+\end{pmatrix} \frac{1}{\sqrt{\cos^2\rho}} =
+\begin{pmatrix}
+	\cos\gamma\\
+	\sin\gamma\\
+	0
+\end{pmatrix},\\
+\uvec{\flat{\rmove}} &=
+\begin{pmatrix}
+	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
+	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
+	0
+\end{pmatrix} \frac{1}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
+\end{align*}
+
+\begin{align*}
+\uvec{\flat{\fmove}}^T \uvec{\flat{\rmove}} &= \frac{-\sin\sigma\sin\rho\cos^2\gamma + \cos\sigma\sin\gamma\cos\gamma - \sin\sigma\sin\rho\sin^2\gamma - \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}\\
+&= \frac{-\sin\sigma\sin\rho}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}
+\end{align*}
+
+\begin{align*}
+\vec{\flat{\fmove}} + \vec{\flat{\rmove}} = \texttt{wishvel} &= \fmove
+\begin{pmatrix}
+	\cos\gamma\\
+	\sin\gamma\\
+	0
+\end{pmatrix} + \rmove
+\begin{pmatrix}
+	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
+	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
+	0
+\end{pmatrix} \frac{1}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
+\end{align*}
+
+\begin{align*}
+\norm{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \norm{\texttt{wishvel}}^2 = &\fmove^2 \cos^2\gamma + \rmove^2 \frac{\sin^2\sigma\sin^2\rho\cos^2\gamma + \cos^2\sigma\sin^2\gamma - \sin\sigma\cos\sigma\sin\rho\sin\gamma\cos\gamma}{\sin^2\sigma\sin^2\rho + \cos^2\sigma} +\\
+&\fmove^2 \sin^2\gamma + \rmove^2 \frac{\sin^2\sigma\sin^2\rho\sin^2\gamma + \cos^2\sigma\cos^2\gamma + \sin\sigma\cos\sigma\sin\rho\sin\gamma\cos\gamma}{\sin^2\sigma\sin^2\rho + \cos^2\sigma} +\\
+&2\fmove\rmove\frac{-\sin\sigma\sin\rho\cos^2\gamma + \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}} +\\
+&2\fmove\rmove\frac{-\sin\sigma\sin\rho\sin^2\gamma - \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},\\
+%
+= &\fmove^2 + \rmove^2 + 2\fmove\rmove\frac{-\sin\sigma\sin\rho}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
+\end{align*}
+
+Derivative
+\begin{align*}
+\frac{\mathrm{d}}{\mathrm{d}\rho} \norm{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \frac{\mathrm{d}}{\mathrm{d}\rho} \norm{\texttt{wishvel}}^2 = 2\fmove\rmove\frac{-\sin\sigma\cos^2\sigma\cos\rho}{\left( \sin^2\sigma\sin^2\rho + \cos^2\sigma \right)^{3/2}},
+\end{align*}
+This is $0$ when
+\[
+\begin{cases}
+	\rho = \hphantom{-}\frac{\pi}{2} + 2k\pi, &k \in \symbb{N},\\
+	\rho = -\frac{\pi}{2} + 2k\pi, &k \in \symbb{N}.
+\end{cases}
+\]
+
+With optimal $\rho$ filled in, we get
+\begin{align*}
+\uvec{\flat{\fmove}}^T \uvec{\flat{\rmove}} &= -\sin\sigma,\\
+&= \sin\sigma,
+\end{align*}
+\begin{align*}
+\norm{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \norm{\texttt{wishvel}}^2 &= \fmove^2 + \rmove^2 - 2\fmove\rmove\sin\sigma,\\
+&= \fmove^2 + \rmove^2 + 2\fmove\rmove\sin\sigma,
+\end{align*}
+
+Appendix \ref{app:cmd_scale}
+
+\begin{align*}
+\texttt{scale} = \frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}},
+\end{align*}
+
+\begin{align*}
+\texttt{wishspeed} &= \texttt{scale} \norm{\texttt{wishvel}} =
+\frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}} \norm{\texttt{wishvel}},\\
+\norm{\vec{\flat{a}}} &= \flat{a} = AT \texttt{wishspeed} = AT\frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}} \norm{\texttt{wishvel}},
+\end{align*}
+when $\fmove = 127$, $\rmove = 0$ and $\umove = 0$, then $s = 320$ like in the previous section.
+
+Air:
+\begin{align}
+\nonumber
+\norm{\projmat{a} \vec{\flat{v}}_f} + \norm{\vec{\flat{a}}} &= s \norm{\uvec{\flat{a}}},\\
+\nonumber
+\vec{v}_{f}^T\texttt{wishdir} + \texttt{accel}T\texttt{wishspeed} &= \texttt{wishspeed}\norm{wishdir},\\
+\nonumber
+\norm{\vec{\flat{v}}_f} \cos{\delta_{\opt}} + \texttt{accel}T\texttt{wishspeed} &= \texttt{wishspeed},\\
+\nonumber
+\flat{v}_f \cos{\delta_{\opt}} &= \texttt{wishspeed} - \texttt{accel}T\texttt{wishspeed},\\
+\delta_{\opt} &= \acos\left( \frac{\texttt{wishspeed} \left(1 - \texttt{accel}T\right)}{\flat{v}_f} \right).
+\end{align}
+
+\texttt{PM\_Accelerate (wishdir, wishspeed, pm\_airaccelerate);}
+
+The strafe keys in CPM do not ever affect upmove. Not true
+
+
+\subsection{Upmove effect on acceleration}
+\label{sec:upmove}
+From the same code listing as before, the current velocity is projected down to the $xy$-plane and is normalised.\\
+If the player is holding 3 movement keys, ($\fmove$, $\rmove$ and $\umove$), this transformation scales it by a factor of $\frac{\sqrt{2}}{\sqrt{3}}$.\\
+If the player is holding 2 movement keys, ($\fmove$ and $\umove$ or $\rmove$ and $\umove$), the scale factor is $\frac{1}{\sqrt{2}}$.\\
+This scale factor is applied to $\texttt{wishspeed}$ ($s$) in the code below.
+\codeFromFile{firstline=627,lastline=634,gobble=1}{code/game/bg_pmove.c}
+Hence, the snap zones will change along with all CGazHUD $\delta$ angles, which explains the altered acceleration while holding moveup or movedown.\\
+Also, holding 2 movement keys reduces $\texttt{wishspeed}$ moreso than holding 3 movement keys, decreasing acceleration more\footnote{Thus, although insignificant, full-beat VQ3 strafing is superior to half-beat and moreso to invert.}.
+
+
+\subsection{Frame rate dependency}
+\label{sec:framerate}
+Given that acceleration is impacted directly by frame rate (by $\flat{a} = sAT$), frame rate has a large impact on speed gains from strafing.\\
+The game engine calculates new velocity using acceleration, applies (new) velocity to player position, then rounds velocity.\\
+
+Additionally, $T$ is rounded to the nearest millisecond (0.001), giving us proper-T $T_p$, and frames are delayed until $1000T_p$ milliseconds pass.\\
+For example, with frame rate $\qty{140}{fps}$, $T$ would be rounded from $\frac{1}{140} = 0.007143$ to 0.007. Note: \texttt{minMsec} is an int.
+\codeFromFile{firstline=2686,lastline=2690,gobble=1}{code/qcommon/common.c}
+
+TODO: frame rate effect on strafing\\
+
+Also, frame rate impacts vertical ($z$-axis) velocity when in air, shown by
+\begin{align*}
+r_z = v_z - gT_p\ \ldots\ g = 800
+\end{align*}
+Hence, with $T = \frac{1}{125} = T_p$,
+\begin{align*}
+r_z &= v_z - 6.4,\\
+\round{r_z} &= v_z - 6\ \ldots\ v_z = \round{v_z}\ \text{when in air},
+\end{align*}
+and thus over one second $v_z$ is reduced by $\qty{750}{ups}$ instead of $\qty{800}{ups}$, allowing the player to jump higher and hence further.\\
+As a general rule, if effective-gravity $\frac{\round{gT_p}}{T_p} < 800$ then frame rates given by $\frac{1}{T}$ allow the player to jump higher than intended.\\
+Through trial and error\footnote{Done with relative ease due to the finite possible values of $T_p$}, it can be shown that $T_p = 0.003$ results in the largest jump height, with effective-gravity of $666.\overline{6}$.\\
+
+%For any framerate $\frac{1}{T_p} > 1600$, gravity doesn't apply as $\round{gT_p} = 0$.\\
+% This !!!IS NOT TRUE!!! since if 1/T > 1000, T_p will be rounded to 0.001, and won't be rounded any lower: see lines 2598-2601 in code/qcommon/common.c
+% \codeFromFile{firstline=2598,lastline=2601,gobble=1}{code/qcommon/common.c}
+%
+% Ironically, given a high enough frame rate, some accelerations can be rounded to 0.\\
+% In general, any acceleration on one axis $a_n$ will be nulled if $a_n < 0.5$.
+TODO: confirm if accelerations on one axis $a_n$ can be rounded to 0 if $a_n < 0.5$
+
 
 \subsection{Step-up}
 \label{sec:stepup}
-TODO
+TODO\\
+NOTE: \texttt{phys\_maxstep} defined in either code/bspc/cfgq3.c (18) or code/botlib/be\_aas\_move.c (19)
+
 
 \subsection{Skimming}
 \label{sec:skimming}
 TODO
 
-\subsection{Upmove effect on acceleration}
-\label{sec:upmove}
-TODO
 
 \subsection{Overbounces}
 \label{sec:overbounce}
-TODO
-
-\subsection{Frame rate dependency}
-\label{sec:framerate}
 TODO
