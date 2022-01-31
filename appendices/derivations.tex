@@ -325,34 +325,43 @@ We find the \emph{maximum ground speed} \eqref{eq:flat_v_max} by
 \left((\flat{v}^2 - \flat{v}_f^2) + \flat{a}^2\right)^2 &= 4 \flat{a}^2s^2,\\
 \label{eq:maxgs}
 \flat{v}^2 - \flat{v}_f^2 &= 2 \flat{a} s - \flat{a}^2,\\
+\label{eq:maxgs_iota}
 \flat{v}^2 \iota cT (2 - \iota cT) &= s^2 AT(2 - AT),\\
 \begin{cases}
 \flat{v}^2 = s^2 AT(2 - AT), &\flat{v} \le d cT,\\
-d cT (2 \flat{v} - d cT) = s^2 AT(2 - AT), &d ct < \flat{v} \le d,\\
+d cT (2 \flat{v} - d cT) = s^2 AT(2 - AT), &d cT < \flat{v} \le d,\\
 \flat{v}^2 cT (2 - cT) = s^2 AT(2 - AT), &\flat{v} > d,\\
 \end{cases}\\
 \flat{v} =
 \begin{cases}
 s \sqrt{AT(2 - AT)}, &\flat{v} \le d cT,\\
-\frac{s^2 AT(2 - AT) + d^2 c^2 T^2}{2 d cT}, &d ct < \flat{v} \le d,\\
-s \sqrt{\frac{AT(2 - AT)}{cT (2 - cT)}}, &\flat{v} > d,\\
-\end{cases}\\
-\flat{v} =
-\begin{cases}
-s \sqrt{AT(2 - AT)} \le d cT,\\
-\frac{s^2 AT(2 - AT) + d^2 c^2 T^2}{2 d cT}, &d ct < \flat{v} \le d,\\
-s \sqrt{\frac{AT(2 - AT)}{cT (2 - cT)}}, &\flat{v} > d,\\
-\end{cases}\\
-\end{align}
+\frac{s^2 AT(2 - AT) + d^2 c^2 T^2}{2 d cT}, &d cT < \flat{v} \le d,\\
+s \sqrt{\frac{AT(2 - AT)}{cT (2 - cT)}}, &\flat{v} > d\\
+\end{cases}
+\end{align}\\
 assuming that $\flat{v} \ge d$ and substituting $\flat{v}_f$ and $\flat{a}$ using equation \eqref{eq:flat_vf} and \eqref{eq:sAT} respectively, we get
 \begin{align*}
 \flat{v}^2 cT(2 - cT) &= s^2 AT(2 - AT),\\
 \flat{v}_{\max} &= s \sqrt{\frac{A(2 - AT)}{c(2 - cT)}}.
 \end{align*}
-As one might notice, the angle $\delta_{\opt}$ also meets at this point, cause
+As one might notice, the angle $\delta_{\opt}$ also meets at this point, because
 \begin{align*}
 \eqref{eq:delta_max} &= \eqref{eq:delta_opt},\\
 \frac{(\flat{v}^2 - \flat{v}_f^2) - \flat{a}^2}{2 \flat{a} \flat{v}_f} &= \frac{s - \flat{a}}{\flat{v}_f},\\
-\flat{v}^2 - \flat{v}_f^2 &= 2 \flat{a} s - \flat{a}^2,
+\flat{v}^2 - \flat{v}_f^2 &= 2 \flat{a} s - \flat{a}^2
 \end{align*}
 is identical to equation \eqref{eq:maxgs}.
+
+
+\subsection{\texorpdfstring{$\flat{v}_{\max}$ alternative}{flat v\_max alternative}}
+\label{app:derive_flat_v_max_alternative}
+To solve for $\flat{v}_{\max}$, equate $\eqref{eq:accel_opt_ground} = \flat{v}$.
+\begin{align*}
+\flat{v} &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2s\flat{a} - \flat{a}^2}\\
+\flat{v}^2 &= \flat{v}^2\left(1^2 + (\iota cT)^2 - 2\iota cT \right)^2 + s^2(2AT - A^2T^2)\\
+\flat{v}^2(\iota cT(\iota cT - 2)) &= -s^2(AT(2 - AT))\\
+\flat{v}^2\iota cT(2 - \iota cT) &= s^2AT(2 - AT),\ \text{which is identical to}\ \eqref{eq:maxgs_iota}\\
+\flat{v}^2 &= s^2 \left(\frac{AT(2 - AT)}{\iota cT(2 - \iota cT)} \right)\\
+\therefore\ \flat{v}_{\max} &= s\sqrt{\frac{A(2 - AT)}{\iota c(2 - \iota cT)}}
+\end{align*}
+Assuming $\flat{v} \ge d$, this equation becomes the same as above, \eqref{eq:flat_v_max}.
