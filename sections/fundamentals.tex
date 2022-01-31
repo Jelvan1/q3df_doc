@@ -27,9 +27,18 @@ v_f = (1 - \iota cT) v,
 \end{align}
 assuming $cT \le 1$ and where
 \begin{align*}
-\iota = \max\left(1, \min\left(\frac{d}{\flat{v}}, \frac{1}{cT}\right)\right)\protect\footnotemark{}.
-\end{align*}
+\iota = \max\left(1, \min\left(\frac{d}{\flat{v}}, \frac{1}{cT}\right)\right)\protect\footnotemark{},
 \footnotetext{This is a simple clamping operation.}%
+\end{align*}
+or otherwise
+\begin{align*}
+v_f = \begin{cases}
+(1 - cT)v, &\flat{v} \ge d\\
+\left(1 - \frac{d}{\flat{v}}cT \right)v, &dcT < \flat{v} < d\\
+0, &\flat{v} \le dcT,\\
+\end{cases}
+\end{align*}
+which is derived from Appendix \ref{app:friction}.\\
 This means that, without acceleration, the current velocity either remains unchanged or decreases over time ($0 \le v_f \le v$).
 
 % Appendix \ref{app:friction}
