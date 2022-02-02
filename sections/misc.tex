@@ -173,22 +173,61 @@ Air:
 The strafe keys in CPM do not ever affect upmove. Not true
 
 
+\subsection{Upmove effect on acceleration}
+\label{sec:upmove}
+From the same code listing as before, the current velocity is projected down to the $xy$-plane and is normalised.\\
+If the player is holding 3 movement keys, ($\fmove$, $\rmove$ and $\umove$), this transformation scales it by a factor of $\frac{\sqrt{2}}{\sqrt{3}}$.\\
+If the player is holding 2 movement keys, ($\fmove$ and $\umove$ or $\rmove$ and $\umove$), the scale factor is $\frac{1}{\sqrt{2}}$.\\
+This scale factor is applied to $\texttt{wishspeed}$ ($s$) in the code below.
+\codeFromFile{firstline=627,lastline=634,gobble=1}{code/game/bg_pmove.c}
+Hence, the snap zones will change along with all CGazHUD $\delta$ angles, which explains the altered acceleration while holding moveup or movedown.\\
+Also, holding 2 movement keys reduces $\texttt{wishspeed}$ moreso than holding 3 movement keys, decreasing acceleration more\footnote{Thus, although insignificant, full-beat VQ3 strafing is superior to half-beat and moreso to invert.}.
+
+
+\subsection{Frame rate dependency}
+\label{sec:framerate}
+Given that acceleration is impacted directly by frame rate (by $\flat{a} = sAT$), frame rate has a large impact on speed gains from strafing.\\
+The game engine calculates new velocity using acceleration, applies (new) velocity to player position, then rounds velocity.\\
+
+Additionally, $T$ is rounded to the nearest millisecond (0.001), giving us proper-T $T_p$, and frames are delayed until $1000T_p$ milliseconds pass.\\
+For example, with frame rate $\qty{140}{fps}$, $T$ would be rounded from $\frac{1}{140} = 0.007143$ to 0.007. Note: \texttt{minMsec} is an int.
+\codeFromFile{firstline=2686,lastline=2690,gobble=1}{code/qcommon/common.c}
+
+TODO: frame rate effect on strafing\\
+
+Also, frame rate impacts vertical ($z$-axis) velocity when in air, shown by
+\begin{align*}
+r_z = v_z - gT_p\ \ldots\ g = 800
+\end{align*}
+Hence, with $T = \frac{1}{125} = T_p$,
+\begin{align*}
+r_z &= v_z - 6.4,\\
+\round{r_z} &= v_z - 6\ \ldots\ v_z = \round{v_z}\ \text{when in air},
+\end{align*}
+and thus over one second $v_z$ is reduced by $\qty{750}{ups}$ instead of $\qty{800}{ups}$, allowing the player to jump higher and hence further.\\
+As a general rule, if effective-gravity $\frac{\round{gT_p}}{T_p} < 800$ then frame rates given by $\frac{1}{T}$ allow the player to jump higher than intended.\\
+Through trial and error\footnote{Done with relative ease due to the finite possible values of $T_p$}, it can be shown that $T_p = 0.003$ results in the largest jump height, with effective-gravity of $666.\overline{6}$.\\
+
+%For any framerate $\frac{1}{T_p} > 1600$, gravity doesn't apply as $\round{gT_p} = 0$.\\
+% This !!!IS NOT TRUE!!! since if 1/T > 1000, T_p will be rounded to 0.001, and won't be rounded any lower: see lines 2598-2601 in code/qcommon/common.c
+% \codeFromFile{firstline=2598,lastline=2601,gobble=1}{code/qcommon/common.c}
+%
+% Ironically, given a high enough frame rate, some accelerations can be rounded to 0.\\
+% In general, any acceleration on one axis $a_n$ will be nulled if $a_n < 0.5$.
+TODO: confirm if accelerations on one axis $a_n$ can be rounded to 0 if $a_n < 0.5$
+
+
 \subsection{Step-up}
 \label{sec:stepup}
-TODO
+TODO\\
+NOTE: \texttt{phys\_maxstep} defined in either code/bspc/cfgq3.c (18) or code/botlib/be\_aas\_move.c (19)
+
 
 \subsection{Skimming}
 \label{sec:skimming}
 TODO
 
-\subsection{Upmove effect on acceleration}
-\label{sec:upmove}
-TODO
 
 \subsection{Overbounces}
 \label{sec:overbounce}
-TODO
-
-\subsection{Frame rate dependency}
-\label{sec:framerate}
 TODO
