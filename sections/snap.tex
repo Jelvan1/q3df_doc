@@ -4,19 +4,20 @@
 \subsection{Basics}
 \label{sec:basics}
 In order to save resources, the game engine rounds each component of some vectors each frame, as shown by the below code. Albeit a simple change, this largely changes the way the game is played.
-\codeFromFile{firstline=480,lastline=488,gobble=1}{code/qcommon/q_shared.h}
-Since player velocity is one of the vectors that is rounded, we can interpret this as rounding the acceleration the player receives each frame, given by
-\begin{align*}
-\flat{a} = sAT,
-\end{align*}
-forming\footnote{Keeping in mind $\vec{a}$ is projected down onto the $xy$-plane.}
+\codeFromFile{firstline=151,lastline=156,gobble=1}{code/unix/unix_shared.h}
+Since player velocity is one of the vectors that is rounded, we can interpret this as rounding the speed change the player receives each frame, forming
 \begin{align*}
 \round{\vec{a}} &=
 \begin{pmatrix}
-\round{a_x} \\ \round{a_y} \\ 0
+\lfloor a_x\rceil \\ \lfloor a_y\rceil \\ \lfloor a_z\rceil % looks weird with \left and \right
 \end{pmatrix}, & \round{\vec{r}} &=
 \begin{pmatrix}
-\round{r_x} \\ \round{r_y} \\ 0
+\lfloor r_x\rceil \\ \lfloor r_y\rceil \\ \lfloor r_z\rceil
 \end{pmatrix}.
 \end{align*}
+TODO
+
+
+\subsection{Frame rate impact}
+\label{sec:snap_frame_rate}
 TODO
