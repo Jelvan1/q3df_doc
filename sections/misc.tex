@@ -176,51 +176,141 @@ The strafe keys in CPM do not ever affect upmove. Not true
 \subsection{Upmove effect on acceleration}
 \label{sec:upmove}
 From the same code listing as before, the current velocity is projected down to the $xy$-plane and is normalised.\\
-If the player is holding 3 movement keys, ($\fmove$, $\rmove$ and $\umove$), this transformation scales it by a factor of $\frac{\sqrt{2}}{\sqrt{3}}$.\\
-If the player is holding 2 movement keys, ($\fmove$ and $\umove$ or $\rmove$ and $\umove$), the scale factor is $\frac{1}{\sqrt{2}}$.\\
+If the player is holding 3 movement keys, ($\fmove$, $\rmove$ and $\umove$), this transformation scales it by a factor of $\frac{\sqrt{2}}{\sqrt{3}}$.
+If the player is holding 2 movement keys, ($\fmove$ and $\umove$ or $\rmove$ and $\umove$), the scale factor is $\frac{1}{\sqrt{2}}$.
+
 This scale factor is applied to $\texttt{wishspeed}$ ($s$) in the code below.
 \codeFromFile{firstline=627,lastline=634,gobble=1}{code/game/bg_pmove.c}
-Hence, the snap zones will change along with all CGazHUD $\delta$ angles, which explains the altered acceleration while holding moveup or movedown.\\
+Hence, the snap zones will change along with all CGazHUD $\delta$ angles, which explains the altered acceleration while holding moveup or movedown.
 Also, holding 2 movement keys reduces $\texttt{wishspeed}$ moreso than holding 3 movement keys, decreasing acceleration more\footnote{Thus, although insignificant, full-beat VQ3 strafing is superior to half-beat and moreso to invert.}.
 
 
 \subsection{Frame rate dependency}
 \label{sec:framerate}
+We can define \emph{frame rate dependency} as attributes of the game engine that act differently depending on framerate,
+and say that an attribute of the game engine has \emph{frame independency} if the time between frames does not need to be equidistant for the physics to act the same.\\
+
 Given that acceleration is impacted directly by frame rate (by $\flat{a} = sAT$), frame rate has a large impact on speed gains from strafing.\\
-The game engine calculates new velocity using acceleration, applies (new) velocity to player position, then rounds velocity.\\
-
-Additionally, $T$ is rounded to the nearest millisecond (0.001), giving us proper-T $T_p$, and frames are delayed until $1000T_p$ milliseconds pass.\\
-For example, with frame rate $\qty{140}{fps}$, $T$ would be rounded from $\frac{1}{140} = 0.007143$ to 0.007. Note: \texttt{minMsec} is an int.
-\codeFromFile{firstline=2686,lastline=2690,gobble=1}{code/qcommon/common.c}
-
 TODO: frame rate effect on strafing\\
+
+Additionally, $T$ is floored to the nearest millisecond (0.001), giving us proper-T $T_p$, and frames are delayed until $1000T_p$ milliseconds pass.
+For example, with frame rate $\qty{140}{fps}$, $T$ would be floored from $\frac{1}{140} = 0.007143$ to 0.007. Note: \texttt{minMsec} is an int.
+\codeFromFile{firstline=2686,lastline=2690,gobble=1}{code/qcommon/common.c}
 
 Also, frame rate impacts vertical ($z$-axis) velocity when in air, shown by
 \begin{align*}
-r_z = v_z - gT_p\ \ldots\ g = 800
+r_z &= v_z - gT_p\ &\ldots\ g = 800,\\
+\round{r_z} &= v_z - \round{gT_p}\ &\ldots\ v_z = \round{v_z}\ \text{when in air}
 \end{align*}
 Hence, with $T = \frac{1}{125} = T_p$,
 \begin{align*}
 r_z &= v_z - 6.4,\\
-\round{r_z} &= v_z - 6\ \ldots\ v_z = \round{v_z}\ \text{when in air},
+\round{r_z} &= v_z - 6,
 \end{align*}
 and thus over one second $v_z$ is reduced by $\qty{750}{ups}$ instead of $\qty{800}{ups}$, allowing the player to jump higher and hence further.\\
-As a general rule, if effective-gravity $\frac{\round{gT_p}}{T_p} < 800$ then frame rates given by $\frac{1}{T}$ allow the player to jump higher than intended.\\
-Through trial and error\footnote{Done with relative ease due to the finite possible values of $T_p$}, it can be shown that $T_p = 0.003$ results in the largest jump height, with effective-gravity of $666.\overline{6}$.\\
+As a general rule, if effective-gravity $\frac{\round{gT_p}}{T_p} < 800$ then frame rates given by $\frac{1}{T}$ allow the player to jump higher than intended.
+This is expanded upon in \ref{sec:x_z} (TODO).\\
 
 %For any framerate $\frac{1}{T_p} > 1600$, gravity doesn't apply as $\round{gT_p} = 0$.\\
 % This !!!IS NOT TRUE!!! since if 1/T > 1000, T_p will be rounded to 0.001, and won't be rounded any lower: see lines 2598-2601 in code/qcommon/common.c
-% \codeFromFile{firstline=2598,lastline=2601,gobble=1}{code/qcommon/common.c}
+% \codeFromFile{firstline=2599,lastline=2601,gobble=1}{code/qcommon/common.c}
 %
-% Ironically, given a high enough frame rate, some accelerations can be rounded to 0.\\
-% In general, any acceleration on one axis $a_n$ will be nulled if $a_n < 0.5$.
-TODO: confirm if accelerations on one axis $a_n$ can be rounded to 0 if $a_n < 0.5$
+%Ironically, given a high enough frame rate, some accelerations can be rounded to 0.\\
+%In general, any acceleration on one axis $a_n$ will be nulled if $a_n < 0.5$.
+TODO: confirm if accelerations on one axis $a_n$ can be rounded to 0 if $a_n < 0.5$\\
+%
+% TODO: Also need to find out what happens in a situation where the flooring to T_p causes the game to try to render more frames per second than FPS(does it?)
+% Eg. 120 FPS. int minMsec = 1000 / 120 = 8.3333, floors to 8. However, T=8 implies 125 frames rendered per second, yet we only have 120 FPS.
+
+Frame rate dependency with respect to overbounces is covered in Section \ref{sec:overbounce} (TODO).
+
+
+\subsection{Approach to $z$-axis translations}
+\label{sec:x_z}
+The game engine applies vertical velocity in a slightly unintuitive way in order to make all $z$-axis position translations frame independent.
+In regards to the $z$-axis, new velocity is calculated using acceleration, velocity is to player position, and then velocity is snapped.
+However the key here is \emph{how} velocity is applied to the player position, demonstrated in \eqref{eq:x_zk+1}.
+
+\begin{align*}
+\text{Defining }&v_z\{k\}\text{ as the sequence of velocities after snapping after }k\text{ frames},\\
+\text{and }&x_z\{k\}\text{ as the sequence of the player's }z\text{-axis position after }k\text{ frames},
+\end{align*}
+\begin{align}
+\label{eq:v_zk+1}
+v_z\{k+1\} &= v_z\{k\} - \round{gT_p}\\
+\label{eq:x_zk+1}
+x_z\{k+1\} &= x_z\{k\} + \left(v_z\{k\} - \frac{gT_p}{2} \right) T_p
+\end{align}
+\begin{align}
+\nonumber
+v_z\{1\} &= v_z\{0\} - \round{gT_p}\\\nonumber
+v_z\{2\} &= v_z\{1\} - \round{gT_p}\\\nonumber
+&= v_z\{0\} - 2\round{gT_p}\\
+\label{eq:v_zk}
+\therefore\ v_z\{k\} &= v_z\{0\} - k\round{gT_p}.
+\end{align}
+Same approach is used to derive $x_z\{k\}$, done in Appendix \ref{app:derive_x_zk}, yielding
+\begin{align}
+\label{eq:x_zk}
+x_z\{k\} &= x_z\{0\} + k\left(v_z\{0\} - \frac{gT_p}{2} + \frac{\round{gT_p}}{2} \right) T_p - \frac{k^2}{2} \round{gT_p} T_p.
+\end{align}
+
+To solve for the frame $n$ that you reach the peak, differentiate $x_z\{k\}$.
+\begin{align*}
+x_z\{k\}' &= \left(v_z\{0\} - \frac{gT_p}{2} + \frac{\round{gT_p}}{2} \right) T_p - k\round{gT_p} T_p\\
+0 &= \left(v_z\{0\} - \frac{gT_p}{2} + \frac{\round{gT_p}}{2} \right) T_p - k\round{gT_p} T_p\\
+\implies k &= \frac{v_z\{0\} - \frac{gT_p}{2} + \frac{\round{gT_p}}{2}}{\round{gT_p}}\\
+&= \frac{v_z\{0\} - \frac{gT_p}{2}}{\round{gT_p}} + \frac{1}{2}\\
+\implies n &= \round{\frac{v_z\{0\} - \frac{gT_p}{2}}{\round{gT_p}} + \frac{1}{2}}\\
+&= \ceil{\frac{v_z\{0\} - \frac{gT_p}{2}}{\round{gT_p}}}
+\end{align*}
+Hence with $\qty{125}{fps}$ and jump velocity $v_z\{0\} = 270$, the peak is reached after $n = 45$ frames.\\
+
+This implementation of $z$-axis translations is frame independent, as shown below
+\begin{align*}
+v_z\{k\} = v_z\{0\} - k\round{gT_p}
+\end{align*}
+Using trapezoidal rule,
+\begin{align*}
+&\sum_{i=0}^{k-1} \left((v_z\{0\} - i\round{gT_p}) + (v_z\{0\} - (i + 1) \round{gT_p})\right) \frac{T_p}{2}\\
+&\sum_{i=0}^{k-1} \left(v_z\{0\} - \left(i + \frac{1}{2} \right) \round{gT_p} \right) T_p\\
+&\implies x_z\{k\} = x_z\{0\} + k v_z\{0\} T_p - \frac{k^2}{2}\round{gT_p} T_p\\
+\end{align*}
+but $x_z\{k\}$ is
+\begin{align*}
+x_z\{k\} + k\left(v_z\{0\} - \frac{gT_p}{2} + \frac{\round{gT_p}}{2} \right) T_p - \frac{k^2}{2}\round{gT_p} T_p\\
+\end{align*}
+Using inverse trapezoidal rule,
+\begin{align*}
+&\sum_{i=0}^{k-1} \left(\left(v_0 - \frac{gT_p}{2} + \frac{\round{gT_p}}{2} \right) - \left(i + \frac{1}{2} \right) \round{gT_p} \right) T_p\\
+&\sum_{i=0}^{k-1} \left(\left(\left(v_z\{0\} - \frac{gT_p}{2} + \frac{\round{gT_p}}{2} \right) - i\round{gT_p} \right) + \left(\left(v_z\{0\} - \frac{gT_p}{2} + \frac{\round{gT_p}}{2} \right) - (i + 1)\round{gT_p} \right) \right) \frac{T_p}{2}\\
+&\implies v_z\{k\} = \left(v_z\{0\} - \frac{gT_p}{2} + \frac{\round{gT_p}}{2} \right) - k\round{gT_p}
+\end{align*}
+Thus, $z$-axis position is updated using this "corrected" velocity, so $z$-axis translations are frame independent.\\
+
+As a side note, this implementation of $z$-axis translations is also frame rate independent $\Longleftrightarrow$ rounding is ignored, since
+\begin{itemize}
+\item
+Vertical acceleration is linear (constant) and thus
+\item
+Ignoring rounding,
+\begin{align*}
+x_z\{k\} &= x_z\{0\} + k\left(v_z\{0\} - \frac{gT_p}{2} + \frac{gT_p}{2} \right) T_p - \frac{k^2}{2} gT_p T_p\\
+&= x_z\{0\} + kv_z\{0\} T_p - \frac{k^2 g{T_p}^2}{2}\\
+&= x_z\{0\} + \left(kT_p \right) v_z\{0\} - \frac{\left(kT_p \right)^2 g}{2}
+\end{align*}
+which is the same as the physical model equation.
+\end{itemize}
+Without ignoring rounding, the implementation is frame rate dependent, hence the differing jump heights by changing frame rate.\\
+
+It can be shown that $T_p = 0.003$ results in the largest jump height, with effective-gravity of $666.\overline{6}$.\\
+TODO
 
 
 \subsection{Step-up}
 \label{sec:stepup}
-TODO\\
-NOTE: \texttt{phys\_maxstep} defined in either code/bspc/cfgq3.c (18) or code/botlib/be\_aas\_move.c (19)
+TODO
+%NOTE: \texttt{phys\_maxstep} is defined in either code/bspc/cfgq3.c (18) or code/botlib/be\_aas\_move.c (19), unsure
 
 
 \subsection{Skimming}
@@ -230,4 +320,5 @@ TODO
 
 \subsection{Overbounces}
 \label{sec:overbounce}
-TODO
+TODO%\\
+%Overbounces occur when $x_z$ comes within 0.125 and 0.25 units of a ground plane.
