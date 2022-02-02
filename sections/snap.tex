@@ -4,7 +4,7 @@
 \subsection{Basics}
 \label{sec:basics}
 In order to save resources, the game engine rounds each component of some vectors each frame, as shown by the below code. Albeit a simple change, this largely changes the way the game is played.
-\codeFromFile{firstline=151,lastline=156,gobble=1}{code/unix/unix_shared.h}
+\codeFromFile{firstline=151,lastline=156}{code/unix/unix_shared.h}
 Since player velocity is one of the vectors that is rounded, we can interpret this as rounding the speed change the player receives each frame, forming
 \begin{align*}
 \round{\vec{a}} &=
