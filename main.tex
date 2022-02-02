@@ -106,7 +106,9 @@
 \DeclareRobustCommand{\darkorangearea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor2,draw=black] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
 \DeclareRobustCommand{\darkgreyarea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor0!60,draw=mycolor0] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
 
-\newcommand*{\round}[1]{\lfloor#1\rceil}
+\newcommand*{\round}[1]{\ensuremath{\left\lfloor#1\right\rceil}}
+\newcommand*{\floor}[1]{\ensuremath{\left\lfloor#1\right\rfloor}}
+\newcommand*{\ceil}[1]{\ensuremath{\left\lceil#1\right\rceil}}
 \newcommand*{\abs}[1]{\left\lvert#1\right\rvert}
 \newcommand*{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand*{\set}[1]{\left\{#1\right\}}
@@ -215,6 +217,7 @@
 \include{sections/cgaz}
 \include{sections/snap}
 \include{sections/misc}
+\include{sections/weapons}
 \include{sections/TODO}
 
 \begin{appendices}
