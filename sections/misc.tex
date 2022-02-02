@@ -2,6 +2,177 @@
 \label{sec:misc}
 Features/Phenomenon which didn't fit into any other category.
 
+
+\subsection{Influence of movement keys}
+\label{sec:movementkeys}
+\begin{align*}
+\vec{\cmd} =
+\begin{pmatrix}
+\fmove \\ \rmove \\ \umove
+\end{pmatrix}, \qquad \vec{\flat{\cmd}} =
+\begin{pmatrix}
+\fmove \\ \rmove \\ 0
+\end{pmatrix},
+\end{align*}
+The direction of acceleration $\uvec{\flat{a}}$ \eqref{eq:accel_direction} can be chosen by using your mouse and the movement keys. Relative to $\nu = \atan\left(\frac{v_y}{v_x}\right)$
+\begin{align*}
+\uvec{\flat{v}} = \frac{1}{\flat{v}}
+\begin{pmatrix}
+v_x \\ v_y \\ 0
+\end{pmatrix}
+\end{align*}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm}
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/cmd}
+		\caption{}
+	\end{subfigure}%
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm}
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/cmd3d} % TODO: merge cmd3d_2
+		\caption{}
+	\end{subfigure}%
+	\caption{The current velocity $\vec{\flat{v}}_f$ (\yellowarrow), the acceleration $\vec{a}$ (\orangearrow) and the resulting new velocity $\vec{\flat{r}}$ (\bluearrow). (a) is the top view of (b). key plane (\lightorangearea). $\theta = \atan\sqrt{2}$}
+	\label{fig:cmd}
+\end{figure}
+
+% TODO: make projections of 2 vs 1 key combinations
+
+where $\gamma = \delta + \nu$ represents the yaw angle.
+
+Appendix \ref{app:angle_vectors}
+
+The current velocity vector is defined as
+\begin{align*}
+\uvec{\fmove} &=
+\begin{pmatrix}
+	\cos\rho\cos\gamma\\
+	\cos\rho\sin\gamma\\
+	-\sin\rho
+\end{pmatrix},\\
+\uvec{\rmove} &=
+\begin{pmatrix}
+	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
+	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
+	-\sin\sigma\cos\rho
+\end{pmatrix},\\
+\uvec{\umove} &=
+\begin{pmatrix}
+	\cos\sigma\sin\rho\cos\gamma + \sin\sigma\sin\gamma\\
+	\cos\sigma\sin\rho\sin\gamma - \sin\sigma\cos\gamma\\
+	\cos\sigma\cos\rho
+\end{pmatrix},
+\end{align*}
+
+\codeFromFile{firstline=621,lastline=625,gobble=1}{code/game/bg_pmove.c}
+
+\begin{align*}
+\uvec{\flat{\fmove}} &=
+\begin{pmatrix}
+	\cos\rho\cos\gamma\\
+	\cos\rho\sin\gamma\\
+	0
+\end{pmatrix} \frac{1}{\sqrt{\cos^2\rho}} =
+\begin{pmatrix}
+	\cos\gamma\\
+	\sin\gamma\\
+	0
+\end{pmatrix},\\
+\uvec{\flat{\rmove}} &=
+\begin{pmatrix}
+	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
+	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
+	0
+\end{pmatrix} \frac{1}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
+\end{align*}
+
+\begin{align*}
+\uvec{\flat{\fmove}}^T \uvec{\flat{\rmove}} &= \frac{-\sin\sigma\sin\rho\cos^2\gamma + \cos\sigma\sin\gamma\cos\gamma - \sin\sigma\sin\rho\sin^2\gamma - \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}\\
+&= \frac{-\sin\sigma\sin\rho}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}
+\end{align*}
+
+\begin{align*}
+\vec{\flat{\fmove}} + \vec{\flat{\rmove}} = \texttt{wishvel} &= \fmove
+\begin{pmatrix}
+	\cos\gamma\\
+	\sin\gamma\\
+	0
+\end{pmatrix} + \rmove
+\begin{pmatrix}
+	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
+	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
+	0
+\end{pmatrix} \frac{1}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
+\end{align*}
+
+\begin{align*}
+\norm{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \norm{\texttt{wishvel}}^2 = &\fmove^2 \cos^2\gamma + \rmove^2 \frac{\sin^2\sigma\sin^2\rho\cos^2\gamma + \cos^2\sigma\sin^2\gamma - \sin\sigma\cos\sigma\sin\rho\sin\gamma\cos\gamma}{\sin^2\sigma\sin^2\rho + \cos^2\sigma} +\\
+&\fmove^2 \sin^2\gamma + \rmove^2 \frac{\sin^2\sigma\sin^2\rho\sin^2\gamma + \cos^2\sigma\cos^2\gamma + \sin\sigma\cos\sigma\sin\rho\sin\gamma\cos\gamma}{\sin^2\sigma\sin^2\rho + \cos^2\sigma} +\\
+&2\fmove\rmove\frac{-\sin\sigma\sin\rho\cos^2\gamma + \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}} +\\
+&2\fmove\rmove\frac{-\sin\sigma\sin\rho\sin^2\gamma - \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},\\
+%
+= &\fmove^2 + \rmove^2 + 2\fmove\rmove\frac{-\sin\sigma\sin\rho}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
+\end{align*}
+
+Derivative
+\begin{align*}
+\frac{\mathrm{d}}{\mathrm{d}\rho} \norm{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \frac{\mathrm{d}}{\mathrm{d}\rho} \norm{\texttt{wishvel}}^2 = 2\fmove\rmove\frac{-\sin\sigma\cos^2\sigma\cos\rho}{\left( \sin^2\sigma\sin^2\rho + \cos^2\sigma \right)^{3/2}},
+\end{align*}
+This is $0$ when
+\[
+\begin{cases}
+	\rho = \hphantom{-}\frac{\pi}{2} + 2k\pi, &k \in \symbb{N},\\
+	\rho = -\frac{\pi}{2} + 2k\pi, &k \in \symbb{N}.
+\end{cases}
+\]
+
+With optimal $\rho$ filled in, we get
+\begin{align*}
+\uvec{\flat{\fmove}}^T \uvec{\flat{\rmove}} &= -\sin\sigma,\\
+&= \sin\sigma,
+\end{align*}
+\begin{align*}
+\norm{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \norm{\texttt{wishvel}}^2 &= \fmove^2 + \rmove^2 - 2\fmove\rmove\sin\sigma,\\
+&= \fmove^2 + \rmove^2 + 2\fmove\rmove\sin\sigma,
+\end{align*}
+
+Appendix \ref{app:cmd_scale}
+
+\begin{align*}
+\texttt{scale} = \frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}},
+\end{align*}
+
+\begin{align*}
+\texttt{wishspeed} &= \texttt{scale} \norm{\texttt{wishvel}} =
+\frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}} \norm{\texttt{wishvel}},\\
+\norm{\vec{\flat{a}}} &= \flat{a} = AT \texttt{wishspeed} = AT\frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}} \norm{\texttt{wishvel}},
+\end{align*}
+when $\fmove = 127$, $\rmove = 0$ and $\umove = 0$, then $s = 320$ like in the previous section.
+
+Air:
+\begin{align}
+\nonumber
+\norm{\projmat{a} \vec{\flat{v}}_f} + \norm{\vec{\flat{a}}} &= s \norm{\uvec{\flat{a}}},\\
+\nonumber
+\vec{v}_{f}^T\texttt{wishdir} + \texttt{accel}T\texttt{wishspeed} &= \texttt{wishspeed}\norm{wishdir},\\
+\nonumber
+\norm{\vec{\flat{v}}_f} \cos{\delta_{\opt}} + \texttt{accel}T\texttt{wishspeed} &= \texttt{wishspeed},\\
+\nonumber
+\flat{v}_f \cos{\delta_{\opt}} &= \texttt{wishspeed} - \texttt{accel}T\texttt{wishspeed},\\
+\delta_{\opt} &= \acos\left( \frac{\texttt{wishspeed} \left(1 - \texttt{accel}T\right)}{\flat{v}_f} \right).
+\end{align}
+
+\texttt{PM\_Accelerate (wishdir, wishspeed, pm\_airaccelerate);}
+
+The strafe keys in CPM do not ever affect upmove. Not true
+
+
 \subsection{Step-up}
 \label{sec:stepup}
 TODO
