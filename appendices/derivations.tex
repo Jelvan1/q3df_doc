@@ -19,7 +19,7 @@ hence the following also holds
 \subsection{\texorpdfstring{$\delta_{\min}$}{delta\_min}}
 \eqref{eq:delta_min}
 \begin{align*}
-\norm{\vec{\flat{v}}_f + (s - \flat{v}_f \cos\delta_{\min})\uvec{\flat{a}}}^2 &= \norm{\vec{\flat{v}}}^2,\\
+\norm*{\vec{\flat{v}}_f + (s - \flat{v}_f \cos\delta_{\min})\uvec{\flat{a}}}^2 &= \norm*{\vec{\flat{v}}}^2,\\
 (\vec{\flat{v}}_f + (s - \flat{v}_f \cos\delta_{\min})\uvec{\flat{a}})^T (\vec{\flat{v}}_f + (s - \flat{v}_f \cos\delta_{\min})\uvec{\flat{a}}) &= \vec{\flat{v}}^T \vec{\flat{v}},\\
 2(s - \flat{v}_f \cos\delta_{\min}) \uvec{\flat{a}}^T \vec{\flat{v}}_f + (s - \flat{v}_f \cos\delta_{\min})^2 \uvec{\flat{a}}^T \uvec{\flat{a}} &= \vec{\flat{v}}^T \vec{\flat{v}} - \vec{\flat{v}}_f^T \vec{\flat{v}}_f,\\
 2(s - \flat{v}_f \cos\delta_{\min}) \flat{v}_f \cos\delta_{\min} + (s - \flat{v}_f \cos\delta_{\min})^2 &= \flat{v}^2 - \flat{v}_f^2,\\
@@ -106,7 +106,7 @@ Note that it simplifies to $\delta_{\opt}$ when approaching the maximum ground s
 \subsection{\texorpdfstring{$\delta_{\opt}$}{delta\_opt}}
 \eqref{eq:delta_opt}
 \begin{align*}
-\norm{\projmat{\flat{a}} \vec{\flat{v}}_f} + \norm{\vec{\flat{a}}} &= s \norm{\uvec{\flat{a}}},\\
+\norm*{\projmat{\flat{a}} \vec{\flat{v}}_f} + \norm*{\vec{\flat{a}}} &= s \norm*{\uvec{\flat{a}}},\\
 \flat{v}_f \cos\delta_{\opt} + \flat{a} &= s,\\
 \delta_{\opt} &= \acos\left( \frac{s - \flat{a}}{\flat{v}_f} \right).
 \end{align*}
@@ -144,7 +144,7 @@ s \frac{(1 - AT)}{(1 - \iota cT)} &\le \flat{v},\\
 \subsection{\texorpdfstring{$\delta_{\max}$}{delta\_max}}
 \eqref{eq:delta_max}
 \begin{align*}
-\norm{\vec{\flat{v}}_f + \vec{\flat{a}}}^2 &= \norm{\vec{\flat{v}}}^2,\\
+\norm*{\vec{\flat{v}}_f + \vec{\flat{a}}}^2 &= \norm*{\vec{\flat{v}}}^2,\\
 (\vec{\flat{v}}_f + \vec{\flat{a}})^T (\vec{\flat{v}}_f + \vec{\flat{a}}) &= \vec{\flat{v}}^T \vec{\flat{v}},\\
 2 \vec{\flat{a}}^T \vec{\flat{v}}_f + \vec{\flat{a}}^T \vec{\flat{a}} &= \vec{\flat{v}}^T \vec{\flat{v}} - \vec{\flat{v}}_f^T \vec{\flat{v}}_f,\\
 2 \flat{a} \flat{v}_f \cos\delta_{\max} + \flat{a}^2 &= \flat{v}^2 - \flat{v}_f^2,\\
@@ -239,9 +239,9 @@ Note that it simplifies to $\delta_{\opt}$ when approaching the maximum ground s
 \subsection{\texorpdfstring{$\bar{\delta}_{\min}$}{bar delta\_min}}
 \eqref{eq:delta_bar_min}
 \begin{align*}
-\norm{\projmat{\flat{v}} \left( \vec{\flat{v}}_f + (s - \flat{v}_f \cos\bar{\delta}_{\min})\uvec{\flat{a}} \right)} &= \norm{\vec{\flat{v}}},\\
-\norm{\flat{v}_f \uvec{\flat{v}} + (s - \flat{v}_f \cos\bar{\delta}_{\min})\cos\bar{\delta}_{\min}\uvec{\flat{v}}} &= \flat{v},\\
-(\flat{v}_f + s\cos\bar{\delta}_{\min} - \flat{v}_f \cos^2\bar{\delta}_{\min}) \norm{\uvec{\flat{v}}} &= \flat{v},\\
+\norm*{\projmat{\flat{v}} \left( \vec{\flat{v}}_f + (s - \flat{v}_f \cos\bar{\delta}_{\min})\uvec{\flat{a}} \right)} &= \norm*{\vec{\flat{v}}},\\
+\norm*{\flat{v}_f \uvec{\flat{v}} + (s - \flat{v}_f \cos\bar{\delta}_{\min})\cos\bar{\delta}_{\min}\uvec{\flat{v}}} &= \flat{v},\\
+(\flat{v}_f + s\cos\bar{\delta}_{\min} - \flat{v}_f \cos^2\bar{\delta}_{\min}) \norm*{\uvec{\flat{v}}} &= \flat{v},\\
 s\cos\bar{\delta}_{\min} - \flat{v}_f \cos^2\bar{\delta}_{\min} &= \flat{v} - \flat{v}_f, \qquad D = s^2 - 4 \flat{v}_f (\flat{v} - \flat{v}_f),\\
 \bar{\delta}_{\min} &= \acos\left( \frac{s \pm \sqrt{s^2 - 4 \flat{v}_f (\flat{v} - \flat{v}_f)}}{2 \flat{v}_f} \right).\\
 \end{align*}
@@ -258,9 +258,9 @@ We find that this only holds for
 \subsection{\texorpdfstring{$\bar{\delta}_{\max}$}{bar delta\_max}}
 \eqref{eq:delta_bar_max}
 \begin{align*}
-\norm{\projmat{\flat{v}}\left( \vec{\flat{v}}_f + \vec{\flat{a}} \right)} &= \norm{\vec{\flat{v}}},\\
-\norm{\flat{v}_f \uvec{\flat{v}} + \flat{a} \cos\bar{\delta}_{\max}\uvec{\flat{v}}} &= \flat{v},\\
-(\flat{v}_f + \flat{a} \cos\bar{\delta}_{\max}) \norm{\uvec{\flat{v}}} &= \flat{v},\\
+\norm*{\projmat{\flat{v}}\left( \vec{\flat{v}}_f + \vec{\flat{a}} \right)} &= \norm*{\vec{\flat{v}}},\\
+\norm*{\flat{v}_f \uvec{\flat{v}} + \flat{a} \cos\bar{\delta}_{\max}\uvec{\flat{v}}} &= \flat{v},\\
+(\flat{v}_f + \flat{a} \cos\bar{\delta}_{\max}) \norm*{\uvec{\flat{v}}} &= \flat{v},\\
 \flat{a} \cos\bar{\delta}_{\max} &= \flat{v} - \flat{v}_f,\\
 \bar{\delta}_{\max} &= \acos\left( \frac{\flat{v} - \flat{v}_f}{\flat{a}} \right).
 \end{align*}
@@ -366,25 +366,25 @@ which is identical to \eqref{eq:maxgs_iota}.\\
 Assuming $\flat{v} \ge d$, this becomes the same as above, \eqref{eq:flat_v_max}.
 
 
-\subsection{\texorpdfstring{$x_z\{k\}$}{x\_z k}}
+\subsection{\texorpdfstring{$x_{z,k}$}{x\_z k}}
 \label{app:derive_x_zk}
-To derive $x_z\{k\}$ in terms of $x_z\{0\}$ and $v_z\{0\}$,
+To derive $x_{z,k}$ in terms of $x_{z,0}$ and $v_{z,0}$,
 \begin{align*}
-x_z\{1\} &= x_z\{0\} + \left(v_z\{0\} - \frac{gT_p}{2} \right) T_p\\
-x_z\{2\} &= x_z\{1\} + \left(v_z\{1\} - \frac{gT_p}{2} \right) T_p\\
-&= x_z\{0\} + \left(v_z\{0\} - \frac{gT_p}{2} \right) T_p + \left(v_z\{0\} - \round{gT_p} - \frac{gT_p}{2} \right) T_p\\
-&= x_z\{0\} + 2\left(v_z\{0\} - \frac{gT_p}{2} \right) T_p - \round{gT_p} T_p\\
-x_z\{3\} &= x_z\{1\} + 2\left(v_z\{1\} - \frac{gT_p}{2} \right) T_p - \round{gT_p} T_p\\
-&= x_z\{0\} + \left(v_z\{0\} - \frac{gT_p}{2} \right) T_p + 2\left(v_z\{0\} - \round{gT_p} - \frac{gT_p}{2} \right) T_p - \round{gT_p} T_p\\
-&= x_z\{0\} + 3\left(v_z\{0\} - \frac{gT_p}{2} \right) T_p - 3\round{gT_p} T_p\\
-x_z\{4\} &= x_z\{1\} + 3\left(v_z\{1\} - \frac{gT_p}{2} \right) T_p - 3\round{gT_p} T_p\\
-&= x_z\{0\} + \left(v_z\{0\} - \frac{gT_p}{2} \right) T_p + 3\left(v_z\{0\} - \round{gT_p} - \frac{gT_p}{2} \right) T_p - 3\round{gT_p} T_p\\
-&= x_z\{0\} + 4\left(v_z\{0\} - \frac{gT_p}{2} \right) T_p - 6\round{gT_p} T_p\\
-x_z\{5\} &= x_z\{1\} + 4\left(v_z\{1\} - \frac{gT_p}{2} \right) T_p - 6\round{gT_p} T_p\\
-&= x_z\{0\} + \left(v_z\{0\} - \frac{gT_p}{2} \right) T_p + 4\left(v_z\{0\} - \round{gT_p} - \frac{gT_p}{2} \right) T_p - 6\round{gT_p} T_p\\
-&= x_z\{0\} + 5\left(v_z\{0\} - \frac{gT_p}{2} \right) T_p - 10\round{gT_p} T_p\\
-x_z\{k\} &= x_z\{0\} + k\left(v_z\{0\} - \frac{gT_p}{2} \right) T_p - \frac{k(k - 1)}{2} \round{gT_p} T_p\\
-&= x_z\{0\} + k\left(v_z\{0\} - \frac{gT_p}{2} \right) T_p + \frac{k}{2} \round{gT_p} T_p - \frac{k^2}{2} \round{gT_p} T_p\\
-&= x_z\{0\} + k\left(v_z\{0\} - \frac{gT_p}{2} + \frac{\round{gT_p}}{2} \right) T_p - \frac{k^2}{2} \round{gT_p} T_p,
+x_{z,1} &= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p\\
+x_{z,2} &= x_{z,1} + \left(v_{z,1} - \frac{gT_p}{2} \right) T_p\\
+&= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p + \left(v_{z,0} - \round*{gT_p} - \frac{gT_p}{2} \right) T_p\\
+&= x_{z,0} + 2\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - \round*{gT_p} T_p\\
+x_{z,3} &= x_{z,1} + 2\left(v_{z,1} - \frac{gT_p}{2} \right) T_p - \round*{gT_p} T_p\\
+&= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p + 2\left(v_{z,0} - \round*{gT_p} - \frac{gT_p}{2} \right) T_p - \round*{gT_p} T_p\\
+&= x_{z,0} + 3\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - 3\round*{gT_p} T_p\\
+x_{z,4} &= x_{z,1} + 3\left(v_{z,1} - \frac{gT_p}{2} \right) T_p - 3\round*{gT_p} T_p\\
+&= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p + 3\left(v_{z,0} - \round*{gT_p} - \frac{gT_p}{2} \right) T_p - 3\round*{gT_p} T_p\\
+&= x_{z,0} + 4\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - 6\round*{gT_p} T_p\\
+x_{z,5} &= x_{z,1} + 4\left(v_{z,1} - \frac{gT_p}{2} \right) T_p - 6\round*{gT_p} T_p\\
+&= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p + 4\left(v_{z,0} - \round*{gT_p} - \frac{gT_p}{2} \right) T_p - 6\round*{gT_p} T_p\\
+&= x_{z,0} + 5\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - 10\round*{gT_p} T_p\\
+x_{z,k} &= x_{z,0} + k\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - \frac{k(k - 1)}{2} \round*{gT_p} T_p\\
+&= x_{z,0} + k\left(v_{z,0} - \frac{gT_p}{2} \right) T_p + \frac{k}{2} \round*{gT_p} T_p - \frac{k^2}{2} \round*{gT_p} T_p\\
+&= x_{z,0} + k\left(v_{z,0} - \frac{gT_p}{2} + \frac{\round*{gT_p}}{2} \right) T_p - \frac{k^2}{2} \round*{gT_p} T_p,
 \end{align*}
 deriving \eqref{eq:x_zk}.

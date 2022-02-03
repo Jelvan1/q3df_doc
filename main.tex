@@ -106,12 +106,12 @@
 \DeclareRobustCommand{\darkorangearea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor2,draw=black] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
 \DeclareRobustCommand{\darkgreyarea}{\tikzexternaldisable\tikz[baseline=-\the\dimexpr\fontdimen22\textfont2\relax+1.25mm]{\draw[fill=mycolor0!60,draw=mycolor0] (0mm, 0mm) rectangle (5mm, 2.5mm);}\tikzexternalenable}
 
-\newcommand*{\round}[1]{\ensuremath{\left\lfloor#1\right\rceil}}
-\newcommand*{\floor}[1]{\ensuremath{\left\lfloor#1\right\rfloor}}
-\newcommand*{\ceil}[1]{\ensuremath{\left\lceil#1\right\rceil}}
-\newcommand*{\abs}[1]{\left\lvert#1\right\rvert}
-\newcommand*{\norm}[1]{\left\lVert#1\right\rVert}
-\newcommand*{\set}[1]{\left\{#1\right\}}
+\DeclarePairedDelimiter{\round}\lfloor\rceil % https://tex.stackexchange.com/questions/433101/rounding-to-nearest-integer-symbol-in-latex/433108#433108
+\DeclarePairedDelimiter{\floor}\lfloor\rfloor % old: \newcommand*{\round}[1]{\ensuremath{\left\lfloor#1\right\rceil}}
+\DeclarePairedDelimiter{\ceil}\lceil\rceil
+\DeclarePairedDelimiter{\abs}\lvert\rvert
+\DeclarePairedDelimiter{\norm}\lVert\rVert
+\DeclarePairedDelimiter{\set}\{\}
 \renewcommand*{\vec}[1]{\symbf{#1}}
 \newcommand*{\uvec}[1]{\vec{\hat{#1}}}
 \newcommand*{\mat}[1]{\symbf{#1}}
