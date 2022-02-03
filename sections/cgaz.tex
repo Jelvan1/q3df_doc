@@ -335,7 +335,7 @@ TODO
 
 \subsection{Speed gains from air strafing}
 \label{sec:accel_air}
-Acceleration from strafing can be obtained using equation \eqref{eq:sAT}.\\
+Acceleration from strafing can be obtained using equation \eqref{eq:sAT}.
 From below code, acceleration is applied per axis in direction of unit \texttt{wishdir} with magnitude of \texttt{accelspeed}, i.e. $\uvec{\flat{s}}\flat{a}$.
 \codeFromFile{firstline=256,lastline=258,gobble=1}{code/game/bg_pmove.c}
 Thus, acceleration is dependent on angle $\delta$.\\
@@ -367,7 +367,7 @@ For normal strafing, $s = 320$, $A = 1$. These values are the same for CPM and V
 \begin{align*}
 \flat{a} = 320\cdot 1\cdot 0.008 = 2.56.
 \end{align*}
-Plugging into \eqref{eq:accel_opt_air},
+Using \eqref{eq:accel_opt_air},
 \begin{align*}
 r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 320 \cdot 2.56 - 2.56^2}\\
 &= \sqrt{\flat{v}^2 + 1631.8464},\ \text{where}\ \flat{v}\ge 317.44.
@@ -379,13 +379,13 @@ r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v
 &= \sqrt{\flat{v}^2 + 725.76},\ \text{where}\ \flat{v}\ge 303.2.
 \end{align*}
 
-This also presents the question of whether CPM sidestrafing ever becomes superior to normal strafing.\\
+This also presents the question of whether CPM sidestrafing ever becomes superior to normal strafing.
 However, it is clear that $r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) > r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right)\ \forall\ \flat{v} \in \symbb{R}$.
 
 
 \subsection{Speed gains from ground strafing}
 \label{sec:accel_ground}
-Deriving formulas for ground strafing works similarly to air strafing, however friction needs to be accounted for.\\
+Deriving formulas for ground strafing works similarly to air strafing, however friction needs to be accounted for.
 As friction is applied before acceleration, $\flat{v}_f = (1 - \iota cT)\flat{v}$. Thus, assuming w.l.o.g. $\flat{v}$ is solely on the $x$-axis,
 \begin{align*}
 \vec{r} =
@@ -424,12 +424,12 @@ After friction is applied, the current velocity vector becomes
 \vec{v}_f &=
 \begin{pmatrix}
 v_{fx} \\ v_{fy} \\ v_{fz}
-\end{pmatrix} = \norm{\vec{v}_f} \uvec{v} = (1-cT)\vec{v},
+\end{pmatrix} = \norm*{\vec{v}_f} \uvec{v} = (1-cT)\vec{v},
 \end{align*}
 with a magnitude
 \begin{align*}
 %\label{eq:vf}
-\norm{\vec{v}_f} &= \sqrt{\vec{v}_f^T \vec{v}_f} = \sqrt{v_{fx}^2 + v_{fy}^2 + v_{fz}^2} = v_f = (1-cT)v,
+\norm*{\vec{v}_f} &= \sqrt{\vec{v}_f^T \vec{v}_f} = \sqrt{v_{fx}^2 + v_{fy}^2 + v_{fz}^2} = v_f = (1-cT)v,
 \end{align*}
 with $c = 3$ the friction factor when using flight (\texttt{pm\_flightfriction}).
 
@@ -541,9 +541,9 @@ tmp2(tmp2 < -pi) = tmp2(tmp2 < -pi) + 2*pi;
 \end{verbatim}
 
 \begin{align*}
-\norm{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= \norm{\vec{v}}^2,\\
+\norm*{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= \norm{\vec{v}}^2,\\
 2\vec{a}^T \vec{v}_f + \vec{a}^T \vec{a} &= \vec{v}^T \vec{v} - \vec{v}_f^T \vec{v}_f,\\
-2\norm{\vec{a}} \vec{v}_f^T \uvec{a} + \norm{\vec{a}}^2 &= \norm{\vec{v}}^2 - \norm{\vec{v}_f}^2,\\
+2\norm{\vec{a}} \vec{v}_f^T \uvec{a} + \norm{\vec{a}}^2 &= \norm{\vec{v}}^2 - \norm*{\vec{v}_f}^2,\\
 320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) ) +\\
 320^2 A^2 T^2\frac{\norm{\vec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd^2} &= v_x^2 + v_z^2 - v_{fx}^2 - v_{fz}^2,
 \end{align*}
@@ -567,7 +567,7 @@ D' &= -v_{fx}\fmove,
 \end{align*}
 
 \begin{align*}
-\frac{d}{d\rho}\norm{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= 0,\\
+\frac{d}{d\rho}\norm*{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= 0,\\
 \frac{d}{d\rho}2\vec{a}^T \vec{v}_f + \frac{d}{d\rho}\vec{a}^T \vec{a} &= 0,\\
 \frac{d}{d\rho}2\norm{\vec{a}} \vec{v}_f^T \uvec{a} + \frac{d}{d\rho}\norm{\vec{a}}^2 &= 0,\\
 \frac{d}{d\rho}320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) ) +\\
@@ -588,7 +588,7 @@ B &= -\frac{2S}{\cmd}v_{fz}\fmove - \frac{2S^2}{\cmd^2}\fmove\umove,
 \end{align*}
 
 \begin{align*}
-\frac{d}{d\rho}\norm{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= 0,\\
+\frac{d}{d\rho}\norm*{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= 0,\\
 \frac{d}{d\rho}2\vec{a}^T \vec{v}_f + \frac{d}{d\rho}\vec{a}^T \vec{a} &= 0,\\
 \frac{d}{d\rho}2\norm{\vec{a}} \vec{v}_f^T \uvec{a} + \frac{d}{d\rho}\norm{\vec{a}}^2 &= 0,\\
 \frac{d}{d\gamma}320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) ) +\\
@@ -630,10 +630,10 @@ D &= -v_{fx}\fmove,
 \texttt{PM\_Accelerate (wishdir, wishspeed, pm\_flyaccelerate);}
 
 \begin{align*}
-\norm{\vec{v}_f + (s - \vec{v}_f^T \uvec{a})\uvec{a}}^2 &= \norm{\vec{v}}^2,\\
+\norm*{\vec{v}_f + (s - \vec{v}_f^T \uvec{a})\uvec{a}}^2 &= \norm{\vec{v}}^2,\\
 (\vec{v}_f + (s - \vec{v}_f^T \uvec{a})\uvec{a})^T (\vec{v}_f + (s - \vec{v}_f^T \uvec{a})\uvec{a}) &= \vec{v}^T \vec{v},\\
 2(s - \vec{v}_f^T \uvec{a})\uvec{a}^T \vec{v}_f + (s - \vec{v}_f^T \uvec{a})^2\uvec{a}^T\uvec{a} &= \vec{v}^T \vec{v} - \vec{v}_f^T \vec{v}_f,\\
-2(s - \vec{v}_f^T \uvec{a})\vec{v}_f^T \uvec{a} + (s - \vec{v}_f^T \uvec{a})^2 &= \norm{\vec{v}}^2 - \norm{\vec{v}_f}^2,\\
+2(s - \vec{v}_f^T \uvec{a})\vec{v}_f^T \uvec{a} + (s - \vec{v}_f^T \uvec{a})^2 &= \norm{\vec{v}}^2 - \norm*{\vec{v}_f}^2,\\
 s^2 - \left(\vec{v}_f^T \uvec{a}\right)^2 &= v^2 - v_f^2,\\
 320^2\frac{\norm{\vec{\cmd}}_{\infty}^2}{127^2\hphantom{_{\infty}}} \frac{(\cmd^2  - 2\fmove\umove\sin\rho)^2}{\cmd^2} -\\ (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove))^2 &= (v_x^2 + v_z^2 - v_{fx}^2 - v_{fz}^2) (\cmd^2  - 2\fmove\umove\sin\rho),
 \end{align*}

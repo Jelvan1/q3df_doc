@@ -144,7 +144,7 @@ v_x v_y & v_y^2 & 0\\
 \end{pmatrix},\\
 %&&&= \frac{\vec{\flat{v}}_f \vec{\flat{v}}_f^T}{\vec{\flat{v}}_f^T \vec{\flat{v}}_f} &&= \frac{\resprojmat{\flat{n}}\vec{v}_f\vec{v}_f^T\resprojmat{\flat{n}}^T}{\vec{v}_f^T\resprojmat{\flat{n}}\vec{v}_f} &&= \projmat{\flat{v}_f}^T = \projmat{\flat{v}_f}^k, \qquad k \in \symbb{N}^+,\\
 %
-\norm{\projmat{\flat{v}} \vec{\flat{r}}} &= \mathmakebox[0pt][l]{\sqrt{\vec{\flat{r}}^T \projmat{\flat{v}} \vec{\flat{r}}} = \sqrt{\vec{\flat{r}}^T \uvec{\flat{v}} \uvec{\flat{v}}^T \vec{\flat{r}}} = \vec{\flat{r}}^T \uvec{\flat{v}} = \flat{r} \cos\varphi,}
+\norm*{\projmat{\flat{v}} \vec{\flat{r}}} &= \mathmakebox[0pt][l]{\sqrt{\vec{\flat{r}}^T \projmat{\flat{v}} \vec{\flat{r}}} = \sqrt{\vec{\flat{r}}^T \uvec{\flat{v}} \uvec{\flat{v}}^T \vec{\flat{r}}} = \vec{\flat{r}}^T \uvec{\flat{v}} = \flat{r} \cos\varphi,}
 \end{alignat*}
 where $\varphi$ represents the angle between the current velocity $\vec{\flat{v}}$ and the new velocity $\vec{\flat{r}}$. Likewise, to project a vector onto the acceleration vector $\vec{\flat{a}}$, we need to multiply with
 \begin{align*}
@@ -156,6 +156,6 @@ where $\varphi$ represents the angle between the current velocity $\vec{\flat{v}
 %\end{pmatrix} =
 \projmat{\flat{a}}^T = \projmat{\flat{a}}^k, \qquad k \in \symbb{N}^+,\\
 %
-\norm{\projmat{\flat{a}} \vec{\flat{v}}_f} &= \sqrt{\vec{\flat{v}}_f^T \projmat{\flat{a}} \vec{\flat{v}}_f} = \sqrt{\vec{\flat{v}}_f^T \uvec{\flat{a}} \uvec{\flat{a}}^T \vec{\flat{v}}_f} = \vec{\flat{v}}_f^T \uvec{\flat{a}} = \flat{v}_f \cos\delta,
+\norm*{\projmat{\flat{a}} \vec{\flat{v}}_f} &= \sqrt{\vec{\flat{v}}_f^T \projmat{\flat{a}} \vec{\flat{v}}_f} = \sqrt{\vec{\flat{v}}_f^T \uvec{\flat{a}} \uvec{\flat{a}}^T \vec{\flat{v}}_f} = \vec{\flat{v}}_f^T \uvec{\flat{a}} = \flat{v}_f \cos\delta,
 \end{align*}
 where $\delta$ represents the angle between the acceleration $\vec{\flat{a}}$ and the velocity $\vec{\flat{v}}$.
