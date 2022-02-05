@@ -60,7 +60,7 @@ jobs:
               const release = await github.repos.getReleaseByTag({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                tag: "master",
+                tag: "latest",
               });
               console.log(`Found latest release`)
               await github.repos.deleteRelease({
@@ -73,9 +73,26 @@ jobs:
               console.log(`Failed deleting latest release: ${e.message}`);
             }
 
+            // create/update 'latest' tag
+            try {
+              await github.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "refs/tags/latest",
+                sha: context.sha,
+              });
+              console.log(`Created new \`latest\` tag`);
+            } catch (e) {
+              await github.git.updateRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "tags/latest",
+                sha: context.sha,
+              });
+              console.log(`Updated \`latest\` tag`);
+            }
+
       - uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           body: "Quake III DeFRaG Physics"
           draft: false
@@ -83,4 +100,5 @@ jobs:
           files: |
             bin/main.pdf
           name: Latest pdf
-          tag_name: master
+          tag_name: latest
+          token: ${{ secrets.GITHUB_TOKEN }}
