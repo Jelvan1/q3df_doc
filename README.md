@@ -4,7 +4,7 @@
 
 This document is a continuous effort of accurately describing the physics of the Quake III mod DeFRaG and how the code dictates the way we play. It covers the math behind the CGazHUD in all sorts of scenarios and should give you a better understanding of what it displays and why. Other sections will be extended gradually.
 
-| [Download latest pdf.](../../releases/download/master/main.pdf) |
+| [Download latest pdf.](../../releases/download/latest/main.pdf) |
 | --------------------------------------------------------------- |
 
 ## Building
