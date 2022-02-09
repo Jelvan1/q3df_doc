@@ -15,9 +15,37 @@ Since player velocity is one of the vectors that is rounded, we can interpret th
 \round{r_x} \\ \round{r_y} \\ \round{r_z}
 \end{pmatrix}.
 \end{align*}
+Hence, there are specific constant view yaw angle ranges called ``snap zones'' which provide the same acceleration regardless of where the player is looking in the zone.
+Some of these zones are rounded to give a value $\round*{\flat{a}} > sAT$, and similarly some are rounded such that $\round*{\flat{a}} < sAT$.
+Note that the player will only accelerate if $\delta \in [\delta_{\min}, \delta_{\max}]$.\\
+Additionally, the closer $\delta_{\min}$ is to the border of a snap zone, there will be a greater change in speed as the acceleration is pointed more in the direction of $\flat{v}$, meaning more of the acceleration goes into increasing the speed rather than changing the direction.
+This also means that as $\delta_{\min}$ gets closer to the border of a snap zone, $\delta_{\min}$ will change faster due to speed increasing more rapidly.\\
 TODO
 
 
 \subsection{Frame rate impact}
 \label{sec:snap_frame_rate}
 TODO
+
+
+\subsection{Proper maximum ground speed}
+\label{sec:max_ground_speed}
+There are technically two solutions to the maximum ground speed for CPM and VQ3: allowing the player to turn any direction (clockwise and anticlockwise), or restricting the player's rotation to one direction as is done in a circle jump.\\
+TODO: method\\
+
+Results\\
+\begin{tabular*}{\textwidth}{c @{\extracolsep{\fill}} cc}
+\text{Restricted} && \text{Unrestricted}\\
+& \text{CPM results} &\\
+\round*{\flat{v}_{\max}} = \norm*{\begin{pmatrix}
+TODO \\ TODO \\ 0
+\end{pmatrix}} = \qty{498.787}{ups} && \round*{\flat{v}_{\max}} = \norm*{\begin{pmatrix}
+TODO \\ TODO \\ 0
+\end{pmatrix}} = \qty{500.3}{ups}\\
+& \text{VQ3 results} &\\
+	\round*{\flat{v}_{\max}} = \norm*{\begin{pmatrix}
+TODO \\ TODO \\ 0
+\end{pmatrix}} = TODO && \round*{\flat{v}_{\max}} = \norm*{\begin{pmatrix}
+403 \\ 91 \\ 0
+\end{pmatrix}} = \qty{413.146}{ups}
+\end{tabular*}
