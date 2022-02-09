@@ -70,7 +70,7 @@ Hence, the angles $\delta_{\min}$ and $\delta_{\max}$ represent the boundaries b
 \label{eq:delta_max_vf}
 \delta_{\max} &= \acos\left( -\frac{a}{2 \flat{v}} \right).
 \end{align}
-Note that, in the air, $\delta_{\max}$ exceeds \ang{90} and still results in a speed increase. On the ground, the angles $\delta_{\min}$, $\delta_{\opt}$ and $\delta_{\max}$ will eventually meet when we reach the \emph{maximum ground speed}\footnote{When we introduce velocity snapping (Section \ref{sec:snaphud}), this is no longer the maximum ground speed.}, due to the friction ($c = 6$), shown in Figure \ref{fig:v_ground} (top left magnification). The mathematically derivation is done in Appendix \ref{app:derive_flat_v_max} and results in
+Note that, in the air, $\delta_{\max}$ exceeds \ang{90} and still results in a speed increase. On the ground, the angles $\delta_{\min}$, $\delta_{\opt}$ and $\delta_{\max}$ will eventually meet when we reach the \emph{maximum ground speed}\footnote{When we introduce velocity snapping (Section \ref{sec:max_ground_speed}), this is no longer the maximum ground speed.}, due to the friction ($c = 6$), shown in Figure \ref{fig:v_ground} (top left magnification). The mathematically derivation is done in Appendix \ref{app:derive_flat_v_max} and results in
 \begin{align}
 \label{eq:flat_v_max}
 \flat{v}_{\max} &= s \sqrt{\frac{A (2 - AT)}{c (2 - cT)}}.
@@ -336,9 +336,10 @@ TODO
 \subsection{Speed gains from air strafing}
 \label{sec:accel_air}
 Acceleration from strafing can be obtained using equation \eqref{eq:sAT}.
-From below code, acceleration is applied per axis in direction of unit \texttt{wishdir} with magnitude of \texttt{accelspeed}, i.e. $\uvec{\flat{s}}\flat{a}$.
+From below code, acceleration is applied per axis in direction of unit \texttt{wishdir} with magnitude of \texttt{accelspeed}, i.e. $\uvec{\flat{s}_x}\flat{a}$ and $\uvec{\flat{s}_y}\flat{a}$.
 \codeFromFile{firstline=256,lastline=258,gobble=1}{code/game/bg_pmove.c}
-Thus, acceleration is dependent on angle $\delta$.\\
+Thus, acceleration is dependent on angle $\delta$.
+
 W.l.o.g., assume current velocity $\flat{v}$ is solely on the $x$-axis. Then the resulting new velocity $\vec{r}$ becomes
 \begin{align*}
 \vec{r} =
@@ -360,23 +361,16 @@ r\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\
 \end{align*}
 \begin{align}
 \label{eq:accel_opt_air}
-\therefore\ r\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\flat{v}^2 + 2s\flat{a} - \flat{a}^2},\ \text{where}\ \flat{v}\ge s - \flat{a}.
+\therefore\ r\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\flat{v}^2 + 2s\flat{a} - \flat{a}^2}\ \ldots\ \flat{v}\ge s - \flat{a}.
 \end{align}\\
 
-For normal strafing, $s = 320$, $A = 1$. These values are the same for CPM and VQ3. Hence,
+For normal strafing, $s = 320$, $A = 1$. These values are the same for CPM and VQ3. Using \eqref{eq:accel_opt_air},
 \begin{align*}
-\flat{a} = 320\cdot 1\cdot 0.008 = 2.56.
-\end{align*}
-Using \eqref{eq:accel_opt_air},
-\begin{align*}
-r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 320 \cdot 2.56 - 2.56^2}\\
-&= \sqrt{\flat{v}^2 + 1631.8464},\ \text{where}\ \flat{v}\ge 317.44.
-\end{align*}
-
-For CPM sidestrafing, $s = 30$, $A = 70$. Hence, $\flat{a} = 30\cdot 70\cdot 0.008 = 16.8$, and
-\begin{align*}
-r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 30 \cdot 16.8 - 16.8^2}\\
-&= \sqrt{\flat{v}^2 + 725.76},\ \text{where}\ \flat{v}\ge 303.2.
+\flat{a} = 320\cdot 1\cdot 0.008 = 2.56, && r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 320 \cdot 2.56 - 2.56^2}\\
+&& &= \sqrt{\flat{v}^2 + 1631.8464}\ \ldots\ \flat{v}\ge 317.44.\\
+\text{For CPM sidestrafing, }s = 30, A = 70.\\
+\flat{a} = 30\cdot 70\cdot 0.008 = 16.8, && r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 30 \cdot 16.8 - 16.8^2}\\
+&& &= \sqrt{\flat{v}^2 + 725.76}\ \ldots\ \flat{v}\ge 303.2.
 \end{align*}
 
 This also presents the question of whether CPM sidestrafing ever becomes superior to normal strafing.
@@ -402,17 +396,17 @@ and likewise gain in speed $G\left(\flat{v}\ ;\delta \right) = \sqrt{\left((1 - 
 Now provided that the player is strafing at $\delta_{\opt}$,
 \begin{align}
 \label{eq:accel_opt_ground}
-r\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2s\flat{a} - \flat{a}^2},\ \text{where}\ \flat{v}_f\ge s - \flat{a}.
-\end{align}\\
+r\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2s\flat{a} - \flat{a}^2}\ \ldots\ \flat{v}_f\ge s - \flat{a}.
+\end{align}
 
-For CPM, $\flat{a} = 320\cdot 15\cdot 0.008 = 38.4$. Hence by \eqref{eq:accel_opt_ground},
+For CPM,
 \begin{align*}
-r_{\text{CPM-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 23101.44},\ \text{where}\ \flat{v}_f\ge 281.6.
+\flat{a} = 320\cdot 15\cdot 0.008 = 38.4, && r_{\text{CPM-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 23101.44}\ \ldots\ \flat{v}_f\ge 281.6.
 \end{align*}
-For VQ3, $\flat{a} = 320\cdot 10\cdot 0.008 = 25.6$. Hence,
+For VQ3,
 \begin{align*}
-r_{\text{VQ3-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 15728.64},\ \text{where}\ \flat{v}_f\ge 294.4.
-\end{align*}\\
+\flat{a} = 320\cdot 10\cdot 0.008 = 25.6, && r_{\text{VQ3-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 15728.64}\ \ldots\ \flat{v}_f\ge 294.4.
+\end{align*}
 
 \eqref{eq:accel_opt_ground} can also be used to derive $\flat{v}_{\max}$ from \eqref{eq:flat_v_max}, done in Appendix \ref{app:derive_flat_v_max_alternative}.
 
