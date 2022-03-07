@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Build
         uses: xu-cheng/latex-action@v2
@@ -29,7 +29,7 @@ jobs:
           latexmk_shell_escape: true
           latexmk_use_lualatex: true
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: artifact
           path: main.pdf
@@ -43,27 +43,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: artifact
           path: bin/
 
-      - uses: actions/github-script@v3.1.0
+      - uses: actions/github-script@v6
         id: script
         with:
-          github-token: ${{ github.token }}
           script: |
             // delete latest release
             try {
-              const release = await github.repos.getReleaseByTag({
+              const release = await github.rest.repos.getReleaseByTag({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 tag: "latest",
               });
               console.log(`Found latest release`)
-              await github.repos.deleteRelease({
+              await github.rest.repos.deleteRelease({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 release_id: release.data.id,
@@ -75,7 +74,7 @@ jobs:
 
             // create/update 'latest' tag
             try {
-              await github.git.createRef({
+              await github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 ref: "refs/tags/latest",
@@ -83,7 +82,7 @@ jobs:
               });
               console.log(`Created new \`latest\` tag`);
             } catch (e) {
-              await github.git.updateRef({
+              await github.rest.git.updateRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 ref: "tags/latest",
