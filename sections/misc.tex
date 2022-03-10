@@ -181,7 +181,7 @@ This scale factor is determined by the below code.
 \codeFromFile{firstline=306,lastline=308,gobble=1}{code/game/bg_pmove.c}
 Hence upmove increases the denominator of the scale factor, decreasing \texttt{wishspeed}.\\
 If the player is holding 3 movement keys, ($\fmove$, $\rmove$ and $\umove$), this transformation scales it by a factor of $\frac{\sqrt{2}}{\sqrt{3}}$.
-If the player is holding 2 movement keys, ($\fmove$ and $\umove$ or $\rmove$ and $\umove$), the scale factor is $\frac{1}{\sqrt{2}}$.
+If the player is holding 2 movement keys, ($\fmove$ and $\umove$ or $\rmove$ and $\umove$), the scale factor is $\frac{\sqrt{2}}{2}$.
 
 Hence, the snap zones will change along with all CGazHUD $\delta$ angles, which explains the altered acceleration while holding moveup or movedown.
 Also, holding 2 movement keys reduces $\texttt{wishspeed}$ moreso than holding 3 movement keys, decreasing acceleration more\footnote{Thus, although insignificant, full-beat VQ3 strafing is superior to half-beat and moreso to invert.}.
@@ -189,7 +189,7 @@ Also, holding 2 movement keys reduces $\texttt{wishspeed}$ moreso than holding 3
 
 \subsection{Frame rate dependency}
 \label{sec:framerate}
-We can define \emph{frame rate dependency} as attributes of the game engine that act differently depending on framerate,
+We can define \emph{frame rate dependency} as attributes of the game engine that act differently depending on frame rate,
 and say that an attribute of the game engine has \emph{frame independency} if the time between frames does not need to be equidistant for the physics to act the same.\\
 
 Given that acceleration is impacted directly by frame rate (by $\flat{a} = sAT$), frame rate has a large impact on speed gains from strafing.\\
@@ -198,6 +198,9 @@ TODO: frame rate effect on strafing\\
 Additionally, $T$ is floored to the nearest millisecond (0.001), giving us proper-T $T_p$, and frames are delayed until $1000T_p$ milliseconds pass.
 For example, with frame rate $\qty{140}{fps}$, $T$ would be floored from $1/140 = 0.007143$ to 0.007. Note: \texttt{minMsec} is an int.
 \codeFromFile{firstline=2686,lastline=2690,gobble=1}{code/qcommon/common.c}
+%For any framerate $\frac{1}{T_p} > 1600$, gravity doesn't apply as $\round*{gT_p} = 0$.\\
+However if if $1/T > 1000$, $T_p$ will be rounded to 0.001, and won't be rounded any lower.
+\codeFromFile{firstline=2599,lastline=2601,gobble=1}{code/qcommon/common.c}
 
 Also, frame rate impacts vertical ($z$-axis) velocity when in air, shown by
 \begin{align*}
@@ -213,14 +216,9 @@ and thus over one second $v_z$ is reduced by $\qty{750}{ups}$ instead of $\qty{8
 As a general rule, if effective-gravity $\frac{\round*{gT_p}}{T_p} < 800$ then frame rates given by $\frac{1}{T}$ allow the player to jump higher than intended.
 This is expanded upon in Section \ref{sec:x_z} (TODO).\\
 
-%For any framerate $\frac{1}{T_p} > 1600$, gravity doesn't apply as $\round*{gT_p} = 0$.\\
-% This !!!IS NOT TRUE!!! since if 1/T > 1000, T_p will be rounded to 0.001, and won't be rounded any lower: see lines 2598-2601 in code/qcommon/common.c
-% \codeFromFile{firstline=2599,lastline=2601,gobble=1}{code/qcommon/common.c}
-%
-%Ironically, given a high enough frame rate, some accelerations can be rounded to 0.\\
-%In general, any acceleration on one axis $a_n$ will be nulled if $a_n < 0.5$.
-TODO: confirm if accelerations on one axis $a_n$ can be rounded to 0 if $a_n < 0.5$\\
-%
+Another important point to note is that accelerations on one axis $a_n$ can be rounded to 0 if $a_n < 0.5$.
+This ironically places limits on the functionality of the movement physics at high frame rates, as accelerations will be more frequently nulled.
+
 % TODO: Also need to find out what happens in a situation where the flooring to T_p causes the game to try to render more frames per second than FPS(does it?)
 % Eg. 120 FPS. int minMsec = 1000 / 120 = 8.3333, floors to 8. However, T=8 implies 125 frames rendered per second, yet we only have 120 FPS.
 
@@ -337,13 +335,13 @@ TODO
 TODO: explanation of step-up, conditions, special cases (if any)\\
 
 The maximum height the player can step-up is $\qty{18}{units}$.
-Hence, to calculate the maximum height the player can jump including step-up, add 18 to \eqref{eq:max_jump_height} giving
+Hence, to calculate the maximum height the player can jump including step-up, add $\qty{18}{units}$ to \eqref{eq:max_jump_height} giving
 \begin{align}
 \label{eq:max_jump_height_stepup}
 \ceil*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}}}\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - \frac{1}{2}\ceil*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}}}^2 \round*{gT_p} T_p + 18,
 \end{align}
 which is $\qty{66.528}{units}$ at $\qty{125}{fps}$.
-%NOTE: \texttt{phys\_maxstep} is defined in either code/bspc/cfgq3.c (18) or code/botlib/be\_aas\_move.c (19), unsure
+%STEPSIZE defined in bg_local.h
 
 
 \subsection{Skimming}
@@ -354,7 +352,7 @@ TODO
 \subsection{Overbounces}
 \label{sec:overbounce}
 TODO%\\
-%Overbounces occur when $x_z$ comes within 0.125 and 0.25 units of a ground plane.
+%Overbounces occur when $x_z$ comes within 0 and 0.25 units of a ground plane.
 
 
 \subsection{Wallbug}

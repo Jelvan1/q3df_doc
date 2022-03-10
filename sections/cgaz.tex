@@ -66,9 +66,9 @@ As you can see, this optimal angle depends on the current velocity $\flat{v}_f$ 
 Hence, the angles $\delta_{\min}$ and $\delta_{\max}$ represent the boundaries between a speed increase and possible speed decrease. When $\vec{\flat{v}} = \vec{\flat{v}}_f$, e.g. in the air\footnote{In the air there is no friction ($c = 0$).}, equations \eqref{eq:delta_min} and \eqref{eq:delta_max} simplify to respectively
 \begin{align}
 \label{eq:delta_min_vf}
-\delta_{\min} &= \acos\left( \frac{s}{\flat{v}_f} \right),\\
+\delta_{\min} &= \acos\left(\frac{s}{\flat{v}} \right),\\
 \label{eq:delta_max_vf}
-\delta_{\max} &= \acos\left( -\frac{a}{2 \flat{v}} \right).
+\delta_{\max} &= \acos\left(-\frac{\flat{a}}{2\flat{v}} \right).
 \end{align}
 Note that, in the air, $\delta_{\max}$ exceeds \ang{90} and still results in a speed increase. On the ground, the angles $\delta_{\min}$, $\delta_{\opt}$ and $\delta_{\max}$ will eventually meet when we reach the \emph{maximum ground speed}\footnote{When we introduce velocity snapping (Section \ref{sec:max_ground_speed}), this is no longer the maximum ground speed.}, due to the friction ($c = 6$), shown in Figure \ref{fig:v_ground} (top left magnification). The mathematically derivation is done in Appendix \ref{app:derive_flat_v_max} and results in
 \begin{align}
@@ -134,7 +134,7 @@ Similar to equation \eqref{eq:delta_max}, we derive the point where we stop gain
 Hence, the angles $\bar{\delta}_{\min}$ and $\bar{\delta}_{\max}$ represent the boundaries between a speed increase and a speed decrease in the direction of the current velocity $\uvec{\flat{v}}$. Similar as before, when $\vec{\flat{v}} = \vec{\flat{v}}_f$ (e.g. in the air), equations \eqref{eq:delta_bar_min} and \eqref{eq:delta_bar_max} simplify to
 \begin{align}
 \label{eq:delta_bar_min_vf}
-\bar{\delta}_{\min} &= \acos\left( \frac{s}{\flat{v}_f} \right) = \eqref{eq:delta_min_vf},\\
+\bar{\delta}_{\min} &= \acos\left(\frac{s}{\flat{v}} \right) = \eqref{eq:delta_min_vf},\\
 \label{eq:delta_bar_max_vf}
 \bar{\delta}_{\max} &= \frac{\pi}{2}.
 \end{align}
@@ -178,7 +178,7 @@ Acceleration $A = 1$ on a icy surface is identical to the acceleration in the ai
 v_{f_z} - gT
 \end{align*}
 
-Explain the drifting speed and sticky jump overbounces (graph time for ob with respect to your current velocity, slick top view turn (with(out) jump)).
+TODO: Explain the drifting speed and sticky jump overbounces (graph time for ob with respect to your current velocity, slick top view turn (with(out) jump)).
 
 
 \subsection{Strafing on sloped surfaces}
@@ -374,7 +374,7 @@ For normal strafing, $s = 320$, $A = 1$. These values are the same for CPM and V
 \end{align*}
 
 This also presents the question of whether CPM sidestrafing ever becomes superior to normal strafing.
-However, it is clear that $r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) > r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right)\ \forall\ \flat{v} \in \symbb{R}$.
+However, it is clear that $r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) > r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right)\ \forall\ \flat{v}\ge 317.44$.
 
 
 \subsection{Speed gains from ground strafing}
@@ -624,11 +624,11 @@ D &= -v_{fx}\fmove,
 \texttt{PM\_Accelerate (wishdir, wishspeed, pm\_flyaccelerate);}
 
 \begin{align*}
-\norm*{\vec{v}_f + (s - \vec{v}_f^T \uvec{a})\uvec{a}}^2 &= \norm{\vec{v}}^2,\\
-(\vec{v}_f + (s - \vec{v}_f^T \uvec{a})\uvec{a})^T (\vec{v}_f + (s - \vec{v}_f^T \uvec{a})\uvec{a}) &= \vec{v}^T \vec{v},\\
-2(s - \vec{v}_f^T \uvec{a})\uvec{a}^T \vec{v}_f + (s - \vec{v}_f^T \uvec{a})^2\uvec{a}^T\uvec{a} &= \vec{v}^T \vec{v} - \vec{v}_f^T \vec{v}_f,\\
-2(s - \vec{v}_f^T \uvec{a})\vec{v}_f^T \uvec{a} + (s - \vec{v}_f^T \uvec{a})^2 &= \norm{\vec{v}}^2 - \norm*{\vec{v}_f}^2,\\
+\norm*{\vec{v}_f + \left(s - \vec{v}_f^T \uvec{a} \right)\uvec{a}}^2 &= \norm{\vec{v}}^2,\\
+\left(\vec{v}_f + \left(s - \vec{v}_f^T \uvec{a} \right)\uvec{a} \right)^T \left(\vec{v}_f + \left(s - \vec{v}_f^T \uvec{a} \right)\uvec{a} \right) &= \vec{v}^T \vec{v},\\
+2\left(s - \vec{v}_f^T \uvec{a} \right)\uvec{a}^T \vec{v}_f + \left(s - \vec{v}_f^T \uvec{a} \right)^2\uvec{a}^T\uvec{a} &= \vec{v}^T \vec{v} - \vec{v}_f^T \vec{v}_f,\\
+2\left(s - \vec{v}_f^T \uvec{a} \right)\vec{v}_f^T \uvec{a} + \left(s - \vec{v}_f^T \uvec{a} \right)^2 &= \norm{\vec{v}}^2 - \norm*{\vec{v}_f}^2,\\
 s^2 - \left(\vec{v}_f^T \uvec{a}\right)^2 &= v^2 - v_f^2,\\
-320^2\frac{\norm{\vec{\cmd}}_{\infty}^2}{127^2\hphantom{_{\infty}}} \frac{(\cmd^2  - 2\fmove\umove\sin\rho)^2}{\cmd^2} -\\ (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove))^2 &= (v_x^2 + v_z^2 - v_{fx}^2 - v_{fz}^2) (\cmd^2  - 2\fmove\umove\sin\rho),
+320^2\frac{\norm{\vec{\cmd}}_{\infty}^2}{127^2\hphantom{_{\infty}}} \frac{(\cmd^2  - 2\fmove\umove\sin\rho)^2}{\cmd^2} -\\ \left(v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) \right)^2 &= \left(v_x^2 + v_z^2 - v_{fx}^2 - v_{fz}^2 \right) \left(\cmd^2  - 2\fmove\umove\sin\rho \right),
 \end{align*}
 which is too complex to calculate efficiently.
