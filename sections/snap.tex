@@ -17,9 +17,16 @@ Since player velocity is one of the vectors that is rounded, we can interpret th
 \end{align*}
 Hence, there are specific constant view yaw angle ranges called ``snap zones'' which provide the same acceleration regardless of where the player is looking in the zone.
 Some of these zones are rounded to give a value $\round*{\flat{a}} > sAT$, and similarly some are rounded such that $\round*{\flat{a}} < sAT$.
-Note that the player will only accelerate if $\delta \in [\delta_{\min}, \delta_{\max}]$.\\
-Additionally, the closer $\delta_{\min}$ is to the border of a snap zone, there will be a greater change in speed as the acceleration is pointed more in the direction of $\flat{v}$, meaning more of the acceleration goes into increasing the speed rather than changing the direction.
-This also means that as $\delta_{\min}$ gets closer to the border of a snap zone, $\delta_{\min}$ will change faster due to speed increasing more rapidly.\\
+Note that the player will still only accelerate if $\delta \in [\delta_{\min}, \delta_{\max}]$.\\
+Additionally, the closer $\delta_{\min}$ is to the border of a snap zone, there will be a greater change in speed as the acceleration is pointed more in the direction of $\vec{\flat{v}}$, meaning more of the acceleration goes into increasing the speed rather than changing the direction.
+This also means that as $\delta_{\min}$ gets closer to the border of a snap zone, $\delta_{\min}$ will change faster due to speed increasing more rapidly.
+Players often attempt to optimise (by decreasing) the distance between $\delta_{\min}$ and the border of the snap zone in order to maximise acceleration through techniques referred to as ``snap manipulation'' or ``snap zone manipulation.''\\
+
+Furthermore, due to velocity snapping rotating the acceleration vector, given a sufficiently high velocity it is possible to lose speed while strafing with $\delta \in [\delta_{\min}, \delta_{\max}]$, which is discussed in Section \ref{sec:speed_loss_while_strafing}.\\
+
+We can form an illustration of the snap zones in any conditions given that we know the acceleration the player is receiving in that frame.
+In normal conditions while air strafing at $\qty{125}{fps}$ with no moveup and $\delta \in [\delta_{\opt}, \delta_{\max}]$, $\flat{a} = 2.56$. The effect of the rounding can be visualised with a circle with radius 2.56.\\
+
 TODO
 
 
@@ -30,22 +37,56 @@ TODO
 
 \subsection{Proper maximum ground speed}
 \label{sec:max_ground_speed}
-There are technically two solutions to the maximum ground speed for CPM and VQ3: allowing the player to turn any direction (clockwise and anticlockwise), or restricting the player's rotation to one direction as is done in a circle jump.\\
+The addition of velocity snapping also affects the maximum ground speed previously calculated to be $\flat{v}_{\max}$.
+There are technically two solutions to the proper maximum ground speed for CPM and VQ3: allowing the player to turn any direction (clockwise and anticlockwise), or restricting the player's rotation to one direction as is done in a circle jump.\\
 TODO: method\\
 
 Results\\
 \begin{tabular*}{\textwidth}{c @{\extracolsep{\fill}} cc}
-\text{Restricted} && \text{Unrestricted}\\
-& \text{CPM results} &\\
-\round*{\flat{v}_{\max}} = \norm*{\begin{pmatrix}
+Restricted && Unrestricted\\
+& CPM results &\\
+$\flat{v}_{\max\_\proper} = \norm*{\begin{pmatrix}
 TODO \\ TODO \\ 0
-\end{pmatrix}} = \qty{498.787}{ups} && \round*{\flat{v}_{\max}} = \norm*{\begin{pmatrix}
+\end{pmatrix}} = \qty{498.787}{ups}$ && $\flat{v}_{\max\_\proper} = \norm*{\begin{pmatrix}
 TODO \\ TODO \\ 0
-\end{pmatrix}} = \qty{500.3}{ups}\\
-& \text{VQ3 results} &\\
-	\round*{\flat{v}_{\max}} = \norm*{\begin{pmatrix}
+\end{pmatrix}} = \qty{500.3}{ups}$\\
+& VQ3 results &\\
+$\flat{v}_{\max\_\proper} = \norm*{\begin{pmatrix}
 TODO \\ TODO \\ 0
-\end{pmatrix}} = TODO && \round*{\flat{v}_{\max}} = \norm*{\begin{pmatrix}
+\end{pmatrix}} = TODO$ && $\flat{v}_{\max\_\proper} = \norm*{\begin{pmatrix}
 403 \\ 91 \\ 0
-\end{pmatrix}} = \qty{413.146}{ups}
+\end{pmatrix}} = \qty{413.146}{ups}$
 \end{tabular*}
+
+
+\subsection{Speed loss while strafing optimally}
+\label{sec:speed_loss_while_strafing}
+As mentioned before, given a high enough velocity the player can lose speed while strafing with $\delta \in [\delta_{\min}, \delta_{\max}]$, due to the acceleration being rounded to an angle greater than $\delta_{\max}$. CPM players often attempt to counteract this through snap zone manipulation, by W-turning through such areas of speed loss.\\
+
+While air strafing, the lowest velocity that such speed loss can occur can be calculated. First it would be useful to define \emph{symmetrical snap zones} as snap zones where the respective $\round*{\vec{\flat{a}}}$ vector intersects the mean of the ranges of angles of the snap zone. It does not matter which direction these zones are approached from. There are 4 symmetrical snap zones when $0.5\le \flat{a} < \sqrt{0.5}$ and 8 when $\flat{a}\ge \sqrt{0.5}$, logically being the snap zones along the axes and diagonals.
+Similarly, \emph{asymmetrical snap zones} are snap zones where this is not the case.
+A loss in speed from strafing can first occur in a zone with the largest difference (in terms of angle) between a border of such snap zone and the respective $\round*{\vec{\flat{a}}}$ for that zone.\\
+
+In normal conditions of $\qty{125}{fps}$ while air strafing with no upmove, this difference $\Delta$ is equal to
+\begin{align*}
+\atan\left(\frac{1}{2} \right) - \atan\left(\frac{\sqrt{\flat{a}^2 - 2.5^2}}{2.5} \right) = \qty{0.246716}{rad},
+\end{align*}
+and occurs when entering the big uncoloured snap zone from the small zone,\footnote{TODO: explain each of the 24 snap zones} and hence $\round*{\flat{a}} = \sqrt{1^2 + 2^2} = \sqrt{5}$. Since velocity snapping changes the received acceleration and a proper $\delta_{\max}$ value depends on the acceleration after velocity snapping, we must first define $\delta_{\max\_\proper}$ as
+\begin{align}
+\delta_{\max\_\proper} &= \acos\left(\frac{\flat{v}^2 - \flat{v}_f^2 - \round*{\flat{a}}^2}{2\round*{\flat{a}}\flat{v}_f} \right)\\\nonumber
+&= \acos\left(-\frac{\round*{\flat{a}}}{2\flat{v}} \right)\ \ldots\ \text{while in air.}
+\end{align}
+Note that definitions of all other proper $\delta$ variables are situation-based so a formula similar to this cannot realistically be derived.
+Assuming the player is strafing at $\delta_{\opt}$, velocities at which speed can be lost by strafing can hence be calculated by solving
+\begin{align*}
+\delta_{\opt} + \Delta &> \delta_{\max\_\proper}\\
+\acos\left(\frac{s - \flat{a}}{\flat{v}} \right) + \Delta &> \acos\left(-\frac{\round*{\flat{a}}}{2\flat{v}} \right),
+\end{align*}
+giving $\flat{v} > \qty{1304.247}{ups}$, which first occurs with
+\begin{align*}
+\vec{v} =
+\begin{pmatrix}
+1278 \\ 282 \\ v_z
+\end{pmatrix}.
+\end{align*}
+It should be noted this solution is frame rate dependent, and that the solution can be reflected about the $x$ and $y$ axes and diagonals to produce 7 other equivalent solutions.
