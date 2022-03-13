@@ -370,11 +370,22 @@ For normal strafing, $s = 320$, $A = 1$. These values are the same for CPM and V
 && &= \sqrt{\flat{v}^2 + 1631.8464}\ \ldots\ \flat{v}\ge 317.44.\\
 \text{For CPM sidestrafing, }s = 30, A = 70.\\
 \flat{a} = 30\cdot 70\cdot 0.008 = 16.8, && r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\cdot 30 \cdot 16.8 - 16.8^2}\\
-&& &= \sqrt{\flat{v}^2 + 725.76}\ \ldots\ \flat{v}\ge 303.2.
+&& &= \sqrt{\flat{v}^2 + 725.76}\ \ldots\ \flat{v}\ge 13.2.
 \end{align*}
 
-This also presents the question of whether CPM sidestrafing ever becomes superior to normal strafing.
-However, it is clear that $r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) > r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right)\ \forall\ \flat{v}\ge 317.44$.
+This also presents the question of which method of strafing in CPM is superior.
+To answer this we can say that normal strafing for $\flat{v} < 317.44$ occurs at the optimal angle of $\delta_{\opt} = 0$, and sidestrafing for $\flat{v} < 13.2$ occurs again at $0$.
+\begin{align*}
+r_{\text{air-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \begin{cases}
+\sqrt{\flat{v}^2 + 1631.8464}, &\flat{v}\ge 317.44\\
+\flat{v} + 2.56, &\flat{v} < 317.44
+\end{cases}\\
+r_{\text{air-sidestrafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \begin{cases}
+\sqrt{\flat{v}^2 + 725.76}, &\flat{v}\ge 13.2\\
+\flat{v} + 16.8, &\flat{v} < 13.2
+\end{cases}\\
+\end{align*}
+These functions intersect when $\flat{v} = 140.47$. Therefore, normal strafing is superior to sidestrafing except for when $\flat{v} < \qty{140.47}{ups}$.
 
 
 \subsection{Speed gains from ground strafing}
