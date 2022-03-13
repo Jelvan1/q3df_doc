@@ -176,7 +176,7 @@ The strafe keys in CPM do not ever affect upmove. Not true
 \subsection{Upmove effect on acceleration}
 \label{sec:upmove}
 \codeFromFile{firstline=615,lastline=634,gobble=1}{code/game/bg_pmove.c}
-From the above code listing, the current velocity is projected down to the $xy$-plane, is normalised, and then a scale factor is applied forming \texttt{wishspeed} ($s$).
+From the above code listing, the current velocity is projected down to the $xy$-plane, is normalized, and then a scale factor is applied forming \texttt{wishspeed} ($s$).
 This scale factor is determined by the below code.
 \codeFromFile{firstline=306,lastline=308,gobble=1}{code/game/bg_pmove.c}
 Hence upmove increases the denominator of the scale factor, decreasing \texttt{wishspeed}.\\
@@ -198,16 +198,18 @@ TODO: frame rate effect on strafing\\
 Additionally, $T$ is floored to the nearest millisecond (0.001), giving us proper-T $T_p$, and frames are delayed until $1000T_p$ milliseconds pass.
 For example, with frame rate $\qty{140}{fps}$, $T$ would be floored from $1/140 = 0.007143$ to 0.007. Note: \texttt{minMsec} is an int.
 \codeFromFile{firstline=2686,lastline=2690,gobble=1}{code/qcommon/common.c}
-%For any framerate $\frac{1}{T_p} > 1600$, gravity doesn't apply as $\round*{gT_p} = 0$.\\
-However if if $1/T > 1000$, $T_p$ will be rounded to 0.001, and won't be rounded any lower.
-\codeFromFile{firstline=2599,lastline=2601,gobble=1}{code/qcommon/common.c}
-
+\codeFromFile{firstline=2599,lastline=2625,gobble=1}{code/qcommon/common.c}
+Hence,
+\begin{align*}
+T_p &= \min\left(5, \max\left(0.001, \frac{\floor{1000T}}{1000} \right) \right), &&\text{when running a dedicated server or client of a remote server}\\
+T_p &= \min\left(0.2, \max\left(0.001, \frac{\floor{1000T}}{1000} \right) \right), &&\text{otherwise.}
+\end{align*}
 Also, frame rate impacts vertical ($z$-axis) velocity when in air, shown by
 \begin{align*}
-r_z &= v_z - gT_p\ &\ldots\ g = 800,\\
-\round{r_z} &= v_z - \round*{gT_p}\ &\ldots\ v_z = \round{v_z}\ \text{when in air}
+r_z &= v_z - gT_p\ &&\ldots\ g = 800,\\
+\round{r_z} &= v_z - \round*{gT_p}\ &&\ldots\ v_z = \round{v_z}\ \text{when in air}
 \end{align*}
-Hence, with $T = \frac{1}{125} = T_p$,
+Hence, with $T = 1/125 = T_p$,
 \begin{align*}
 r_z &= v_z - 6.4,\\
 \round{r_z} &= v_z - 6,
