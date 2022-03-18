@@ -16,16 +16,17 @@ Since player velocity is one of the vectors that is rounded, we can interpret th
 \end{pmatrix}.
 \end{align*}
 Hence, there are specific constant view yaw angle ranges called ``snap zones'' which provide the same acceleration regardless of where the player is looking in the zone.
-Some of these zones are rounded to give a value $\round*{\flat{a}} > sAT$, and similarly some are rounded such that $\round*{\flat{a}} < sAT$.
-Note that the player will still only accelerate if $\delta \in [\delta_{\min}, \delta_{\max}]$.\\
-Additionally, the closer $\delta_{\min}$ is to the border of a snap zone, there will be a greater change in speed as the acceleration is pointed more in the direction of $\vec{\flat{v}}$, meaning more of the acceleration goes into increasing the speed rather than changing the direction.
+Some of these zones are rounded to give a value $\norm*{\round*{\vec{\flat{a}}}} > sAT$, and similarly some are rounded such that $\norm*{\round*{\vec{\flat{a}}}} < sAT$.
+Note that the player will still only accelerate if $\delta \in [\delta_{\min}, 2\pi - \delta_{\min}]$, using the new value of $\delta_{\min}$ after taking into account velocity snapping.
+
+Additionally, the closer $\delta_{\min}$ is to the border of a snap zone, there will be a greater increase in speed, as the acceleration is pointed more in the direction of $\vec{\flat{v}}$ meaning more of the acceleration goes into increasing the speed rather than changing the direction.
 This also means that as $\delta_{\min}$ gets closer to the border of a snap zone, $\delta_{\min}$ will change faster due to speed increasing more rapidly.
 Players often attempt to optimize (by decreasing) the distance between $\delta_{\min}$ and the border of the snap zone in order to maximize acceleration through techniques referred to as ``snap manipulation'' or ``snap zone manipulation.''\\
 
 Furthermore, due to velocity snapping rotating the acceleration vector, given a sufficiently high velocity it is possible to lose speed while strafing at $\delta_{\opt}$, which is discussed in Section \ref{sec:speed_loss_while_strafing}.\\
 
 We can form an illustration of the snap zones in any conditions given that we know the acceleration the player is receiving in that frame.
-In normal conditions while air strafing at $\qty{125}{fps}$ with no moveup and $\delta \in [\delta_{\opt}, \delta_{\max}]$, $\flat{a} = 2.56$. The effect of the rounding can be visualized with a circle with radius 2.56.\\
+In normal conditions while air strafing at $\qty{125}{fps}$ with no moveup and $\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$, $\flat{a} = 2.56$. The effect of the rounding can be visualized with a circle with radius 2.56.\\
 
 TODO
 
@@ -61,7 +62,7 @@ TODO \\ TODO \\ 0
 
 \subsection{Speed loss while strafing optimally}
 \label{sec:speed_loss_while_strafing}
-As mentioned before, given a high enough velocity the player can lose speed while strafing with $\delta \in [\delta_{\min}, \delta_{\max}]$. CPM players often attempt to counteract this through snap zone manipulation, by W-turning through such areas of speed loss.\\
+As mentioned before, given a high enough velocity the player can lose speed while strafing with $\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$. CPM players often attempt to counteract this through snap zone manipulation, by W-turning through such areas of speed loss.\\
 
 While air strafing, the lowest velocity that such speed loss can occur can be calculated. First it would be useful to define \emph{symmetrical snap zones} as snap zones where the respective $\round*{\vec{\flat{a}}}$ vector lies in the middle of the snap zone borders. It does not matter which direction these zones are approached from. Similarly, \emph{asymmetrical snap zones} are snap zones where this is not the case.
 There is 1 symmetrical snap zone when $\flat{a} < 0.5$ and 8 when $\flat{a}\ge 0.5$, logically being the snap zones along the axes and diagonals. The first asymmetrical snap zones appear after $\flat{a}\ge 1.5$.

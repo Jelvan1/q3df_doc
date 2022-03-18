@@ -347,7 +347,7 @@ W.l.o.g., assume current velocity $\flat{v}$ is solely on the $x$-axis. Then the
 \flat{v} + \flat{a}\cos\delta\\\flat{a}\sin\delta\\0
 \end{pmatrix}.
 \end{align*}
-Given $\delta \in [\delta_{\min}, \delta_{\max}]$, function of new velocity\footnote{When strafing at angle $\delta$ to $\vec{\flat{v}}$ for a single frame.} $r\left(\flat{v}\ ;\delta \right)$ is given by
+Given $\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$, function of new velocity\footnote{When strafing at angle $\delta$ to $\vec{\flat{v}}$ for a single frame.} $r\left(\flat{v}\ ;\delta \right)$ is given by
 \begin{align*}
 r\left(\flat{v}\ ;\delta \right) &= \sqrt{\left(\flat{v} + \flat{a}\cos\delta \right)^2 + \left(\flat{a}\sin\delta \right)^2}\\
 &= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos\delta + \flat{a}^2}
@@ -398,7 +398,7 @@ As friction is applied before acceleration, $\flat{v}_f = (1 - \iota cT)\flat{v}
 (1 - \iota cT)\flat{v} + \flat{a}\cos\delta\\\flat{a}\sin\delta\\0
 \end{pmatrix}.
 \end{align*}
-Then with $\delta \in [\delta_{\min}, \delta_{\max}]$,
+Then with $\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$,
 \begin{align*}
 r\left(\flat{v}\ ;\delta \right) = \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2(1 - \iota cT)\flat{v}\flat{a}\cos\delta + \flat{a}^2}
 \end{align*}
