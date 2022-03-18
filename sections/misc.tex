@@ -218,7 +218,7 @@ and thus over one second $v_z$ is reduced by $\qty{750}{ups}$ instead of $\qty{8
 As a general rule, if effective-gravity $\frac{\round*{gT_p}}{T_p} < 800$ then frame rates given by $\frac{1}{T}$ allow the player to jump higher than intended.
 This is expanded upon in Section \ref{sec:x_z} (TODO).\\
 
-Another important point to note is that accelerations on one axis $a_n$ can be rounded to 0 if $a_n < 0.5$.
+Another important point to note is that accelerations on one axis $a_n$ can be rounded to 0 if $a_n\le 0.5$.
 This ironically places limits on the functionality of the movement physics at high frame rates, as accelerations will be more frequently nulled.
 
 % TODO: Also need to find out what happens in a situation where the flooring to T_p causes the game to try to render more frames per second than FPS(does it?)
@@ -254,22 +254,23 @@ v_{z,2} &= v_{z,1} - \round*{gT_p}\\\nonumber
 Same approach is used to derive $x_{z,k}$, done in Appendix \ref{app:derive_x_zk}, yielding
 \begin{align}
 \label{eq:x_zk}
-x_{z,k} &= x_{z,0} + k\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - \frac{k^2}{2} \round*{gT_p} T_p.
+x_{z,k} &= x_{z,0} + k\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - \frac{k^2}{2} \round*{gT_p} T_p\\\nonumber
+&= x_{z,0} + kT_p\left(v_{z,0} + \frac{(1 - k)\round*{gT_p} - gT_p}{2} \right).
 \end{align}
 
-To solve for the frame $n$ that you reach the peak, differentiate $x_{z,k}$.
+To solve for the frame $n_{peak}$ that you reach the peak, differentiate $x_{z,k}$.
 \begin{align}
 \nonumber
 x_{z,k}' &= \left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - k\round*{gT_p} T_p\\\nonumber
 0 &= \left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - k\round*{gT_p} T_p\\\nonumber
 \implies k &= \frac{v_{z,0} - \frac{gT_p}{2} + \frac{\round*{gT_p}}{2}}{\round*{gT_p}}\\\nonumber
 &= \frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}} + \frac{1}{2}\\\nonumber
-\implies n &= \round*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}} + \frac{1}{2}}\\
-\therefore\ n &= \ceil*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}}}
+\implies n_{peak} &= \round*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}} + \frac{1}{2}}\\
+\therefore\ n_{peak} &= \ceil*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}}}
 \end{align}
-With $\qty{125}{fps}$ and jump velocity $v_{z,0} = \qty{270}{ups}$, the peak is reached after $n = \qty{45}{frames}$.\\
+With $\qty{125}{fps}$ and jump velocity $v_{z,0} = \qty{270}{ups}$, the peak is reached after $n_{peak} = \qty{45}{frames}$.\\
 
-The maximum height the player reaches in a jump is given by substituting $n$ into $x_{z,k}$, with $x_{z,0} = 0$.
+The maximum height the player reaches in a jump is given by substituting $n_{peak}$ into $x_{z,k}$, with $x_{z,0} = 0$.
 When step-up is introduced in Section \ref{sec:stepup} this formula changes.
 \begin{align}
 \label{eq:max_jump_height}
@@ -309,9 +310,9 @@ As $x_z$ is updated using ``corrected'' velocity \eqref{eq:corrected_v_zk} rathe
 This implementation results in a height ``error'' $h$, given by
 \begin{align}
 \label{eq:height_error}
-h = l T_p\frac{\round*{gT_p} - gT_p}{2}\ \ldots\ \text{where $l \in \symbb{R}^+$ is the number of frames that gravity was applied}.
+h = n_{gravity}T_p\frac{\round*{gT_p} - gT_p}{2}\ \ldots\ \text{where $n_{gravity} \in \symbb{R}^+$ is the number of frames that gravity was applied}.
 \end{align}
-For example, a jump at $\qty{125}{fps}$ lasts $l = \qty{90}{frames}$, so the final $x_z$ of the player is $h = \qty{-0.144}{units}$ relative to the starting $x_z$\footnote{Since $h < 0$ the final position is below the starting position, assuming the player didn't clip into the ground plane.}.\\
+For example, a jump at $\qty{125}{fps}$ lasts $n_{gravity} = \qty{90}{frames}$, so the final $x_z$ of the player is $h = \qty{-0.144}{units}$ relative to the starting $x_z$\footnote{Since $h < 0$ the final position is below the starting position, assuming the player didn't clip into the ground plane.}.\\
 
 As a side note, this implementation of $z$-axis translations is also frame rate independent $\Longleftrightarrow$ rounding is ignored, since
 \begin{itemize}
