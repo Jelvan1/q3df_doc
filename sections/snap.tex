@@ -17,7 +17,7 @@ Since player velocity is one of the vectors that is rounded, we can interpret th
 \end{align*}
 Hence, there are specific constant view yaw angle ranges called ``snap zones'' which provide the same acceleration regardless of where the player is looking in the zone.
 Some of these zones are rounded to give a value $\norm*{\round*{\vec{\flat{a}}}} > sAT$, and similarly some are rounded such that $\norm*{\round*{\vec{\flat{a}}}} < sAT$.
-Note that the player will still only accelerate if $\delta \in [\delta_{\min}, 2\pi - \delta_{\min}]$, using the new value of $\delta_{\min}$ after taking into account velocity snapping.
+Note that the player can only accelerate if $\delta \in [\delta_{\min}, 2\pi - \delta_{\min}]$.
 
 Additionally, the closer $\delta_{\min}$ is to the border of a snap zone, there will be a greater increase in speed, as the acceleration is pointed more in the direction of $\vec{\flat{v}}$ meaning more of the acceleration goes into increasing the speed rather than changing the direction.
 This also means that as $\delta_{\min}$ gets closer to the border of a snap zone, $\delta_{\min}$ will change faster due to speed increasing more rapidly.
