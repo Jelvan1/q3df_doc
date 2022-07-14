@@ -7,17 +7,20 @@ In order to save resources, the game engine rounds each component of some vector
 \codeFromFile{firstline=151,lastline=156}{code/unix/unix_shared.c}
 Since player velocity is one of the vectors that is rounded, we can interpret this as rounding the speed change the player receives each frame, forming
 \begin{align*}
-\round{\vec{a}} &=
+\round{\vec{\tilde{a}}} &=
 \begin{pmatrix}
-\round{a_x} \\ \round{a_y} \\ \round{a_z}
+\round{\tilde{a}_x} \\ \round{\tilde{a}_y} \\ \round{\tilde{a}_z}
 \end{pmatrix}, & \round{\vec{r}} &=
 \begin{pmatrix}
 \round{r_x} \\ \round{r_y} \\ \round{r_z}
 \end{pmatrix}.
 \end{align*}
+Note that $r_n = \round*{(1 - \tilde{f}T) v_n + a_n}$ on an axis $n$ as $v_n$ would have already been rounded in the previous frame so doesn't need to be rounded again.
+It should also be noted that the player's origin is translated before velocity is snapped.
+
 Hence, there are specific constant view yaw angle ranges called ``snap zones'' which provide the same acceleration regardless of where the player is looking in the zone.
 Some of these zones are rounded to give a value $\norm*{\round*{\vec{\flat{a}}}} > sAT$, and similarly some are rounded such that $\norm*{\round*{\vec{\flat{a}}}} < sAT$.
-Note that the player can only accelerate if $\delta \in [\delta_{\min}, 2\pi - \delta_{\min}]$.
+Note that the player can only accelerate if $\delta \in [\delta_{\min}, 2\pi - \delta_{\min}]$ and $\round{\vec{a}} \neq \inlinemat{0, 0, 0}^T$.
 
 Additionally, the closer $\delta_{\min}$ is to the border of a snap zone, there will be a greater increase in speed, as the acceleration is pointed more in the direction of $\vec{\flat{v}}$ meaning more of the acceleration goes into increasing the speed rather than changing the direction.
 This also means that as $\delta_{\min}$ gets closer to the border of a snap zone, $\delta_{\min}$ will change faster due to speed increasing more rapidly.
@@ -26,13 +29,44 @@ Players often attempt to optimize (by decreasing) the distance between $\delta_{
 Furthermore, due to velocity snapping rotating the acceleration vector, given a sufficiently high velocity it is possible to lose speed while strafing at $\delta_{\opt}$, which is discussed in Section \ref{sec:speed_loss_while_strafing}.\\
 
 We can form an illustration of the snap zones in any conditions given that we know the acceleration the player is receiving in that frame.
-In normal conditions while air strafing at $\qty{125}{fps}$ with no moveup and $\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$, $\flat{a} = 2.56$. The effect of the rounding can be visualized with a circle with radius 2.56.\\
+In normal conditions while air strafing at $\qty{125}{fps}$ with no moveup and $\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$, $\flat{a} = 2.56$.\\
 
-TODO
+To receive the maximum acceleration, in most cases only two conditions must be upheld
+\begin{itemize}
+\item
+$\delta$ must lie in the same snap zone as $\delta_{\opt}$ and
+\item
+$\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$.
+\end{itemize}
 
 
 \subsection{Frame rate impact}
 \label{sec:snap_frame_rate}
+Velocity snapping is heavily frame rate dependent, due to an altered value of $T$ changing $\flat{a}$ and hence changing all snap zones.
+$a$ can also be changed by strafing on slopes (Section \ref{sec:slopes}) or by the haste effect.\\
+When strafing in the air in normal conditions with $\flat{a} = 2.56$, there are 24 snap zones.
+The effect of the rounding can hence be visualized with a circle with radius $2.56$, illustrated below.
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm}
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/snap_zones}
+		\caption{}
+		\label{fig:snap_zones}
+	\end{subfigure}%
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm}
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/snap_areas}
+		\caption{}
+		\label{fig:snap_areas}
+	\end{subfigure}
+	\caption{Visual demonstrations of the $24$ snap zones at $\qty{125}{fps}$. It should be noted that both the blue and green zones are snap zones.}
+\end{figure}
+In game on SnapHUD, the green snap zones are rendered as uncoloured and the blue ones are rendered as coloured. The zones are henced often named ``small zone'', ``diagonal zone'' (along the axes), ``big coloured zone'', and ``big uncoloured zone.''
 TODO
 
 
@@ -91,3 +125,13 @@ giving $\flat{v} > \qty{1304.247}{ups}$, which first occurs with
 \end{pmatrix}.
 \end{align*}
 It should be noted this solution is frame rate dependent, and that the solution can be reflected about the $x$ and $y$ axes and diagonals to produce 7 other equivalent solutions.
+Solutions for when this occurs in the other snap zones can be solved for similarly.
+
+
+\subsection{Wall strafing limitations}
+\label{sec:wall_strafing_limits}
+Depending on the orientation of the wall relative to the $xy$-plane, along some walls there exists a velocity at which wall strafing would no longer result in any increase in speed.
+This is due to velocity snapping rotating the acceleration vector to be obtusely angled with the velocity vector, i.e. $\vec{\flat{v}}_f \cdot \round*{\vec{\flat{a}}} \le 0$.
+The maximum speed can be calculated by finding the velocity at which $\delta_{\min}$ enters such final snap zone.
+
+TODO

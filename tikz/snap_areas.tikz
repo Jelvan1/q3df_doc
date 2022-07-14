@@ -1,0 +1,215 @@
+\begin{tikzpicture}[%
+dot1/.style={circle,fill=mycolor1,inner sep=0.1pt},
+dot5/.style={circle,fill=mycolor5,inner sep=0.1pt}
+]
+
+\definecolor{mycolor0lighter}{rgb}{.7,.7,.7}%
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+xmin=-3.5,
+xmax=3.5,
+xtick={-3,-2,-1,0,1,2,3},
+minor x tick num=1,
+xlabel={$x$},
+ymin=-3.5,
+ymax=3.5,
+ytick={-3,-2,-1,0,1,2,3},
+minor y tick num=1,
+ylabel={$y$},
+grid=both,
+grid style={line width=.1pt, draw=gray!12},
+major grid style={line width=.2pt, draw=gray!40},
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white},
+]
+
+\def\rad{2.56}
+
+\addplot[name path=ABOVE,draw=none,samples=1000] {(6.5536- x^2)^0.5};
+\addplot[name path=BELOW,draw=none,samples=1000] {-(6.5536 - x^2)^0.5};
+
+% areas
+% A
+\draw[color=mycolor1,name path=A1] (axis cs:2.51069711435,0.5) -- (axis cs:3,1);
+\draw[color=mycolor1,name path=A2] (axis cs:2.5,0.550999092558) -- (axis cs:3,1);
+\node at (axis cs:3,1) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = A1 and A2, soft clip={domain=2.51069711435:3}];
+%\addplot[color=mycolor1!10] fill between [of = A2 and ABOVE, soft clip={domain=2.5:2.51069711435}]; % not sure why this one doesn't want to work
+
+% B
+\draw[color=mycolor5,name path=B1] (axis cs:2,1) -- (axis cs:2.5,0.550999092558);
+\draw[color=mycolor5,name path=B2] (axis cs:2,1) -- (axis cs:2.07451199081,1.5);
+\node at (axis cs:2,1) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = B1 and B2, soft clip={domain=2:2.07451199081}];
+\addplot[color=mycolor5!10] fill between [of = B1 and ABOVE, soft clip={domain=2.07451199081:2.5}];
+
+% C
+\draw[color=mycolor1,name path=C1] (axis cs:2,2) -- (axis cs:2.07451199081,1.5);
+\draw[color=mycolor1,name path=C2] (axis cs:1.5,2.07451199081) -- (axis cs:2,2);
+\node at (axis cs:2,2) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = C1 and ABOVE, soft clip={domain=2:2.07451199081}];
+\addplot[color=mycolor1!10] fill between [of = C2 and ABOVE, soft clip={domain=1.5:2}];
+
+% D
+\draw[color=mycolor5,name path=D1] (axis cs:1,2) -- (axis cs:1.5,2.07451199081);
+\draw[color=mycolor5,name path=D2] (axis cs:0.550999092558,2.5) -- (axis cs:1,2);
+\node at (axis cs:1,2) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = D1 and ABOVE, soft clip={domain=1:1.5}];
+\addplot[color=mycolor5!10] fill between [of = D2 and ABOVE, soft clip={domain=0.550999092558:1}];
+
+% E
+\draw[color=mycolor1,name path=E1] (axis cs:0.550999092558,2.5) -- (axis cs:1,3);
+\draw[color=mycolor1,name path=E2] (axis cs:0.5,2.51069711435) -- (axis cs:1,3);
+\node at (axis cs:1,3) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = E1 and E2, soft clip={domain=0.550999092558:1}];
+\addplot[color=mycolor1!10] fill between [of = E2 and ABOVE, soft clip={domain=0.5:0.550999092558}];
+
+% F
+\draw[color=mycolor5,name path=F1] (axis cs:0,3) -- (axis cs:0.5,2.51069711435);
+\draw[color=mycolor5,name path=F2] (axis cs:-0.5,2.51069711435) -- (axis cs:0,3);
+\node at (axis cs:0,3) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = F1 and ABOVE, soft clip={domain=0:0.5}];
+\addplot[color=mycolor5!10] fill between [of = F2 and ABOVE, soft clip={domain=-0.5:0}];
+
+% G
+\draw[color=mycolor1,name path=G1] (axis cs:-1,3) -- (axis cs:-0.550999092558,2.5);
+\draw[color=mycolor1,name path=G2] (axis cs:-1,3) -- (axis cs:-0.5,2.51069711435);
+\node at (axis cs:-1,3) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = G1 and G2, soft clip={domain=-1:-0.550999092558}];
+\addplot[color=mycolor1!10] fill between [of = G2 and ABOVE, soft clip={domain=-0.550999092558:-0.5}];
+
+% H
+\draw[color=mycolor5,name path=H1] (axis cs:-1.5,2.07451199081) -- (axis cs:-1,2);
+\draw[color=mycolor5,name path=H2] (axis cs:-1,2) -- (axis cs:-0.550999092558,2.5);
+\node at (axis cs:-1,2) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = H1 and ABOVE, soft clip={domain=-1.5:-1}];
+\addplot[color=mycolor5!10] fill between [of = H2 and ABOVE, soft clip={domain=-1:-0.550999092558}];
+
+% I
+\draw[color=mycolor1,name path=I1] (axis cs:-2.07451199081,1.5) -- (axis cs:-2,2);
+\draw[color=mycolor1,name path=I2] (axis cs:-2,2) -- (axis cs:-1.5,2.07451199081);
+\node at (axis cs:-2,2) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = I1 and ABOVE, soft clip={domain=-2.07451199081:-2}];
+\addplot[color=mycolor1!10] fill between [of = I2 and ABOVE, soft clip={domain=-2:-1.5}];
+
+% J
+\draw[color=mycolor5,name path=J1] (axis cs:-2.5,0.550999092558) -- (axis cs:-2,1);
+\draw[color=mycolor5,name path=J2] (axis cs:-2.07451199081,1.5) -- (axis cs:-2,1);
+\node at (axis cs:-2,1) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = J1 and J2, soft clip={domain=-2.07451199081:-2}];
+\addplot[color=mycolor5!10] fill between [of = J1 and ABOVE, soft clip={domain=-2.5:-2.07451199081}];
+
+% K
+\draw[color=mycolor1,name path=K1] (axis cs:-3,1) -- (axis cs:-2.51069711435,0.5);
+\draw[color=mycolor1,name path=K2] (axis cs:-3,1) -- (axis cs:-2.5,0.550999092558);
+\node at (axis cs:-3,1) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = K1 and K2, soft clip={domain=-3:-2.51069711435}];
+%\addplot[color=mycolor1!10] fill between [of = K2 and ABOVE, soft clip={domain=-2.51069711435:-2.5}]; % not sure why this one doesn't want to work
+
+% L
+\draw[color=mycolor5,name path=L1] (axis cs:-3,0) -- (axis cs:-2.51069711435,0.5);
+\draw[color=mycolor5,name path=L2] (axis cs:-3,0) -- (axis cs:-2.51069711435,-0.5);
+\node at (axis cs:-3,0) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = L1 and L2, soft clip={domain=-3:-2.56}];
+\addplot[color=mycolor5!10] fill between [of = L1 and ABOVE, soft clip={domain=-2.56:-2.51069711435}];
+\addplot[color=mycolor5!10] fill between [of = L2 and BELOW, soft clip={domain=-2.56:-2.51069711435}];
+
+% M
+\draw[color=mycolor1,name path=M1] (axis cs:-3,-1) -- (axis cs:-2.51069711435,-0.5);
+\draw[color=mycolor1,name path=M2] (axis cs:-3,-1) -- (axis cs:-2.5,-0.550999092558);
+\node at (axis cs:-3,-1) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = M1 and M2, soft clip={domain=-3:-2.51069711435}];
+%\addplot[color=mycolor1!10] fill between [of = M2 and BELOW, soft clip={domain=-2.51069711435:-2.5}]; % not sure why this one doesn't want to work
+
+% N
+\draw[color=mycolor5,name path=N1] (axis cs:-2.5,-0.550999092558) -- (axis cs:-2,-1);
+\draw[color=mycolor5,name path=N2] (axis cs:-2.07451199081,-1.5) -- (axis cs:-2,-1);
+\node at (axis cs:-2,-1) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = N1 and N2, soft clip={domain=-2.07451199081:-2}];
+\addplot[color=mycolor5!10] fill between [of = N1 and BELOW, soft clip={domain=-2.5:-2.07451199081}];
+
+% O
+\draw[color=mycolor1,name path=O1] (axis cs:-2.07451199081,-1.5) -- (axis cs:-2,-2);
+\draw[color=mycolor1,name path=O2] (axis cs:-2,-2) -- (axis cs:-1.5,-2.07451199081);
+\node at (axis cs:-2,-2) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = O1 and BELOW, soft clip={domain=-2.07451199081:-2}];
+\addplot[color=mycolor1!10] fill between [of = O2 and BELOW, soft clip={domain=-2:-1.5}];
+
+% P
+\draw[color=mycolor5,name path=P1] (axis cs:-1.5,-2.07451199081) -- (axis cs:-1,-2);
+\draw[color=mycolor5,name path=P2] (axis cs:-1,-2) -- (axis cs:-0.550999092558,-2.5);
+\node at (axis cs:-1,-2) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = P1 and BELOW, soft clip={domain=-1.5:-1}];
+\addplot[color=mycolor5!10] fill between [of = P2 and BELOW, soft clip={domain=-1:-0.550999092558}];
+
+% Q
+\draw[color=mycolor1,name path=Q1] (axis cs:-1,-3) -- (axis cs:-0.550999092558,-2.5);
+\draw[color=mycolor1,name path=Q2] (axis cs:-1,-3) -- (axis cs:-0.5,-2.51069711435);
+\node at (axis cs:-1,-3) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = Q1 and Q2, soft clip={domain=-1:-0.550999092558}];
+\addplot[color=mycolor1!10] fill between [of = Q2 and BELOW, soft clip={domain=-0.550999092558:-0.5}];
+
+% R
+\draw[color=mycolor5,name path=R1] (axis cs:0,-3) -- (axis cs:0.5,-2.51069711435);
+\draw[color=mycolor5,name path=R2] (axis cs:-0.5,-2.51069711435) -- (axis cs:0,-3);
+\node at (axis cs:0,-3) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = R1 and BELOW, soft clip={domain=0:0.5}];
+\addplot[color=mycolor5!10] fill between [of = R2 and BELOW, soft clip={domain=-0.5:0}];
+
+% S
+\draw[color=mycolor1,name path=S1] (axis cs:0.550999092558,-2.5) -- (axis cs:1,-3);
+\draw[color=mycolor1,name path=S2] (axis cs:0.5,-2.51069711435) -- (axis cs:1,-3);
+\node at (axis cs:1,-3) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = S1 and S2, soft clip={domain=0.550999092558:1}];
+\addplot[color=mycolor1!10] fill between [of = S2 and BELOW, soft clip={domain=0.5:0.550999092558}];
+
+% T
+\draw[color=mycolor5,name path=T1] (axis cs:1,-2) -- (axis cs:1.5,-2.07451199081);
+\draw[color=mycolor5,name path=T2] (axis cs:0.550999092558,-2.5) -- (axis cs:1,-2);
+\node at (axis cs:1,-2) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = T1 and BELOW, soft clip={domain=1:1.5}];
+\addplot[color=mycolor5!10] fill between [of = T2 and BELOW, soft clip={domain=0.550999092558:1}];
+
+% U
+\draw[color=mycolor1,name path=U1] (axis cs:2,-2) -- (axis cs:2.07451199081,-1.5);
+\draw[color=mycolor1,name path=U2] (axis cs:1.5,-2.07451199081) -- (axis cs:2,-2);
+\node at (axis cs:2,-2) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = U1 and BELOW, soft clip={domain=2:2.07451199081}];
+\addplot[color=mycolor1!10] fill between [of = U2 and BELOW, soft clip={domain=1.5:2}];
+
+% V
+\draw[color=mycolor5,name path=V1] (axis cs:2,-1) -- (axis cs:2.5,-0.550999092558);
+\draw[color=mycolor5,name path=V2] (axis cs:2,-1) -- (axis cs:2.07451199081,-1.5);
+\node at (axis cs:2,-1) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = V1 and V2, soft clip={domain=2:2.07451199081}];
+\addplot[color=mycolor5!10] fill between [of = V1 and BELOW, soft clip={domain=2.07451199081:2.5}];
+
+% W
+\draw[color=mycolor1,name path=W1] (axis cs:2.51069711435,-0.5) -- (axis cs:3,-1);
+\draw[color=mycolor1,name path=W2] (axis cs:2.5,-0.550999092558) -- (axis cs:3,-1);
+\node at (axis cs:3,-1) [dot1]{};
+\addplot[color=mycolor1!10] fill between [of = W1 and W2, soft clip={domain=2.51069711435:3}];
+%\addplot[color=mycolor1!10] fill between [of = W2 and BELOW, soft clip={domain=2.5:2.51069711435}]; % not sure why this one doesn't want to work
+
+% X
+\draw[color=mycolor5,name path=X1] (axis cs:2.51069711435,0.5) -- (axis cs:3,0);
+\draw[color=mycolor5,name path=X2] (axis cs:2.51069711435,-0.5) -- (axis cs:3,0);
+\node at (axis cs:3,0) [dot5]{};
+\addplot[color=mycolor5!10] fill between [of = X1 and X2, soft clip={domain=2.56:3}];
+\addplot[color=mycolor5!10] fill between [of = X1 and ABOVE, soft clip={domain=2.51069711435:2.56}];
+\addplot[color=mycolor5!10] fill between [of = X2 and BELOW, soft clip={domain=2.51069711435:2.56}];
+
+
+% circle
+\draw[draw=mycolor0lighter] (axis cs:\rad,0) arc [start angle=0, end angle=360,radius=\rad] -- cycle;
+
+\end{axis}
+\end{tikzpicture}%
+

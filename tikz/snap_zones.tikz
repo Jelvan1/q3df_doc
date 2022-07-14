@@ -1,0 +1,53 @@
+\begin{tikzpicture}[%
+dot/.style={circle,fill=mycolor1,inner sep=0.7pt}
+]
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+xmin=-3.5,
+xmax=3.5,
+xtick={-3,-2,-1,0,1,2,3},
+minor x tick num=1,
+xlabel={$x$},
+ymin=-3.5,
+ymax=3.5,
+ytick={-3,-2,-1,0,1,2,3},
+minor y tick num=1,
+ylabel={$y$},
+grid=both,
+grid style={line width=.1pt, draw=gray!15},
+major grid style={line width=.2pt, draw=gray!40},
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white},
+]
+
+\def\rad{2.56}
+
+\draw[draw=mycolor5,line width=0.5mm] (axis cs:\rad,0) arc [start angle=0, end angle=360,radius=\rad] -- cycle;
+
+% snap hud
+\draw[draw=mycolor1,line width=0.5mm] (11.262979546:\rad) arc (11.262979546:12.4292571325:\rad);
+\draw[draw=mycolor1,line width=0.5mm] (35.869247732:\rad) arc (35.869247732:54.130752268:\rad);
+\draw[draw=mycolor1,line width=0.5mm] (77.5707428675:\rad) arc (77.5707428675:78.737020454:\rad);
+
+\draw[draw=mycolor1,line width=0.5mm] (11.262979546+90:\rad) arc (11.262979546+90:12.4292571325+90:\rad);
+\draw[draw=mycolor1,line width=0.5mm] (35.869247732+90:\rad) arc (35.869247732+90:54.130752268+90:\rad);
+\draw[draw=mycolor1,line width=0.5mm] (77.5707428675+90:\rad) arc (77.5707428675+90:78.737020454+90:\rad);
+
+\draw[draw=mycolor1,line width=0.5mm] (11.262979546+180:\rad) arc (11.262979546+180:12.4292571325+180:\rad);
+\draw[draw=mycolor1,line width=0.5mm] (35.869247732+180:\rad) arc (35.869247732+180:54.130752268+180:\rad);
+\draw[draw=mycolor1,line width=0.5mm] (77.5707428675+180:\rad) arc (77.5707428675+180:78.737020454+180:\rad);
+
+\draw[draw=mycolor1,line width=0.5mm] (11.262979546+270:\rad) arc (11.262979546+270:12.4292571325+270:\rad);
+\draw[draw=mycolor1,line width=0.5mm] (35.869247732+270:\rad) arc (35.869247732+270:54.130752268+270:\rad);
+\draw[draw=mycolor1,line width=0.5mm] (77.5707428675+270:\rad) arc (77.5707428675+270:78.737020454+270:\rad);
+
+\end{axis}
+\end{tikzpicture}%
+
