@@ -13,6 +13,7 @@
 \usepackage{amssymb} % blacksquare
 \usepackage{siunitx} % units
 \usepackage[normalem]{ulem} % uline
+\usepackage{cases} % for numcases environment  
 
 \usepackage{fontspec}
 % https://tex.stackexchange.com/questions/570548/suppress-warning-by-unicode-math-regarding-mathtools
@@ -25,6 +26,7 @@
 \usepackage{subcaption} % subfigure
 \usepackage[pdfusetitle,colorlinks=true]{hyperref} % recommended to load last
 \usepackage[all]{tcolorbox} % listing (requires hyperref)
+\usepgfplotslibrary{fillbetween} % lets you fill area between curves
 
 \usepgfplotslibrary{external}
 \usetikzlibrary{
@@ -112,8 +114,19 @@
 \DeclarePairedDelimiter{\abs}\lvert\rvert
 \DeclarePairedDelimiter{\norm}\lVert\rVert
 \DeclarePairedDelimiter{\set}\{\}
+\newcommand{\diff}{d}
+
 \renewcommand*{\vec}[1]{\symbf{#1}}
-\newcommand*{\uvec}[1]{\vec{\hat{#1}}}
+\newcommand*{\nuvec}[1]{\vec{\hat{#1}}} % "normal" unit vector
+\newcommand*{\wuvec}[1]{\vec{\widehat{#1}}} % "wide-hat" unit vector
+\newcommand*{\uvec}{\@ifstar\wuvec\nuvec}
+\newcommand*{\tvec}[1]{\boldsymbol{#1}} % "text" vector, allows things like \fmove to be bolded
+\newcommand*{\tnuvec}[1]{\tvec{\hat{#1}}} % text normal unit vector
+\newcommand*{\twuvec}[1]{\tvec{\widehat{#1}}} % text wide-hat unit vector
+\newcommand*{\tuvec}{\@ifstar\twuvec\tnuvec}
+%\renewcommand{\vec}{\@ifstar\boldsymbol\symbf} % lets bold work on fm,rm,etc. if * used. can't combine with \uvec* though
+
+\newcommand*{\conj}[1]{\overline{#1}}
 \newcommand*{\mat}[1]{\symbf{#1}}
 \newcommand*{\projmat}[1]{\mat{P}_{\vec{#1}}}
 \newcommand*{\resprojmat}[1]{\mat{M}_{\vec{#1}}}
@@ -128,15 +141,19 @@
 \AtBeginDocument{\renewcommand*{\flat}[1]{\uline{#1}}} % overwrite macro from unicode-math
 
 \DeclareMathOperator{\acos}{acos}
+\DeclareMathOperator{\asin}{asin}
 \DeclareMathOperator{\atan}{atan}
 \DeclareMathOperator{\opt}{opt}
 \DeclareMathOperator{\proper}{proper}
+\DeclareMathOperator{\new}{new}
+\DeclareMathOperator{\maxphi}{max\_phi}
 \DeclareMathOperator{\yaw}{yaw}
 \DeclareMathOperator{\cmd}{cmd}
 \DeclareMathOperator{\fmove}{fm}
 \DeclareMathOperator{\rmove}{rm}
 \DeclareMathOperator{\umove}{um}
 \DeclareMathOperator{\fumove}{fum}
+\DeclareMathOperator{\frmove}{frm}
 
 \newlength\figureheight
 \newlength\figurewidth
@@ -218,6 +235,7 @@
 \include{sections/cgaz}
 \include{sections/snap}
 \include{sections/misc}
+\include{sections/CPM}
 \include{sections/weapons}
 \include{sections/ranking}
 \include{sections/TODO}
