@@ -1,0 +1,156 @@
+\section{CPM}
+\label{sec:cpm}
+
+While the majority of CPM is identical to VQ3, there are some changes and additions which this section covers.
+
+\subsection{CGazHUD and SnapHUD differences}
+\label{sec:cgaz_snap_CPM}
+While in the air, if $\delta \in (0.5\pi, 1.5\pi)$ then $A$ is multiplied by $2.5$ in order to make the player decelerate more quickly.
+\codeFromFile{firstline=505,lastline=507,gobble=2}{cpm_code/pmove/bg_pmove.c}
+Hence in the air
+\begin{align*}
+\delta_{\max} = \pm\acos\left(-\frac{1.25\flat{a}}{\flat{v}} \right),\qquad \delta_{\maxphi} = \pm\acos\left(-\frac{2.5\flat{a}}{\flat{v}} \right).
+\end{align*}
+While on an icy surface, $A = 15$ similarly to while ground strafing.
+
+TODO: finish
+
+
+\subsection{CPM air control}
+\label{sec:turn_CPM}
+Forwardkey aircontrol, forwardkey CGazHUD strafing, forwardkey side speed gain
+
+Sidestrafe aircontrol applies regular acceleration with an additional change of direction, done by strafing with only rightmove while midair. The new velocity is pulled towards the yaw angle.
+\codeFromFile{firstline=508,lastline=514,gobble=2}{cpm_code/pmove/bg_pmove.c}
+In this case, $s = 30$, $A = 70$.
+Since this rescaling is done before acceleration, upmove has no effect on sidestrafing.
+
+Forwardkey aircontrol rotates the player's $xy$-velocity towards \texttt{wishdir} after acceleration, and only applies if $\delta \in (-0.5\pi, 0.5\pi)$.
+\codeFromFile{firstline=450,lastline=463,gobble=1}{cpm_code/pmove/bg_pmove.c}
+Assuming w.l.o.g. velocity is entirely on the $x$-axis, after acceleration forwardkey aircontrol hence affects velocity at $\qty{125}{fps}$ as follows
+\begin{align*}
+\vec{\flat{r}} &= \frac{\flat{v}}{\norm*{\vec{\flat{v}} + 4800T\left(\uvec{\flat{v}}\cdot \uvec{\flat{s}} \right)^2\uvec{\flat{s}}}} \left(\vec{\flat{v}} + 4800T\left(\uvec{\flat{v}}\cdot \uvec{\flat{s}} \right)^2\uvec{\flat{s}} \right)\\
+&= \frac{\flat{v}}{\norm*{\vec{\flat{v}} + 38.4\cos^2 \delta\uvec{\flat{s}}}} \left(\vec{\flat{v}} + 38.4\cos^2 \delta\uvec{\flat{s}} \right)\\
+\vec{r} &= \frac{\flat{v}}{\norm*{\vec{\flat{v}} + 38.4\cos^2 \delta\uvec{\flat{s}}}} \begin{pmatrix}
+v_x + 38.4\cos^3 \delta \\ v_y + 38.4\cos^2 \delta \sin\delta \\ 0
+\end{pmatrix} + \begin{pmatrix}
+0 \\ 0 \\ v_z
+\end{pmatrix},\\
+r &= v.
+\end{align*}
+Magnitude of $\vec{r}$ can be ignored when calculating $\varphi$. Since $\atan$ is an increasing function, it can be ignored when calculating $\delta_{\maxphi}$.
+\begin{align*}
+\varphi &= \atan\left(\frac{\cos^2 \delta \sin\delta}{\frac{\flat{v}}{38.4} + \cos^3 \delta} \right),\qquad c = \cos\delta.\\
+\frac{\partial}{\partial c}(\tan\varphi) &= \frac{\partial}{\partial c}\left(\frac{c^2 \sqrt{1 - c^2}}{\frac{\flat{v}}{38.4} + c^3} \right)\\
+&= \frac{\frac{\diff}{\diff c}\left(c^2 \sqrt{1 - c^2} \right) \left(\frac{\flat{v}}{38.4} + c^3 \right) - \frac{\partial}{\partial c}\left(\frac{\flat{v}}{38.4} + c^3 \right) c^2 \sqrt{1 - c^2}}{\left(\frac{\flat{v}}{38.4} + c^3 \right)^2}\\
+&= \frac{\frac{2c - 3c^3}{\sqrt{1 - c^2}} \left(\frac{\flat{v}}{38.4} + c^3 \right) - 3c^4 \sqrt{1 - c^2}}{\left(\frac{\flat{v}}{38.4} + c^3 \right)^2}\\
+&= \frac{\left(2c - 3c^3 \right) \left(\frac{\flat{v}}{38.4} + c^3 \right) - 3c^4 \left(1 - c^2 \right)}{\sqrt{1 - c^2} \left(\frac{\flat{v}}{38.4} + c^3 \right)^2}\\
+&= \frac{-c^4 - \frac{3\flat{v}}{38.4}c^3 + \frac{2\flat{v}}{38.4}c}{\sqrt{1 - c^2} \left(\frac{\flat{v}}{38.4} + c^3 \right)^2}\\
+0 &= -c^4 - \frac{3}{38.4}\flat{v}c^3 + \frac{2}{38.4}\flat{v}c\ \ldots\ c = \cos\delta_{\maxphi}\\
+&= -38.4c^3 - 3\flat{v}c^2 + 2\flat{v}.
+\end{align*}
+This decreases as $\flat{v}$ rises, and has the below limit.
+\begin{align}
+\nonumber
+\flat{v} \to \infty \implies& 0 = -3\flat{v}c^2 + 2\flat{v}\\\nonumber
+\implies& c^2 = \frac{2}{3}\\
+\label{eq:W_turning_maxphi_limit}
+\therefore\ \lim_{\flat{v} \to \infty} \delta_{\maxphi} =& \pm \acos\left(\frac{\sqrt{2}}{\sqrt{3}} \right) \approx \ang{35.264390}.
+\end{align}
+Roots $c_k, k\in \{0, 1, 2\}$ of a cubic are given by
+\begin{align*}
+\Delta_0 &= b^2 - 3ac & \Delta_1 &= 2b^3 - 9abc + 27a^2 d\\
+&= b^2 & &= 2b^3 + 27a^2 d\\
+\end{align*}
+\begin{align*}
+C &= \sqrt[3]{\frac{\Delta_1 \pm \sqrt{\Delta_1^2 - 4\Delta_0^3}}{2}},\\
+\xi &= \frac{-1 + \sqrt{-3}}{2},\\
+c_k &= -\frac{1}{3a} \left(b + \xi^k C + \frac{\Delta_0}{\xi^k C} \right),
+\end{align*}
+where distinct $a = -38.4$, $b = -3\flat{v}$, distinct $c = 0$, and $d = 2\flat{v}$.
+\begin{align*}
+\implies c_k &= -\frac{b}{3a} \left(1 + K + \frac{1}{K} \right)\ \ldots\ K = \frac{\xi^k C}{b}.\\
+\sqrt{\Delta_1^2 - 4\Delta_0^3} &= \sqrt{\left(2916\flat{v}^6 + 2916\cdot 38.4^4\flat{v}^2 - 2\cdot 2916\cdot 38.4^2\flat{v}^4 \right) - \left(2916\flat{v}^6 \right)}\\
+&= \sqrt{2916\cdot 38.4^2\flat{v}^2 \left(38.4^2 - 2\flat{v}^2 \right)}
+\end{align*}
+\begin{numcases}{=} % TODO: align this somehow. can use empheq package
+\label{eq:W_turning_v_le}
+-54\cdot 38.4\flat{v} \sqrt{38.4^2 - 2\flat{v}^2},& $\flat{v} \le \sqrt{\frac{38.4^2}{2}}$\\ % TODO: explain why - chosen in the +-sqrt(...). they both give the same root
+\label{eq:W_turning_v_gt}
+54\cdot 38.4\flat{v} \sqrt{2\flat{v}^2 - 38.4^2}i,& $\flat{v} > \sqrt{\frac{38.4^2}{2}}$.
+\end{numcases}
+In the first case \eqref{eq:W_turning_v_le},
+\begin{align*}
+k &= 1,\\
+C_1 &= \sqrt[3]{\frac{-2\cdot 27\flat{v}^3 + 27\cdot 38.4^2\cdot 2\flat{v} - 54\cdot 38.4\flat{v} \sqrt{38.4^2 - 2\flat{v}^2}}{2}}\\
+&= \sqrt[3]{54\frac{-\flat{v}^3 + 38.4^2 \flat{v} - 38.4\flat{v} \sqrt{38.4^2 - 2\flat{v}^2}}{2}}\\
+&= 3\sqrt[3]{\flat{v} \left(-\flat{v}^2 + 38.4^2 - 38.4\sqrt{38.4^2 - 2\flat{v}^2} \right)},\\
+K_1 &= \frac{-1 + \sqrt{3}i}{2} \sqrt[3]{\frac{\flat{v}^2 - 38.4^2 + 38.4\sqrt{38.4^2 - 2\flat{v}^2}}{\flat{v}^2}},\\
+c_1 &= -\frac{\flat{v}}{38.4} \left(1 + K_1 + \frac{1}{K_1} \right).\\
+\therefore\ \delta_{\maxphi} &= \pm \acos\left(-\frac{\flat{v}}{38.4} \left(1 + K_1 + \frac{1}{K_1} \right) \right)\ \ldots\ 0 < \flat{v} \le \sqrt{\frac{38.4^2}{2}}.
+\end{align*}
+In the second case \eqref{eq:W_turning_v_gt},
+\begin{align*}
+k &= 2,\\
+C_2 &= 3\sqrt[3]{\flat{v} \left(-\flat{v}^2 + 38.4^2 + 38.4\sqrt{2\flat{v}^2 - 38.4^2}i \right)},\\
+K_2 &= \frac{-1 - \sqrt{3}i}{2} \sqrt[3]{\frac{\flat{v}^2 - 38.4^2 - 38.4\sqrt{2\flat{v}^2 - 38.4^2}i}{\flat{v}^2}},\\
+c_2 &= -\frac{\flat{v}}{38.4} \left(1 + K_2 + \frac{1}{K_2} \right).\\
+\therefore\ \delta_{\maxphi} &= \pm \acos\left(-\frac{\flat{v}}{38.4} \left(1 + K_2 + \frac{1}{K_2} \right) \right)\ \ldots\ \flat{v} > \sqrt{\frac{38.4^2}{2}}.
+\end{align*}
+Alternatively, we can derive a trigonometric formula $\forall \flat{v}$.
+For $\flat{v} > \sqrt{\frac{38.4^2}{2}}$
+\begin{align*}
+V &= \frac{\flat{v}^2 - 38.4^2}{\flat{v}^2},\\
+K_2 &= \xi^2 \sqrt[3]{\frac{\flat{v}^2 - 38.4^2}{\flat{v}^2} - \frac{\sqrt{2\cdot 38.4^2\flat{v}^2 - 38.4^4}}{\flat{v}^2} i}\\
+&= \xi^2 \sqrt[3]{\frac{\flat{v}^2 - 38.4^2}{\flat{v}^2} - \sqrt{\frac{\flat{v}^4 - \flat{v}^4 + 2\cdot 38.4^2\flat{v}^2 - 38.4^4}{\flat{v}^4}} i}\\
+&= \xi^2 \sqrt[3]{\frac{\flat{v}^2 - 38.4^2}{\flat{v}^2} - \sqrt{1 - \left(\frac{\flat{v}^2 - 38.4^2}{\flat{v}^2} \right)^2} i}\\
+&= \xi^2 \sqrt[3]{V - \sqrt{1 - V^2} i}\\
+&= \exp\left[\frac{-2\pi}{3} i \right] \exp\left[-\frac{1}{3} \acos V\, i \right]\\
+&= \exp\left[\frac{1}{3} (-2\pi - \acos V) i \right],\\
+&= \cos\left(\frac{1}{3} (-2\pi - \acos V) \right) + \sin\left(\frac{1}{3} (-2\pi - \acos V) \right) i,\\
+c_2 &= -\frac{\flat{v}}{38.4} \left(1 + K_2 + \conj{K_2} \right)\\
+&= -\frac{\flat{v}}{38.4} \left(1 + 2\cos\left(\frac{1}{3} (2\pi + \acos V) \right) \right).
+\end{align*}
+For $\flat{v} \le \sqrt{\frac{38.4^2}{2}}$
+\begin{align*}
+K_1 &= \xi^1 \sqrt[3]{\frac{\flat{v}^2 - 38.4^2}{\flat{v}^2} + \frac{\sqrt{38.4^4 - 2\cdot 38.4^2\flat{v}^2}}{\flat{v}^2}}\\
+&= \xi^1 \sqrt[3]{\frac{\flat{v}^2 - 38.4^2}{\flat{v}^2} + \sqrt{\frac{\flat{v}^4 - \flat{v}^4 + 38.4^4 - 2\cdot 38.4^2\flat{v}^2}{\flat{v}^4}}}\\
+&= \xi^1 \sqrt[3]{\frac{\flat{v}^2 - 38.4^2}{\flat{v}^2} + \sqrt{\left(\frac{\flat{v}^2 - 38.4^2}{\flat{v}^2} \right)^2 - 1}}\\
+&= \xi^1 \sqrt[3]{V + \sqrt{V^2 - 1}}\\
+&= \xi^1 \sqrt[3]{V + \sqrt{1 - V^2}i},\\
+&= \exp\left[\frac{1}{3} (2\pi + \acos V) i \right],\\
+c_1 &= -\frac{\flat{v}}{38.4} \left(1 + 2\cos\left(\frac{1}{3} (2\pi + \acos V) \right) \right)\\
+&= c_2.
+\end{align*}
+At any frame rate after acceleration is applied,
+\begin{align}
+\label{eq:W_turning_maxphi_trig_sol}
+\therefore\ \delta_{\maxphi} &= \pm \acos\left(-\frac{\flat{v}}{4800T} \left(1 + 2\cos\left(\frac{1}{3} (2\pi + \acos V) \right) \right) \right)\qquad \forall \flat{v}\ \ldots\ \flat{v} > 0.
+\end{align}
+Provided the player did not accelerate, this is the angle to aim at to have maximum rotation of the velocity vector over any number of frames, since the player's speed is unchanged.
+
+This can be compared to CPM sidestrafe aircontrol, to see which results in a larger $\varphi$, done below.
+\begin{figure}[H]
+	\centering
+	\setlength\figureheight{4.8cm}
+	\setlength\figurewidth{13cm}
+	\includetikz{tikz/air_control_phi}
+	\caption{Graph of maximum possible $\varphi$, achieved by strafing at $\delta_{\maxphi}$ for sidestrafe aircontrol (\bluearrow) and forwardkey aircontrol (\greenarrow).}
+	\label{fig:air_control_phi}
+\end{figure}
+From this graph it can be seen sidestrafe aircontrol results in a larger $\varphi$ than forwardkey aircontrol. This however is only valid for a single frame, since aiming at $\delta_{\maxphi}$ changes velocity while sidestrafing.
+
+TODO: take into account acceleration too
+
+
+\subsection{Double jumps}
+\label{sec:dj}
+\codeFromFile{firstline=264,lastline=270,gobble=1}{cpm_code/pmove/bg_pmove.c}
+Double jumps occur after jumping within a $\qty{400}{ms}$ timeframe since the last jump, giving the player an additional $\qty{100}{ups}$ in $z$-vel.
+
+TODO
+
+
+\subsection{Ramp jumps}
+\label{sec:ramp_jumps}
+TODO
