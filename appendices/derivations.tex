@@ -3,20 +3,21 @@
 Common assumptions in these derivations
 \begin{align}
 \label{eq:assump_accel_1}
-0 \le \mathmakebox[\widthof{$\iota c$}]{A}T \le 1,\\
+0 \le \mathmakebox[\widthof{$\tilde{f}$}]{A}T \le 1,\\
 \label{eq:assump_friction_1}
-0 \le \iota cT \le 1,
+0 \le \tilde{f}T \le 1,
 \end{align}
 hence the following also holds
 \begin{align}
 \label{eq:assump_accel_2}
-0 \le \mathmakebox[\widthof{$\iota c$}]{A}T (2 - \mathmakebox[\widthof{$\iota c$}]{A} T) \le 1,\\
+0 \le \mathmakebox[\widthof{$\tilde{f}$}]{A}T (2 - \mathmakebox[\widthof{$\tilde{f}$}]{A} T) \le 1,\\
 \label{eq:assump_friction_2}
-0 \le \iota cT(2 - \iota cT) \le 1.
+0 \le \tilde{f}T(2 - \tilde{f}T) \le 1.
 \end{align}
 
 
 \subsection{\texorpdfstring{$\delta_{\min}$}{delta\_min}}
+\label{app:derive_delta_min}
 \eqref{eq:delta_min}
 \begin{align*}
 \norm*{\vec{\flat{v}}_f + (s - \flat{v}_f \cos\delta_{\min})\uvec{\flat{a}}}^2 &= \norm*{\vec{\flat{v}}}^2,\\
@@ -29,8 +30,8 @@ s^2 - \flat{v}_f^2 \cos^2\delta_{\min} &= \flat{v}^2 - \flat{v}_f^2,\\
 Alternatively, using equation \eqref{eq:flat_vf} we find the extended form
 \begin{align*}
 \delta_{\min} &= \acos\left(\frac{\sqrt{s^2 - \flat{v}^2 + \flat{v}_f^2}}{\flat{v}_f} \right).\\
-&= \acos\left(\frac{\sqrt{s^2 - \flat{v}^2 + (\flat{v} - \flat{v}\iota cT)^2}}{\flat{v} - \flat{v}\iota cT} \right)\\
-&= \acos\left(\sqrt{\frac{s^2 - \flat{v}^2\iota cT(2 - \iota cT)}{\flat{v}^2 - \flat{v}^2\iota cT(2 - \iota cT)}} \right)\\
+&= \acos\left(\frac{\sqrt{s^2 - \flat{v}^2 + (\flat{v} - \flat{v}\tilde{f}T)^2}}{\flat{v} - \flat{v}\tilde{f}T} \right)\\
+&= \acos\left(\sqrt{\frac{s^2 - \flat{v}^2\tilde{f}T(2 - \tilde{f}T)}{\flat{v}^2 - \flat{v}^2\tilde{f}T(2 - \tilde{f}T)}} \right)\\
 \end{align*}
 
 \begin{itemize}
@@ -38,25 +39,25 @@ Alternatively, using equation \eqref{eq:flat_vf} we find the extended form
 Take square root of positive number + \eqref{eq:assump_friction_2}
 \begin{align}
 \nonumber
-\flat{v}^2 \iota cT (2 - \iota cT) &\le s^2,\\
+\flat{v}^2 \tilde{f}T (2 - \tilde{f}T) &\le s^2,\\
 \nonumber
 \begin{cases}
-\flat{v}^2 \le s^2, &\flat{v} \le d cT\\
-d cT (2 \flat{v} - d cT) \le s^2, &d cT < \flat{v} \le d\\
-\flat{v}^2 cT (2 - cT) \le s^2, &\flat{v} > d\\
+\flat{v}^2 \le s^2, &\flat{v} \le S fT\\
+S fT (2 \flat{v} - S fT) \le s^2, &S fT < \flat{v} \le S\\
+\flat{v}^2 fT (2 - fT) \le s^2, &\flat{v} > S\\
 \end{cases}\\
 \nonumber
 \begin{cases}
-\flat{v} \le s, &\flat{v} \le d cT\\
-\flat{v} \le \frac{s^2 + d^2 c^2 T^2}{2 d cT}, &d cT < \flat{v} \le d\\
-\flat{v} \le s \sqrt{\frac{1}{cT (2 - cT)}}, &\flat{v} > d\\
+\flat{v} \le s, &\flat{v} \le S fT\\
+\flat{v} \le \frac{s^2 + S^2 f^2 T^2}{2 S fT}, &S fT < \flat{v} \le S\\
+\flat{v} \le s \sqrt{\frac{1}{fT (2 - fT)}}, &\flat{v} > S\\
 \end{cases}\\
 \label{eq:derive_delta_min_pos_root}
-\flat{v} &\le s\sqrt{\frac{1}{\iota cT (2 - \iota cT)}}.
+\flat{v} &\le s\sqrt{\frac{1}{\tilde{f}T (2 - \tilde{f}T)}}.
 \end{align}
 
 \item
-Using equation \eqref{eq:r}, it's only valid in range
+Using equation \eqref{eq:a_tilde}, it's only valid in range
 \begin{align*}
 0 \le s - \flat{v}_f \cos\delta_{\min} \le \flat{a},\\
 s - \flat{a} \le \flat{v}_f \cos\delta_{\min} \le s,\\
@@ -64,16 +65,16 @@ s - sAT \le \sqrt{s^2 - \flat{v}^2 + \flat{v}_f^2} \le s,
 \end{align*}
 Under condition \eqref{eq:derive_delta_min_pos_root}, then every term is positive, take square.
 \begin{align*}
-s^2 - s^2 AT (2 - AT) \le s^2 - \flat{v}^2 + \flat{v}_f^2 \le s^2,\\
+s^2 - s^2 AT(2 - AT) \le s^2 - \flat{v}^2 + \flat{v}_f^2 \le s^2,\\
 0 \le \flat{v}^2 - \flat{v}_f^2 \le s^2 AT(2 - AT),\\
-0 \le \flat{v}^2 \iota cT(2 - \iota cT) \le s^2 AT(2 - AT),
+0 \le \flat{v}^2 \tilde{f}T(2 - \tilde{f}T) \le s^2 AT(2 - AT),
 \end{align*}
 Since \eqref{eq:assump_accel_2} and \eqref{eq:assump_friction_2}
 \begin{align}
 \nonumber
-0 \le \flat{v}^2 \le s^2 \frac{AT(2 - AT)}{\iota cT(2 - \iota cT)},\\
+0 \le \flat{v}^2 \le s^2 \frac{AT(2 - AT)}{\tilde{f}T(2 - \tilde{f}T)},\\
 \label{eq:delta_min_constraint}
-0 \le \flat{v} \le s\sqrt{\frac{AT(2 - AT)}{\iota cT(2 - \iota cT)}},
+0 \le \flat{v} \le s\sqrt{\frac{AT(2 - AT)}{\tilde{f}T(2 - \tilde{f}T)}},
 \end{align}
 which is more strict than \eqref{eq:derive_delta_min_pos_root}, because of \eqref{eq:assump_accel_2}. It even simplifies to \eqref{eq:flat_v_max}
 \begin{align}
@@ -81,7 +82,7 @@ which is more strict than \eqref{eq:derive_delta_min_pos_root}, because of \eqre
 \end{align}
 
 \item
-The numerator smaller or equal than the denominator ($\acos$ range)
+The numerator smaller than or equal to the denominator ($\acos$ range)
 \begin{align*}
 s^2 - \flat{v}^2 + \flat{v}_f^2 &\le \flat{v}_f^2,\\
 \flat{v} &\ge s
@@ -92,18 +93,19 @@ s^2 - \flat{v}^2 + \flat{v}_f^2 &\le \flat{v}_f^2,\\
 The $\delta_{\min}$ valid interval/range
 \begin{align*}
 s \le \flat{v} \le \flat{v}_{\max},\\
-\acos\left(\frac{\sqrt{\flat{v}_f^2}}{\flat{v}_f} \right) \le \delta_{\min} \le \acos\left(\frac{\sqrt{s^2 - \flat{v}^2\iota cT(2 - \iota cT)}}{\flat{v}(1 - \iota cT)}\right),\\
-\acos(1) \le \delta_{\min} \le \acos\left(\frac{\sqrt{s^2 - s^2 AT(2 - AT)}}{\flat{v}(1 - \iota cT)}\right),\\
-0 \le \delta_{\min} \le \acos\left(\frac{s(1 - AT)}{\flat{v}(1 - \iota cT)}\right),\\
-0 \le \delta_{\min} \le \acos\left(\frac{s(1 - AT)}{s\sqrt{\frac{AT(2 - AT)}{\iota cT(2 - \iota cT)}} (1 - \iota cT)}\right),\\
-0 \le \delta_{\min} \le \acos\left(\sqrt{\frac{\iota cT(2 - \iota cT)}{AT(2 - AT)}} \frac{(1 - AT)}{(1 - \iota cT)}\right),\\
-0 \le \delta_{\min} \le \acos\left(\sqrt{\frac{(1 - (1 - \iota cT)^2) (1 - AT)^2}{(1 - (1 - AT)^2) (1 - \iota cT)^2}}\right),\\
+\acos\left(\frac{\sqrt{\flat{v}_f^2}}{\flat{v}_f} \right) \le \delta_{\min} \le \acos\left(\frac{\sqrt{s^2 - \flat{v}^2\tilde{f}T(2 - \tilde{f}T)}}{\flat{v}(1 - \tilde{f}T)}\right),\\
+\acos(1) \le \delta_{\min} \le \acos\left(\frac{\sqrt{s^2 - s^2 AT(2 - AT)}}{\flat{v}(1 - \tilde{f}T)}\right),\\
+0 \le \delta_{\min} \le \acos\left(\frac{s(1 - AT)}{\flat{v}(1 - \tilde{f}T)}\right),\\
+0 \le \delta_{\min} \le \acos\left(\frac{s(1 - AT)}{s\sqrt{\frac{AT(2 - AT)}{\tilde{f}T(2 - \tilde{f}T)}} (1 - \tilde{f}T)}\right),\\
+0 \le \delta_{\min} \le \acos\left(\sqrt{\frac{\tilde{f}T(2 - \tilde{f}T)}{AT(2 - AT)}} \frac{(1 - AT)}{(1 - \tilde{f}T)}\right),\\
+0 \le \delta_{\min} \le \acos\left(\sqrt{\frac{(1 - (1 - \tilde{f}T)^2) (1 - AT)^2}{(1 - (1 - AT)^2) (1 - \tilde{f}T)^2}}\right),\\
 0 \le \delta_{\min} \le \delta_{\flat{v}_{\max}},\\
 \end{align*}
 Note that it simplifies to $\delta_{\opt}$ when approaching the maximum ground speed $\flat{v}_{\max}$.
 
 
 \subsection{\texorpdfstring{$\delta_{\opt}$}{delta\_opt}}
+\label{app:derive_delta_opt}
 \eqref{eq:delta_opt}
 \begin{align*}
 \norm*{\projmat{\flat{a}} \vec{\flat{v}}_f} + \norm*{\vec{\flat{a}}} &= s \norm*{\uvec{\flat{a}}},\\
@@ -113,35 +115,36 @@ Note that it simplifies to $\delta_{\opt}$ when approaching the maximum ground s
 Alternatively, using equation \eqref{eq:flat_vf} we find the extended form
 \begin{align*}
 \delta_{\opt} &= \acos\left( \frac{s - \flat{a}}{\flat{v}_f} \right),\\
-&= \acos\left( \frac{s(1 - AT)}{\flat{v}(1 - \iota cT)} \right)
+&= \acos\left( \frac{s(1 - AT)}{\flat{v}(1 - \tilde{f}T)} \right)
 \end{align*}
 
 \begin{itemize}
 \item
-\eqref{eq:r}, it's only valid in range
+\eqref{eq:a_tilde}, it's only valid in range
 \begin{align*}
-\flat{v}_f \cos\delta_{\opt} &\le s - a,\\
-s - a&\le s - a,
+\flat{v}_f \cos\delta_{\opt} &\le s - \flat{a},\\
+s - \flat{a}&\le s - \flat{a},
 \end{align*}
 which is always valid.
 
 \item
-The numerator smaller or equal than the denominator ($\acos$ range) + \eqref{eq:assump_accel_1} and \eqref{eq:assump_friction_1}
+The numerator smaller than or equal to the denominator ($\acos$ range) + \eqref{eq:assump_accel_1} and \eqref{eq:assump_friction_1}
 \begin{align*}
-s (1 - AT) &\le \flat{v}(1 - \iota cT),\\
-\flat{v} &\ge s \frac{(1 - AT)}{(1 - \iota cT)},
+s (1 - AT) &\le \flat{v}(1 - \tilde{f}T),\\
+\flat{v} &\ge s \frac{(1 - AT)}{(1 - \tilde{f}T)},
 \end{align*}
 \end{itemize}
 
 The $\delta_{\opt}$ valid interval/range
 \begin{align*}
-s \frac{(1 - AT)}{(1 - \iota cT)} &\le \flat{v},\\
+s \frac{(1 - AT)}{(1 - \tilde{f}T)} &\le \flat{v},\\
 \acos\left( \frac{s(1 - AT)}{s(1 - AT)} \right) &\le \delta_{\opt},\\
 0 &\le \delta_{\opt},
 \end{align*}
 
 
 \subsection{\texorpdfstring{$\delta_{\max}$}{delta\_max}}
+\label{app:derive_delta_max}
 \eqref{eq:delta_max}
 \begin{align*}
 \norm*{\vec{\flat{v}}_f + \vec{\flat{a}}}^2 &= \norm*{\vec{\flat{v}}}^2,\\
@@ -150,93 +153,96 @@ s \frac{(1 - AT)}{(1 - \iota cT)} &\le \flat{v},\\
 2 \flat{a} \flat{v}_f \cos\delta_{\max} + \flat{a}^2 &= \flat{v}^2 - \flat{v}_f^2,\\
 \delta_{\max} &= \acos\left( \frac{\flat{v}^2 - \flat{v}_f^2 - \flat{a}^2}{2 \flat{a} \flat{v}_f} \right).
 \end{align*}
+This formula could also be derived for geometrically by using an isosceles triangle.
+
 Alternatively, using equation \eqref{eq:flat_vf} we find the extended form
 \begin{align*}
 \delta_{\max} &= \acos\left( \frac{\flat{v}^2 - \flat{v}_f^2 - \flat{a}^2}{2 \flat{a} \flat{v}_f} \right),\\
-&= \acos\left( \frac{\flat{v}^2 \iota cT(2 - \iota cT) - s^2 A^2 T^2}{2 s \flat{v} AT(1 - \iota cT)} \right),\\
-&= \acos\left( \frac{\flat{v} \flat{v} (\iota cT)(2 - \iota cT) - ss (AT)(AT)}{s \flat{v} (AT)(2 - \iota cT) - s \flat{v} (AT)(\iota cT)} \right),
+&= \acos\left( \frac{\flat{v}^2 \tilde{f}T(2 - \tilde{f}T) - s^2 A^2 T^2}{2 s \flat{v} AT(1 - \tilde{f}T)} \right),\\
+&= \acos\left( \frac{\flat{v} \flat{v} (\tilde{f}T)(2 - \tilde{f}T) - ss (AT)(AT)}{s \flat{v} (AT)(2 - \tilde{f}T) - s \flat{v} (AT)(\tilde{f}T)} \right),
 \end{align*}
 
 \begin{itemize}
 \item
-\eqref{eq:r}, it's only valid in range + \eqref{eq:assump_accel_2} and \eqref{eq:assump_friction_2}
+\eqref{eq:a_tilde}, it's only valid in range + \eqref{eq:assump_accel_2} and \eqref{eq:assump_friction_2}
 \begin{align*}
-\flat{v}_f \cos\delta_{\max} &\le s - a,\\
-\frac{\flat{v}^2 - \flat{v}_f^2 - \flat{a}^2}{2 \flat{a}}&\le s - a,\\
-\flat{v}^2 - \flat{v}_f^2 &\le 2 a s - a^2,\\
-\flat{v}^2 \iota cT(2 - \iota cT)&\le s^2 AT(2 - AT),\\
-\flat{v} &\le s \sqrt{\frac{AT(2 - AT)}{\iota cT(2 - \iota cT)}},
+\flat{v}_f \cos\delta_{\max} &\le s - \flat{a},\\
+\frac{\flat{v}^2 - \flat{v}_f^2 - \flat{a}^2}{2 \flat{a}}&\le s - \flat{a},\\
+\flat{v}^2 - \flat{v}_f^2 &\le 2 \flat{a} s - \flat{a}^2,\\
+\flat{v}^2 \tilde{f}T(2 - \tilde{f}T)&\le s^2 AT(2 - AT),\\
+\flat{v} &\le s \sqrt{\frac{AT(2 - AT)}{\tilde{f}T(2 - \tilde{f}T)}},
 \end{align*}
 
 \item
-The numerator can be both positive and negative. Numerator negative, in this case the numerator is smaller or equal than the denominator ($\acos$ range) when
+The numerator can be both positive and negative. Numerator negative, in this case the numerator is smaller than or equal to the denominator ($\acos$ range) when
 \begin{align*}
 -\flat{v}^2 + \flat{v}_f^2 + \flat{a}^2 &\le 2 \flat{a} \flat{v}_f,\\
--\flat{v}^2 \iota cT (2 - \iota cT) + \flat{a}^2 &\le 2 \flat{a} \flat{v} (1 - \iota cT),\\
-\flat{a}^2 + 2 \flat{a} (\flat{v} \iota cT) + (\flat{v} \iota cT)^2 &\le 2 \flat{a} \flat{v} + 2 \flat{v}^2 \iota cT,\\
-(\flat{a} + \flat{v} \iota cT)^2 &\le 2 \flat{v} (\flat{a} + \flat{v} \iota cT),\\
+-\flat{v}^2 \tilde{f}T (2 - \tilde{f}T) + \flat{a}^2 &\le 2 \flat{a} \flat{v} (1 - \tilde{f}T),\\
+\flat{a}^2 + 2 \flat{a} (\flat{v} \tilde{f}T) + (\flat{v} \tilde{f}T)^2 &\le 2 \flat{a} \flat{v} + 2 \flat{v}^2 \tilde{f}T,\\
+(\flat{a} + \flat{v} \tilde{f}T)^2 &\le 2 \flat{v} (\flat{a} + \flat{v} \tilde{f}T),\\
 \end{align*}
 since \eqref{eq:assump_friction_1}
 \begin{align*}
-\flat{a} + \flat{v} \iota cT &\le 2 \flat{v},\\
-\flat{v} &\ge s \frac{AT}{2 - \iota cT},\\
+\flat{a} + \flat{v} \tilde{f}T &\le 2 \flat{v},\\
+\flat{v} &\ge s \frac{AT}{2 - \tilde{f}T},\\
 \end{align*}
 
 \item
-Numerator positive, in this case the numerator is smaller or equal than the denominator ($\acos$ range) when
+Numerator positive, in this case the numerator is smaller than or equal to the denominator ($\acos$ range) when
 \begin{align}
 \nonumber
 \flat{v}^2 - \flat{v}_f^2 - \flat{a}^2 &\le 2 \flat{a} \flat{v}_f,\\
 \nonumber
-\flat{v}^2 \iota cT (2 - \iota cT) - \flat{a}^2 &\le 2 \flat{a} \flat{v} (1 - \iota cT),\\
+\flat{v}^2 \tilde{f}T (2 - \tilde{f}T) - \flat{a}^2 &\le 2 \flat{a} \flat{v} (1 - \tilde{f}T),\\
 \nonumber
-- \flat{a}^2 + 2 \flat{a} (\flat{v} \iota cT) - (\flat{v} \iota cT)^2 &\le 2 \flat{a} \flat{v} - 2 \flat{v}^2 \iota cT,\\
+- \flat{a}^2 + 2 \flat{a} (\flat{v} \tilde{f}T) - (\flat{v} \tilde{f}T)^2 &\le 2 \flat{a} \flat{v} - 2 \flat{v}^2 \tilde{f}T,\\
 \label{eq:delta_max_constraint}
--(\flat{a} - \flat{v} \iota cT)^2 &\le 2 \flat{v} (\flat{a} - \flat{v} \iota cT),
+-(\flat{a} - \flat{v} \tilde{f}T)^2 &\le 2 \flat{v} (\flat{a} - \flat{v} \tilde{f}T),
 \end{align}
-$\flat{a} - \flat{v} \iota cT$ can be both positive and negative. When $\flat{a} - \flat{v} \iota cT \le 0$ \eqref{eq:delta_max_constraint} becomes with \eqref{eq:assump_friction_1}
+$\flat{a} - \flat{v} \tilde{f}T$ can be both positive and negative. When $\flat{a} - \flat{v} \tilde{f}T \le 0$ \eqref{eq:delta_max_constraint} becomes with \eqref{eq:assump_friction_1}
 \begin{align*}
--(\flat{a} - \flat{v} \iota cT) &\ge 2 \flat{v},\\
-\flat{v} &\le -s \frac{AT}{2 - \iota cT},
+-(\flat{a} - \flat{v} \tilde{f}T) &\ge 2 \flat{v},\\
+\flat{v} &\le -s \frac{AT}{2 - \tilde{f}T},
 \end{align*}
-which is never true, because $\flat{v} \ge 0$. When $\flat{a} - \flat{v} \iota cT \ge 0$ \eqref{eq:delta_max_constraint} becomes with \eqref{eq:assump_friction_1}
+which is never true, because $\flat{v} \ge 0$. When $\flat{a} - \flat{v} \tilde{f}T \ge 0$ \eqref{eq:delta_max_constraint} becomes with \eqref{eq:assump_friction_1}
 \begin{align*}
--(\flat{a} - \flat{v} \iota cT) &\le 2 \flat{v},
+-(\flat{a} - \flat{v} \tilde{f}T) &\le 2 \flat{v},
 \end{align*}
 which is always true. Hence,
 \begin{align*}
-\flat{a} - \flat{v} \iota cT &\ge 0,\\
-\flat{v} &\le s \frac{AT}{\iota cT},
+\flat{a} - \flat{v} \tilde{f}T &\ge 0,\\
+\flat{v} &\le s \frac{AT}{\tilde{f}T},
 \end{align*}
 \end{itemize}
 
 The $\delta_{\max}$ valid interval/range
 \begin{align*}
-s \frac{AT}{2 - \iota cT} \le \flat{v} \le
+s \frac{AT}{2 - \tilde{f}T} \le \flat{v} \le
 \begin{cases}
-s \frac{AT}{\iota cT}, & AT \le \iota cT,\\
-s \sqrt{\frac{AT(2 - AT)}{\iota cT(2 - \iota cT)}}, &AT > \iota cT,
+s \frac{AT}{\tilde{f}T}, & AT \le \tilde{f}T,\\
+s \sqrt{\frac{AT(2 - AT)}{\tilde{f}T(2 - \tilde{f}T)}}, &AT > \tilde{f}T,
 \end{cases}\\
-\acos\left( \frac{\frac{s^2A^2T^2\iota cT}{2 - \iota cT} - s^2A^2T^2}{s^2A^2T^2 - \frac{s^2A^2T^2\iota cT}{2 - \iota cT}} \right) \ge \delta_{\max} \ge
+\acos\left( \frac{\frac{s^2A^2T^2\tilde{f}T}{2 - \tilde{f}T} - s^2A^2T^2}{s^2A^2T^2 - \frac{s^2A^2T^2\tilde{f}T}{2 - \tilde{f}T}} \right) \ge \delta_{\max} \ge
 \begin{cases}
-\acos\left( \frac{\frac{s^2A^2T^2(2 - \iota cT)}{\iota cT} - s^2A^2T^2}{\frac{s^2A^2T^2(2 - \iota cT)}{\iota cT} - s^2A^2T^2} \right), & AT \le \iota cT,\\
-\acos\left( \frac{s^2 AT(2 - AT) - s^2 A^2 T^2}{2 s \flat{v} AT(1 - \iota cT)} \right), &AT > \iota cT,
+\acos\left( \frac{\frac{s^2A^2T^2(2 - \tilde{f}T)}{\tilde{f}T} - s^2A^2T^2}{\frac{s^2A^2T^2(2 - \tilde{f}T)}{\tilde{f}T} - s^2A^2T^2} \right), & AT \le \tilde{f}T,\\
+\acos\left( \frac{s^2 AT(2 - AT) - s^2 A^2 T^2}{2 s \flat{v} AT(1 - \tilde{f}T)} \right), &AT > \tilde{f}T,
 \end{cases}\\
 \acos(-1) \ge \delta_{\max} \ge
 \begin{cases}
-\acos(1), & AT \le \iota cT,\\
-\acos\left( \frac{2 s s AT(1 - AT)}{2 s \flat{v} AT(1 - \iota cT)} \right), &AT > \iota cT,
+\acos(1), & AT \le \tilde{f}T,\\
+\acos\left( \frac{2 s s AT(1 - AT)}{2 s \flat{v} AT(1 - \tilde{f}T)} \right), &AT > \tilde{f}T,
 \end{cases}\\
 \pi \ge \delta_{\max} \ge
 \begin{cases}
-0, & AT \le \iota cT,\\
-\acos\left( \frac{s(1 - AT)}{\flat{v} (1 - \iota cT)} \right), &AT > \iota cT,
+0, & AT \le \tilde{f}T,\\
+\acos\left( \frac{s(1 - AT)}{\flat{v} (1 - \tilde{f}T)} \right), &AT > \tilde{f}T,
 \end{cases}
 \end{align*}
 Note that it simplifies to $\delta_{\opt}$ when approaching the maximum ground speed $\flat{v}_{\max}$.
 
 
 \subsection{\texorpdfstring{$\bar{\delta}_{\min}$}{bar delta\_min}}
+\label{app:derive_delta_bar_min}
 \eqref{eq:delta_bar_min}
 \begin{align*}
 \norm*{\projmat{\flat{v}} \left( \vec{\flat{v}}_f + (s - \flat{v}_f \cos\bar{\delta}_{\min})\uvec{\flat{a}} \right)} &= \norm*{\vec{\flat{v}}},\\
@@ -256,6 +262,7 @@ We find that this only holds for
 
 
 \subsection{\texorpdfstring{$\bar{\delta}_{\max}$}{bar delta\_max}}
+\label{app:derive_delta_bar_max}
 \eqref{eq:delta_bar_max}
 \begin{align*}
 \norm*{\projmat{\flat{v}}\left( \vec{\flat{v}}_f + \vec{\flat{a}} \right)} &= \norm*{\vec{\flat{v}}},\\
@@ -266,24 +273,24 @@ We find that this only holds for
 \end{align*}
 \begin{align*}
 \bar{\delta}_{\max} &= \acos\left( \frac{\flat{v} - \flat{v}_f}{\flat{a}} \right),\\
-&= \acos\left( \frac{\flat{v} \iota cT}{sAT} \right).
+&= \acos\left( \frac{\flat{v} \tilde{f}T}{sAT} \right).
 \end{align*}
 
 \begin{itemize}
 \item
-\eqref{eq:r}, it's only valid in range
+\eqref{eq:a_tilde}, it's only valid in range
 \begin{align*}
-\flat{v}_f \cos\bar{\delta}_{\max} &\le s - a,\\
-\frac{\flat{v}^2 \iota cT(1 - \iota cT)}{sAT} &\le s(1 - AT),\\
-\flat{v}^2 \iota cT(1 - \iota cT) &\le s^2 AT(1 - AT),\\
-\flat{v} &\le s \sqrt{\frac{AT(1 - AT)}{\iota cT(1 - \iota cT)}},
+\flat{v}_f \cos\bar{\delta}_{\max} &\le s - \flat{a},\\
+\frac{\flat{v}^2 \tilde{f}T(1 - \tilde{f}T)}{sAT} &\le s(1 - AT),\\
+\flat{v}^2 \tilde{f}T(1 - \tilde{f}T) &\le s^2 AT(1 - AT),\\
+\flat{v} &\le s \sqrt{\frac{AT(1 - AT)}{\tilde{f}T(1 - \tilde{f}T)}},
 \end{align*}
 
 \item
-The numerator is smaller or equal than the denominator ($\acos$ range) when
+The numerator is smaller than or equal to the denominator ($\acos$ range) when
 \begin{align*}
-\flat{v} \iota cT \le sAT,\\
-\flat{v} \le s \frac{AT}{\iota cT},
+\flat{v} \tilde{f}T \le sAT,\\
+\flat{v} \le s \frac{AT}{\tilde{f}T},
 \end{align*}
 \end{itemize}
 
@@ -291,18 +298,18 @@ The $\bar{\delta}_{\max}$ valid interval/range
 \begin{align*}
 0 \le \flat{v} \le
 \begin{cases}
-s \frac{AT}{\iota cT}, & AT \le \iota cT,\\
-s \sqrt{\frac{AT(1 - AT)}{\iota cT(1 - \iota cT)}}, &AT > \iota cT,
+s \frac{AT}{\tilde{f}T}, & AT \le \tilde{f}T,\\
+s \sqrt{\frac{AT(1 - AT)}{\tilde{f}T(1 - \tilde{f}T)}}, &AT > \tilde{f}T,
 \end{cases}\\
 \acos(0) \ge \bar{\delta}_{\max} \ge
 \begin{cases}
-\acos(1), & AT \le \iota cT,\\
-\acos\left( \frac{\iota cT}{AT} \sqrt{\frac{AT(1 - AT)}{\iota cT(1 - \iota cT)}} \right), &AT > \iota cT,
+\acos(1), & AT \le \tilde{f}T,\\
+\acos\left( \frac{\tilde{f}T}{AT} \sqrt{\frac{AT(1 - AT)}{\tilde{f}T(1 - \tilde{f}T)}} \right), &AT > \tilde{f}T,
 \end{cases}\\
 \frac{\pi}{2} \ge \bar{\delta}_{\max} \ge
 \begin{cases}
-0, & AT \le \iota cT,\\
-\acos\left( \sqrt{\frac{\iota cT(1 - AT)}{AT(1 - \iota cT)}} \right), &AT > \iota cT,
+0, & AT \le \tilde{f}T,\\
+\acos\left( \sqrt{\frac{\tilde{f}T(1 - AT)}{AT(1 - \tilde{f}T)}} \right), &AT > \tilde{f}T,
 \end{cases}
 \end{align*}
 
@@ -325,24 +332,24 @@ We find the \emph{maximum ground speed} \eqref{eq:flat_v_max} by
 \left((\flat{v}^2 - \flat{v}_f^2) + \flat{a}^2\right)^2 &= 4 \flat{a}^2s^2,\\
 \label{eq:maxgs}
 \flat{v}^2 - \flat{v}_f^2 &= 2 \flat{a} s - \flat{a}^2,\\
-\label{eq:maxgs_iota}
-\flat{v}^2 \iota cT (2 - \iota cT) &= s^2 AT(2 - AT),\\
+\label{eq:maxgs_f_tilde}
+\flat{v}^2 \tilde{f}T (2 - \tilde{f}T) &= s^2 AT(2 - AT),\\
 \begin{cases}
-\flat{v}^2 = s^2 AT(2 - AT), &\flat{v} \le d cT,\\
-d cT (2 \flat{v} - d cT) = s^2 AT(2 - AT), &d cT < \flat{v} \le d,\\
-\flat{v}^2 cT (2 - cT) = s^2 AT(2 - AT), &\flat{v} > d,\\
+\flat{v}^2 = s^2 AT(2 - AT), &\flat{v} \le S fT,\\
+S fT (2 \flat{v} - S fT) = s^2 AT(2 - AT), &S fT < \flat{v} \le S,\\
+\flat{v}^2 fT (2 - fT) = s^2 AT(2 - AT), &\flat{v} > S,\\
 \end{cases}\\
 \flat{v} =
 \begin{cases}
-s \sqrt{AT(2 - AT)}, &\flat{v} \le d cT,\\
-\frac{s^2 AT(2 - AT) + d^2 c^2 T^2}{2 d cT}, &d cT < \flat{v} \le d,\\
-s \sqrt{\frac{AT(2 - AT)}{cT (2 - cT)}}, &\flat{v} > d\\
+s \sqrt{AT(2 - AT)}, &\flat{v} \le S fT,\\
+\frac{s^2 AT(2 - AT) + S^2 f^2 T^2}{2 S fT}, &S fT < \flat{v} \le S,\\
+s \sqrt{\frac{AT(2 - AT)}{fT (2 - fT)}}, &\flat{v} > S\\
 \end{cases}
 \end{align}\\
-assuming that $\flat{v} \ge d$ and substituting $\flat{v}_f$ and $\flat{a}$ using equation \eqref{eq:flat_vf} and \eqref{eq:sAT} respectively, we get
+assuming that $\flat{v} \ge S$ and substituting $\flat{v}_f$ and $\flat{a}$ using equation \eqref{eq:flat_vf} and \eqref{eq:sAT} respectively, we get
 \begin{align*}
-\flat{v}^2 cT(2 - cT) &= s^2 AT(2 - AT),\\
-\flat{v}_{\max} &= s \sqrt{\frac{A(2 - AT)}{c(2 - cT)}}.
+\flat{v}^2 fT(2 - fT) &= s^2 AT(2 - AT),\\
+\flat{v}_{\max} &= s \sqrt{\frac{A(2 - AT)}{f(2 - fT)}}.
 \end{align*}
 As one might notice, the angle $\delta_{\opt}$ also meets at this point, because
 \begin{align*}
@@ -357,35 +364,86 @@ is identical to equation \eqref{eq:maxgs}.
 \label{app:derive_flat_v_max_alternative}
 To solve for $\flat{v}_{\max}$, equate $\eqref{eq:accel_opt_ground} = \flat{v}$.
 \begin{align*}
-\flat{v} &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2s\flat{a} - \flat{a}^2}\\
-\flat{v}^2 &= \flat{v}^2\left(1^2 + (\iota cT)^2 - 2\iota cT \right)^2 + s^2(2AT - A^2T^2)\\
-\flat{v}^2(\iota cT(\iota cT - 2)) &= -s^2(AT(2 - AT))\\
-\flat{v}^2\iota cT(2 - \iota cT) &= s^2AT(2 - AT),
+\flat{v} &= \sqrt{\left((1 - \tilde{f}T)\flat{v} \right)^2 + 2s\flat{a} - \flat{a}^2}\\
+\flat{v}^2 &= \flat{v}^2\left(1^2 + (\tilde{f}T)^2 - 2\tilde{f}T \right)^2 + s^2(2AT - A^2T^2)\\
+\flat{v}^2(\tilde{f}T(\tilde{f}T - 2)) &= -s^2(AT(2 - AT))\\
+\flat{v}^2\tilde{f}T(2 - \tilde{f}T) &= s^2AT(2 - AT),
 \end{align*}
-which is identical to \eqref{eq:maxgs_iota}.\\
-Assuming $\flat{v} \ge d$, this becomes the same as above, \eqref{eq:flat_v_max}.
+which is identical to \eqref{eq:maxgs_f_tilde}.\\
+Assuming $\flat{v} \ge S$, this becomes the same as above, \eqref{eq:flat_v_max}.
+
+
+\subsection{\texorpdfstring{$\delta_{\maxphi}$}{delta\_max\_phi}}
+\label{app:derive_delta_max_phi}
+\eqref{eq:delta_max_phi}\\
+The angle we want to maximize is \eqref{eq:varphi}.
+\begin{align*}
+\frac{\partial}{\partial\delta}\left(\frac{\flat{a}\sin\delta}{\flat{v}_f + \flat{a}\cos\delta} \right) &= \frac{\flat{a}\left(\cos\delta\left(\flat{v}_f + \flat{a}\cos\delta \right) + \flat{a}\sin^2 \delta \right)}{\left(\flat{v}_f + \flat{a}\cos\delta \right)^2}\\
+&= \frac{\flat{a}^2 + \flat{a}\flat{v}_f\cos\delta}{\left(\flat{v}_f + \flat{a}\cos\delta \right)^2}\\
+\frac{\partial\varphi}{\partial\delta} &= \frac{1}{1 + \left(\frac{\flat{a}\sin\delta}{\flat{v}_f + \flat{a}\cos\delta} \right)^2} \frac{\partial}{\partial\delta}\left(\frac{\flat{a}\sin\delta}{\flat{v}_f + \flat{a}\cos\delta} \right)\\
+&= \frac{\flat{a}^2 + \flat{a}\flat{v}_f\cos\delta}{\flat{a}^2 \sin^2 \delta + \left(\flat{v}_f + \flat{a}\cos\delta \right)^2}\\
+&= 0\\
+&= \flat{a}^2 + \flat{a}\flat{v}_f\cos\delta_{\maxphi}
+\end{align*}
+Alternatively, it could be noted that $\atan$ is an increasing function.
+\begin{align*}
+\delta_{\maxphi} &= \acos\left( -\frac{\flat{a}}{\flat{v}_f} \right).
+\end{align*}
+Also,
+\begin{align*}
+\frac{\partial^2 \varphi}{\partial\delta^2} &= \frac{\flat{a}^3 \flat{v}_f \sin\delta - \flat{a}\flat{v}_f^3 \sin\delta}{\left(\flat{a}^2 + \flat{v}_f^2 + 2\flat{a}\flat{v}_f\cos\delta \right)^2}\\
+\frac{\partial^2 \varphi}{\partial\delta^2}\left(\acos\left( -\frac{\flat{a}}{\flat{v}_f} \right) \right) &= -\frac{\flat{a}}{\sqrt{\flat{v}_f^2 - \flat{a}^2}}\\
+&< 0
+\end{align*}
+
+\begin{itemize}
+\item
+\eqref{eq:a_tilde}, it's only valid in range
+\begin{align*}
+\flat{v}_f \cos\delta_{\maxphi} &\le s - \flat{a},\\
+-\flat{a}&\le s - \flat{a},
+\end{align*}
+which is always true
+
+\item
+Ignoring the negative sign, the numerator is smaller than or equal to the denominator ($\acos$ range) when
+\begin{align*}
+\flat{a} \le \flat{v}_f
+\end{align*}
+Otherwise, the required angle is $\pi$ to cause the velocity vector to completely flip.
+\end{itemize}
+
+Hence
+\begin{align*}
+\delta_{\maxphi} =
+\begin{cases}
+\pi, &\flat{v}_f < \flat{a}\\
+\acos\left( -\frac{\flat{a}}{\flat{v}_f} \right), &\flat{v}_f \ge \flat{a}\\
+\end{cases}
+\end{align*}
 
 
 \subsection{\texorpdfstring{$x_{z,k}$}{x\_z k}}
 \label{app:derive_x_zk}
+\eqref{eq:x_zk}\\
 To derive $x_{z,k}$ in terms of $x_{z,0}$ and $v_{z,0}$,
 \begin{align*}
-x_{z,1} &= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p\\
-x_{z,2} &= x_{z,1} + \left(v_{z,1} - \frac{gT_p}{2} \right) T_p\\
-&= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p + \left(v_{z,0} - \round*{gT_p} - \frac{gT_p}{2} \right) T_p\\
-&= x_{z,0} + 2\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - \round*{gT_p} T_p\\
-x_{z,3} &= x_{z,1} + 2\left(v_{z,1} - \frac{gT_p}{2} \right) T_p - \round*{gT_p} T_p\\
-&= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p + 2\left(v_{z,0} - \round*{gT_p} - \frac{gT_p}{2} \right) T_p - \round*{gT_p} T_p\\
-&= x_{z,0} + 3\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - 3\round*{gT_p} T_p\\
-x_{z,4} &= x_{z,1} + 3\left(v_{z,1} - \frac{gT_p}{2} \right) T_p - 3\round*{gT_p} T_p\\
-&= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p + 3\left(v_{z,0} - \round*{gT_p} - \frac{gT_p}{2} \right) T_p - 3\round*{gT_p} T_p\\
-&= x_{z,0} + 4\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - 6\round*{gT_p} T_p\\
-x_{z,5} &= x_{z,1} + 4\left(v_{z,1} - \frac{gT_p}{2} \right) T_p - 6\round*{gT_p} T_p\\
-&= x_{z,0} + \left(v_{z,0} - \frac{gT_p}{2} \right) T_p + 4\left(v_{z,0} - \round*{gT_p} - \frac{gT_p}{2} \right) T_p - 6\round*{gT_p} T_p\\
-&= x_{z,0} + 5\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - 10\round*{gT_p} T_p\\
-x_{z,k} &= x_{z,0} + k\left(v_{z,0} - \frac{gT_p}{2} \right) T_p - \frac{k(k - 1)}{2} \round*{gT_p} T_p\\
-&= x_{z,0} + k\left(v_{z,0} - \frac{gT_p}{2} \right) T_p + \frac{k}{2} \round*{gT_p} T_p - \frac{k^2}{2} \round*{gT_p} T_p\\
-&= x_{z,0} + k\left(v_{z,0} - \frac{gT_p}{2} + \frac{\round*{gT_p}}{2} \right) T_p - \frac{k^2}{2} \round*{gT_p} T_p\\
-&= x_{z,0} + k\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - \frac{k^2}{2} \round*{gT_p} T_p,
+x_{z,1} &= x_{z,0} + \left(v_{z,0} - \frac{gT}{2} \right) T\\
+x_{z,2} &= x_{z,1} + \left(v_{z,1} - \frac{gT}{2} \right) T\\
+&= x_{z,0} + \left(v_{z,0} - \frac{gT}{2} \right) T + \left(v_{z,0} - \round*{gT} - \frac{gT}{2} \right) T\\
+&= x_{z,0} + 2\left(v_{z,0} - \frac{gT}{2} \right) T - \round*{gT} T\\
+x_{z,3} &= x_{z,1} + 2\left(v_{z,1} - \frac{gT}{2} \right) T - \round*{gT} T\\
+&= x_{z,0} + \left(v_{z,0} - \frac{gT}{2} \right) T + 2\left(v_{z,0} - \round*{gT} - \frac{gT}{2} \right) T - \round*{gT} T\\
+&= x_{z,0} + 3\left(v_{z,0} - \frac{gT}{2} \right) T - 3\round*{gT} T\\
+x_{z,4} &= x_{z,1} + 3\left(v_{z,1} - \frac{gT}{2} \right) T - 3\round*{gT} T\\
+&= x_{z,0} + \left(v_{z,0} - \frac{gT}{2} \right) T + 3\left(v_{z,0} - \round*{gT} - \frac{gT}{2} \right) T - 3\round*{gT} T\\
+&= x_{z,0} + 4\left(v_{z,0} - \frac{gT}{2} \right) T - 6\round*{gT} T\\
+x_{z,5} &= x_{z,1} + 4\left(v_{z,1} - \frac{gT}{2} \right) T - 6\round*{gT} T\\
+&= x_{z,0} + \left(v_{z,0} - \frac{gT}{2} \right) T + 4\left(v_{z,0} - \round*{gT} - \frac{gT}{2} \right) T - 6\round*{gT} T\\
+&= x_{z,0} + 5\left(v_{z,0} - \frac{gT}{2} \right) T - 10\round*{gT} T\\
+x_{z,k} &= x_{z,0} + k\left(v_{z,0} - \frac{gT}{2} \right) T - \frac{k(k - 1)}{2} \round*{gT} T\\
+&= x_{z,0} + k\left(v_{z,0} - \frac{gT}{2} \right) T + \frac{k}{2} \round*{gT} T - \frac{k^2}{2} \round*{gT} T\\
+&= x_{z,0} + k\left(v_{z,0} - \frac{gT}{2} + \frac{\round*{gT}}{2} \right) T - \frac{k^2}{2} \round*{gT} T\\
+&= x_{z,0} + k\left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) T - \frac{k^2}{2} \round*{gT} T,
 \end{align*}
 deriving \eqref{eq:x_zk}.
