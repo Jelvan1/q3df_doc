@@ -5,7 +5,7 @@ Short for CampingGaz-HUD.
 
 \subsection{Strafing on flat ground or in air}
 \label{sec:normal_strafe}
-When we try to apply an acceleration $\vec{\flat{a}}$ at some angle $\delta$ to the velocity $\vec{\flat{v}}_f$, we will be allowed to accelerate provided that the component of our current velocity in the proposed direction is smaller than $s$, also expressed as $\flat{v}_f \cos\delta < s$. The size of the acceleration applied, $\flat{a}$, is a constant\footnote{In the air $\flat{a} = 2.56$, while on the ground $\flat{a} = 25.6$ and $\flat{a} = 38.4$ for VQ3 and CPM, respectively.}, independent of the angle at which it is applied. However, there is one special case which is an exception to this rule. If $\flat{v}_f \cos\delta < s$ but still very close to $s$, applying the usual constant acceleration $\flat{a}$ for a single frame would be enough to take you over $s$ in that direction. This is something the engine checks for, and if the situation exists, the applied acceleration will be only enough to take you up to $s$ (so the resulting acceleration would be $s - \flat{v}_f \cos\delta$ instead of the full acceleration $\flat{a}$). However, the range of angle $\delta$ at which this situation exists is very small ($\delta_{\min} \le \delta \le \delta_{\opt}$) as can be seen in Figure \ref{fig:delta_min_friction}--\ref{fig:delta_opt_friction}.
+When we try to apply an acceleration $\vec{\flat{a}}$ at some angle $\delta$ to the velocity $\vec{\flat{v}}_f$, we will be allowed to accelerate provided that the component of our current velocity in the proposed direction is smaller than $s$, also expressed as $\flat{v}_f \cos\delta < s$. The size of the acceleration applied, $\flat{a}$, is a constant\footnote{In the air $\flat{a} = 2.56$, while on the ground $\flat{a} = 25.6$ and $\flat{a} = 38.4$ for VQ3 and CPM, respectively.}, independent of the angle at which it is applied. However, there is one special case which is an exception to this rule. As Appendix \ref{app:accelerate}, if $\flat{v}_f \cos\delta < s$ but still very close to $s$, applying the usual constant acceleration $\flat{a}$ for a single frame would be enough to take you over $s$ in that direction. This is something the engine checks for, and if the situation exists, the applied acceleration will be only enough to take you up to $s$ (so the resulting acceleration would be $s - \flat{v}_f \cos\delta$ instead of the full acceleration $\flat{a}$). However, the range of angle $\delta$ at which this situation exists is very small ($\delta_{\min} \le \delta \le \delta_{\opt}$) as can be seen in Figure \ref{fig:delta_min_friction}--\ref{fig:delta_opt_friction}.
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}[t]{.33\textwidth}
@@ -38,44 +38,53 @@ When we try to apply an acceleration $\vec{\flat{a}}$ at some angle $\delta$ to 
 Hence, we can summarize that
 \begin{align}
 \label{eq:r}
+\vec{\flat{r}} &= \vec{\flat{v}}_f + \vec{\tilde{\flat{a}}}
+\end{align}
+where
+\begin{align}
+\label{eq:a_tilde}
+\vec{\tilde{\flat{a}}} &= \uvec{\flat{a}}\cdot\max\left(0, \min\left(\flat{a}, s - \flat{v}_f \cos\delta\right)\right),
+\end{align}
+or otherwise
+\begin{align*}
 \vec{\flat{r}} &=
 \begin{cases}
 \vec{\flat{v}}_f, & s - \flat{v}_f \cos\delta \le 0,\\
 \vec{\flat{v}}_f + (s - \flat{v}_f \cos\delta)\uvec{\flat{a}}, & 0 < s - \flat{v}_f \cos\delta \le \flat{a},\\
 \vec{\flat{v}}_f + \mathmakebox[\widthof{$(s - \flat{v}_f \cos\delta)$}][r]{\flat{a}} \uvec{\flat{a}}, & s - \flat{v}_f \cos\delta > \flat{a}.
 \end{cases}
-\end{align}
+\end{align*}
 
-The acceleration causes a change in the total velocity, which is made up of a \emph{change in speed} and a \emph{change in direction}. The direction $\uvec{a}$ in which the acceleration is applied dictates how much of this acceleration goes into changing the speed, and how much goes into changing the direction. In \emph{strafe-jumping}, it is the \emph{change in speed} we are interested in \emph{maximizing}, in an increasing fashion.
+The acceleration causes a change in the total velocity, which is made up of a \emph{change in speed} and a \emph{change in direction}. The direction $\uvec{\flat{a}}$ in which the acceleration is applied dictates how much of this acceleration goes into changing the speed, and how much goes into changing the direction. In \emph{strafe-jumping}, it is the \emph{change in speed} we are interested in \emph{maximizing}, in an increasing fashion.
 
 The way to achieve this maximum increase in speed is by applying the acceleration so its direction is as close to that of the original velocity as possible, i.e. so the angle $\delta$ is as small as possible. This will mean that more of the acceleration goes into increasing our speed, and less goes into affecting the direction. The limiting condition gives a minimum angle of
 \begin{align}
 \label{eq:delta_min}
-\delta_{\min} &= \acos\left(\frac{\sqrt{s^2 - \flat{v}^2 + \flat{v}_f^2}}{\flat{v}_f} \right).
+\delta_{\min} &= \pm\acos\left(\frac{\sqrt{s^2 - \flat{v}^2 + \flat{v}_f^2}}{\flat{v}_f} \right).
 \end{align}
 However, in order to gain the full acceleration, $\flat{a}$, we need the angle to be a bit larger, so we avoid the special case mentioned above. Therefore the optimal angle is the smallest angle at which we receive the full acceleration, $\flat{a}$, which is given by
 \begin{align}
 \label{eq:delta_opt}
-\delta_{\opt} &= \acos\left( \frac{s - \flat{a}}{\flat{v}_f} \right).
+\delta_{\opt} &= \pm\acos\left( \frac{s - \flat{a}}{\flat{v}_f} \right).
 \end{align}
 As you can see, this optimal angle depends on the current velocity $\flat{v}_f$ and increases towards \ang{90} as the velocity goes to infinity. The other limiting condition (i.e. the maximum angle), shown in Figure \ref{fig:delta_max_air}, is given by
 \begin{align}
 \label{eq:delta_max}
-\delta_{\max} &= \acos\left( \frac{\flat{v}^2 - \flat{v}_f^2 - \flat{a}^2}{2 \flat{a} \flat{v}_f} \right).
+\delta_{\max} &= \pm\acos\left( \frac{\flat{v}^2 - \flat{v}_f^2 - \flat{a}^2}{2 \flat{a} \flat{v}_f} \right).
 \end{align}
-Hence, the angles $\delta_{\min}$ and $\delta_{\max}$ represent the boundaries between a speed increase and possible speed decrease. When $\vec{\flat{v}} = \vec{\flat{v}}_f$, e.g. in the air\footnote{In the air there is no friction ($c = 0$).}, equations \eqref{eq:delta_min} and \eqref{eq:delta_max} simplify to respectively
+Hence, the angles $\delta_{\min}$ and $\delta_{\max}$ represent the boundaries between a speed increase and possible speed decrease. When $\vec{\flat{v}} = \vec{\flat{v}}_f$, e.g. in the air\footnote{In the air there is no friction ($f = 0$).}, equations \eqref{eq:delta_min} and \eqref{eq:delta_max} simplify to respectively
 \begin{align}
 \label{eq:delta_min_vf}
-\delta_{\min} &= \acos\left(\frac{s}{\flat{v}} \right),\\
+\delta_{\min} &= \pm\acos\left(\frac{s}{\flat{v}} \right),\\
 \label{eq:delta_max_vf}
-\delta_{\max} &= \acos\left(-\frac{\flat{a}}{2\flat{v}} \right).
+\delta_{\max} &= \pm\acos\left(-\frac{\flat{a}}{2\flat{v}} \right).
 \end{align}
-Note that, in the air, $\delta_{\max}$ exceeds \ang{90} and still results in a speed increase. On the ground, the angles $\delta_{\min}$, $\delta_{\opt}$ and $\delta_{\max}$ will eventually meet when we reach the \emph{maximum ground speed}\footnote{When we introduce velocity snapping (Section \ref{sec:max_ground_speed}), this is no longer the maximum ground speed.}, due to the friction ($c = 6$), shown in Figure \ref{fig:v_ground} (top left magnification). The mathematically derivation is done in Appendix \ref{app:derive_flat_v_max} and results in
+Note that, in the air, $\delta_{\max}$ exceeds \ang{90} and still results in a speed increase. On the ground, the angles $\delta_{\min}$, $\delta_{\opt}$ and $\delta_{\max}$ will eventually meet when we reach the \emph{maximum ground speed}\footnote{When we introduce velocity snapping, this is no longer the maximum ground speed (Section \ref{sec:max_ground_speed}).}, due to the friction ($f = 6$), shown in Figure \ref{fig:v_ground} (top left magnification). The mathematically derivation is done in Appendix \ref{app:derive_flat_v_max} and results in
 \begin{align}
 \label{eq:flat_v_max}
-\flat{v}_{\max} &= s \sqrt{\frac{A (2 - AT)}{c (2 - cT)}}.
+\flat{v}_{\max} &= s \sqrt{\frac{A (2 - AT)}{f (2 - fT)}}.
 \end{align}
-Knowing this, we find that on a flat surface the maximum ground speed for $\text{VQ3} = \qty{409.7180}{ups}$ and $\text{CPM} = \qty{496.5454}{ups}$, at $\qty{125}{fps}$. Note that if there is no friction ($c = 0$), there would in principle be no limit on the maximum speed. This would be an example of being on an icy surface, or in the air. However there are inevitably other aspects of the engine that put limits on very high speeds.
+Knowing this, we find that on a flat surface the maximum ground speed for $\text{VQ3} = \qty{409.7180}{ups}$ and $\text{CPM} = \qty{496.5454}{ups}$, at $\qty{125}{fps}$. Note that if there is no friction ($f = 0$), there would in principle be no limit on the maximum speed. This would be an example of being on an icy surface, or in the air. However there are inevitably other aspects of the engine that put limits on very high speeds.
 
 %Figure \ref{fig:delta_phi}, law of cosines
 %\begin{align*}
@@ -124,19 +133,19 @@ Knowing this, we find that on a flat surface the maximum ground speed for $\text
 At this point, it might be interesting to define the $\delta$-region where you gain speed in the direction of the current velocity $\uvec{\flat{v}}$. Similar to equation \eqref{eq:delta_min}, we derive the point where we first start gaining speed in the direction $\uvec{\flat{v}}$. The limiting condition gives a minimum angle of
 \begin{align}
 \label{eq:delta_bar_min}
-\bar{\delta}_{\min} &= \acos\left( \frac{s + \sqrt{s^2 - 4 \flat{v}_f (\flat{v} - \flat{v}_f)}}{2 \flat{v}_f} \right).
+\bar{\delta}_{\min} &= \pm\acos\left( \frac{s + \sqrt{s^2 - 4 \flat{v}_f (\flat{v} - \flat{v}_f)}}{2 \flat{v}_f} \right).
 \end{align}
 Similar to equation \eqref{eq:delta_max}, we derive the point where we stop gaining speed in the direction $\uvec{\flat{v}}$. The limiting condition gives a maximum angle of
 \begin{align}
 \label{eq:delta_bar_max}
-\bar{\delta}_{\max} &= \acos\left( \frac{\flat{v} - \flat{v}_f}{\flat{a}} \right).
+\bar{\delta}_{\max} &= \pm\acos\left( \frac{\flat{v} - \flat{v}_f}{\flat{a}} \right).
 \end{align}
 Hence, the angles $\bar{\delta}_{\min}$ and $\bar{\delta}_{\max}$ represent the boundaries between a speed increase and a speed decrease in the direction of the current velocity $\uvec{\flat{v}}$. Similar as before, when $\vec{\flat{v}} = \vec{\flat{v}}_f$ (e.g. in the air), equations \eqref{eq:delta_bar_min} and \eqref{eq:delta_bar_max} simplify to
 \begin{align}
 \label{eq:delta_bar_min_vf}
-\bar{\delta}_{\min} &= \acos\left(\frac{s}{\flat{v}} \right) = \eqref{eq:delta_min_vf},\\
+\bar{\delta}_{\min} &= \pm\acos\left(\frac{s}{\flat{v}} \right) = \eqref{eq:delta_min_vf},\\
 \label{eq:delta_bar_max_vf}
-\bar{\delta}_{\max} &= \frac{\pi}{2}.
+\bar{\delta}_{\max} &= \pm\frac{\pi}{2}.
 \end{align}
 Knowing all these angles, we can create a CGazHUD (i.e. a strafe-jump helper), which is divided in 5 regions (see Figure \ref{fig:v_air} and \ref{fig:v_ground}):
 \begin{itemize}
@@ -170,18 +179,78 @@ Knowing all these angles, we can create a CGazHUD (i.e. a strafe-jump helper), w
 	\label{fig:v_ground}
 \end{figure}
 
+Another angle which can be derived is the angle to strafe at in order to achieve maximum change in direction of the velocity vector in any one frame, $\delta_{\maxphi}$, done in Appendix \ref{app:derive_delta_max_phi}.
+This gives an angle of
+\begin{align}
+\nonumber
+\delta_{\maxphi} &= \argmax_{\delta \in [0, 2\pi)} \varphi\\
+\label{eq:delta_max_phi}
+&= \pm\acos\left( -\frac{\flat{a}}{\flat{v}_f} \right),
+\end{align}
+which is just slightly larger than $\delta_{\max}$.
+
 
 \subsection{Strafing on icy surfaces}
 \label{sec:slick}
-Acceleration $A = 1$ on a icy surface is identical to the acceleration in the air, however, this is not the entire story. Every frame Gravity $g = 800$ (\texttt{g\_gravity}).
+Acceleration $A = 1$ on an icy surface (or ``slick'' surface) is identical to the acceleration in the air, however this is not the entire story. Every frame gravity $g = 800$ (\texttt{g\_gravity}) is applied after acceleration, then velocity is clipped to the ground plane and scaled to be the new length.
 \begin{align*}
-v_{f_z} - gT
+v_{fz} - gT
 \end{align*}
+\codeFromFile{firstline=783,lastline=798,gobble=1}{code/game/bg_pmove.c}
+On a flat slick surface (normal $\vec{\flat{n}} = \inlinemat{0, 0, 1}^T$), this produces
+\begin{align*}
+\vec{\flat{r}} &= \frac{\sqrt{(v_x + \tilde{\flat{a}}_x)^2 + (v_y + \tilde{\flat{a}}_y)^2 + (gT)^2}}{\sqrt{(v_x + \tilde{\flat{a}}_x)^2 + (v_y + \tilde{\flat{a}}_y)^2}}\begin{pmatrix}
+v_x + \tilde{\flat{a}}_x \\ v_y + \tilde{\flat{a}}_y \\ 0
+\end{pmatrix}.
+\end{align*}
+It is also not entirely the case that $v_z = 0$ while on flat icy surfaces. After gravity is applied, the velocity is clipped to the ground plane, however the clipping is done slightly too much, by a factor of $1 - O$ with $O = 1.001$ (\texttt{OVERCLIP}). Since the player is on a flat plane, this doesn't alter $v_x$ or $v_y$, but sets $v_z = gT(O - 1)$. The velocity is then scaled to be of the same length that it was before the clipping.
+Hence the proper equation for the new velocity is
+\begin{align}
+\label{eq:flat_slick_r}
+\vec{r} &= \sqrt{\frac{(v_x + \tilde{\flat{a}}_x)^2 + (v_y + \tilde{\flat{a}}_y)^2 + (gT)^2}{(v_x + \tilde{\flat{a}}_x)^2 + (v_y + \tilde{\flat{a}}_y)^2 + (gT(O - 1))^2}}\begin{pmatrix}
+v_x + \tilde{\flat{a}}_x \\ v_y + \tilde{\flat{a}}_y \\ gT(O - 1)
+\end{pmatrix},
+\end{align}
+becoming $\round*{\vec{r}}$ after snapping (see Section \ref{sec:snaphud}), which will round $r_z$ back to $0$ provided it is $< 0.5$.
 
-TODO: Explain the drifting speed and sticky jump overbounces (graph time for ob with respect to your current velocity, slick top view turn (with(out) jump)).
+One implication this has is that at a low velocity, the effect of the gravity will be enough to cause the player to accelerate without pressing any movement keys. This acceleration increases up until a certain speed at which the new velocity is snapped back to the old velocity resulting in no further increase in speed. Such speed is referred to as the ``drifting speed.'' The drifting speed can be solved for by solving the equation
+\begin{align*}
+\round*{\sqrt{\frac{v_x^2 + v_y^2 + (gT)^2}{v_x^2 + v_y^2 + (gT(O - 1))^2}}\begin{pmatrix}
+v_x \\ v_y \\ 0
+\end{pmatrix}} &= \begin{pmatrix}
+v_x \\ v_y \\ 0
+\end{pmatrix}.
+\end{align*}
+Travelling along an axis this simplifies to $\round*{\sqrt{\frac{\flat{v}^2 + (gT)^2}{\flat{v}^2 + (gT(O - 1))^2}} \flat{v}} = \flat{v}$ and solves to $v = \qty{41}{ups}$, but this phenomenon can occur along any direction not just the axes.
+Along the diagonals the drift speed is $v = 21\sqrt{2} = \qty{29.6985}{ups}$.
+%While travelling along a diagonal this simplifies on one axis to $\round*{\sqrt{\frac{v^2 + \frac{(gT)^2}{2}}{v^2 + \frac{(gT(O - 1))^2}{2}}} v} = v$, giving $\qty{21}{ups}$ so solving to $\inlinemat{21, 21, 0}^T$ or $\qty{29.6985}{ups}$.
+
+When player inputs are decreasing velocity, it is also possible that the effect of gravity will increase the player's speed to what it was before.
+Travelling along an axis the equation simplifies to $\round*{\sqrt{\frac{(\flat{v} + \flat{a})^2 + (gT)^2}{(\flat{v} + \flat{a})^2 + (gT(O - 1))^2}} (\flat{v} + \flat{a})} = \flat{v}$ and solves to $v = \qty{11}{ups}$.
+
+This increased acceleration also means that SnapHUD is no longer entirely accurate, nor some CGazHUD angles.
+
+TODO: Explain HOBs and sticky jump overbounces (graph time for ob with respect to your current velocity, slick top view turn (with(out) jump)).
+\begin{figure}[H]
+	\centering
+	\setlength\figureheight{4.8cm}
+	\setlength\figurewidth{13cm}
+	\includetikz{tikz/icy_ob_time}
+	\caption{Graph of time until overbounce is possible with respect to velocity. $t_{HOB}$ (\bluearrow), $t_{SOB}$ (\greenarrow).}
+	\label{fig:icy_ob_time}
+\end{figure}
+Here,
+\begin{align*}
+t_{HOB} = \frac{0.25}{gT(O - 1)}\sqrt{\frac{\flat{v}^2 + (gT(O - 1))^2}{\flat{v}^2 + (gT)^2}},\qquad t_{SOB} = \frac{-h}{gT(O - 1)}\sqrt{\frac{\flat{v}^2 + (gT(O - 1))^2}{\flat{v}^2 + (gT)^2}}.
+\end{align*}
+These have upper bounds of respectively
+\begin{align*}
+\frac{0.25}{gT(O - 1)} = \qty{39.0625}{s},\qquad \frac{-h}{gT(O - 1)} = \qty{22.5}{s}.
+\end{align*}
 
 
 \subsection{Strafing on sloped surfaces}
+\label{sec:slopes}
 \begin{align*}
 \vec{n} &=
 \begin{pmatrix}
@@ -223,18 +292,18 @@ n_2^2+n_3^2 & -n_1 n_2 & -n_1 n_3\\
 
 \begin{align*}
 % no slope
-\yaw_1 &= -\arctan\frac{n_1}{n_2},\\
+\yaw_1 &= -\atan\frac{n_1}{n_2},\\
 % min angle yaw1 - yaw2
-\yaw_2 &= -\arctan\frac{n_1}{n_2} + \frac{\pi}{2},\\
+\yaw_2 &= -\atan\frac{n_1}{n_2} + \frac{\pi}{2},\\
 % no slope
-\yaw_3 &= -\arctan\frac{n_1}{n_2} + \pi,\\
+\yaw_3 &= -\atan\frac{n_1}{n_2} + \pi,\\
 % max angle yaw2 - yaw1
-\yaw_4 &= -\arctan\frac{n_1}{n_2} - \frac{\pi}{2},
+\yaw_4 &= -\atan\frac{n_1}{n_2} - \frac{\pi}{2}.
 \end{align*}
 
-It is this acceleration, provided by the movement keys, which gives the player a change in velocity, which ultimately changes his position.
+It is this acceleration, provided by the movement keys, which gives the player a change in velocity, ultimately changing their position.
 \begin{align*}
-\flat{\fmove} &=
+\tvec{\flat{\fmove}} &=
 \begin{pmatrix}
 \cos(\delta+\yaw_4) \\ \sin(\delta+\yaw_4) \\ 0
 \end{pmatrix} = \frac{1}{\sqrt{n_1^2 + n_2^2}}
@@ -242,13 +311,13 @@ It is this acceleration, provided by the movement keys, which gives the player a
 \hphantom{-}n_2\sin\delta - n_1\cos\delta\\
 -n_1\sin\delta - n_2\cos\delta\\
 0
-\end{pmatrix},
+\end{pmatrix}
 \end{align*}
 
-One can use the \emph{Rodrigues' rotation formula} to construct the rotation matrix $\mat{R}$ that rotates by an angle $\phi = \arccos(\vec{k}^T\vec{n})$ about the unit vector (\purplearrow)
+One can use the \emph{Rodrigues' rotation formula} to construct the rotation matrix $\mat{R}$ that rotates by an angle $\phi = \acos\left(\vec{k}^T\vec{n} \right)$ about the unit vector (\purplearrow)
 \begin{equation}
 \label{eq:u}
-\vec{u} =
+\uvec{u} =
 \begin{pmatrix}
 u_1\\u_2\\u_3
 \end{pmatrix} = \frac{1}{\sqrt{n_1^2 + n_2^2}}
@@ -267,7 +336,7 @@ Letting
 \]
 the Rodrigues' rotation matrix is constructed as
 \begin{align*}
-\mat{R} &= \mat{I} + \sin \phi \mat{W} + 2\sin^2 \frac{\phi}{2}\mat{W}^2,\\
+\mat{R} &= \mat{I} + \sin \phi \mat{W} + (1 - \cos \phi) \mat{W}^2,\\
 \mat{R} &= \mat{I} + \sqrt{n_1^2 + n_2^2}\mat{W} + (1 - n_3)\mat{W}^2,\\
 \mat{R} &=
 \begin{pmatrix}
@@ -324,44 +393,110 @@ currentspeed &= S2F velocity;
 	\caption{The unit vector $\uvec{u}$ (\purplearrow) from equation \eqref{eq:u}. (a) Original setup: the key plane (\orangearea) and the surface (\greenarea). (b) Change of basis, with the surface normal $\vec{\flat{n}}$ (\greenarrow) straight up.}
 \end{figure}
 
+When strafing on a slope $\tvec{\flat{\fmove}}$ and $\tvec{\flat{\rmove}}$ are projected orthogonally onto the ground plane and normalized, then multiplied by $\fmove$ and $\rmove$ respectively and added to make \texttt{wishvel}. Then as usual \texttt{wishvel} is scaled by a factor of $1/\norm{\tvec{\cmd}}$ to make \texttt{wishspeed} $s$.\\
+When strafing on a slope with a single movement key, the code works as intended and $s = 320$. Since \texttt{wishvel} now has a vertical component however, \texttt{wishspeed} along the $xy$-plane ($\flat{s}$) will be lower than normal.
 
-\subsection{CPM air control}
-\label{sec:turnCPM}
-Forwardkey aircontrol, forwardkey CGazHUD strafing, forwardkey side speed gain
+Since they are normalized before being added, pitch and roll have no effect so we can say w.l.o.g. $\rho = 0$, $\sigma = 0$. $\tuvec*{\flat{\fmove}}$ and $\tuvec*{\flat{\rmove}}$ are hence unit vectors as described below.
+For $\fmove$,
+\begin{align*}
+\tvec{\fmove_{\new}} &= \tuvec*{\flat{\fmove}} - O\left(\tuvec*{\flat{\fmove}}\cdot \vec{n} \right)\vec{n}\\
+&= \begin{pmatrix}
+\cos\gamma \\ \sin\gamma \\ 0
+\end{pmatrix} - O\left(n_1\cos\gamma + n_2\sin\gamma \right) \begin{pmatrix}
+n_1 \\ n_2 \\ n_3
+\end{pmatrix}.
+\end{align*}
+Similarly for $\rmove$,
+\begin{align*}
+\tvec{\rmove_{\new}} &= \tuvec*{\flat{\rmove}} - O\left(\tuvec*{\flat{\rmove}}\cdot \vec{n} \right)\vec{n}\\
+&= \begin{pmatrix}
+\sin\gamma \\ -\cos\gamma \\ 0
+\end{pmatrix} - O\left(n_1\sin\gamma - n_2\cos\gamma \right) \begin{pmatrix}
+n_1 \\ n_2 \\ n_3
+\end{pmatrix}.
+\end{align*}
+If we take $O = 1$, this can be shown to be a projection onto the plane since $\tvec{\fmove_{\new}}\cdot \vec{n} = \tuvec*{\flat{\fmove}}\cdot \vec{n} - \left(\tuvec*{\flat{\fmove}}\cdot \vec{n} \right)\vec{n}\cdot \vec{n} = 0$.\\
+The magnitude of $\tvec{\fmove_{\new}}$ (and similarly for $\tvec{\rmove_{\new}}$) is derived by
+\begin{align*}
+d &= \tuvec*{\flat{\fmove}}\cdot \vec{n},\\
+\norm*{\tvec{\fmove_{\new}}} &= \sqrt{1 - d^2}\ \ldots\ \text{or with \texttt{OVERCLIP}},\\
+&= \sqrt{\left(\sqrt{1 - d^2} \right)^2 + (d(O - 1))^2}\\
+&= \sqrt{1 - d^2 \left(2O - O^2 \right)},\\
+\norm*{\tvec{\flat{\fmove_{\new}}}} &= \sqrt{\norm*{\tvec{\fmove_{\new}}}^2 - \norm*{\tvec{\fmove_{\new\_z}}}^2}\\
+&= \sqrt{\left(\sqrt{1 - d^2} \right)^2 - \left(-n_3 d \right)^2}\\
+&= \sqrt{1 - d^2 \left(1 + n_3^2 \right)}\ \ldots\ \text{or with \texttt{OVERCLIP}},\\
+&= \sqrt{\left(\sqrt{1 - d^2 \left(2O - O^2 \right)} \right)^2 - \left(-n_3 dO \right)^2}\\
+&= \sqrt{1 - d^2 \left(2O - O^2 \left(1 - n_3^2 \right) \right)}.
+\end{align*}
+Hence
+\begin{gather}
+\begin{aligned}
+\label{eq:slope_fm_flat_s}
+\flat{s} &= s \sqrt{\frac{1 - d^2 \left(2O - O^2 \left(1 - n_3^2 \right) \right)}{1 - d^2 \left(2O - O^2 \right)}}\\
+&= s \sqrt{1 - \frac{n_3^2 d^2 O^2}{1 - d^2 \left(2O - O^2 \right)}}.
+\end{aligned}
+\end{gather}
+This is maximal when $d = 0$ since $\flat{s}$ has a turning point at $d = 0$, minimal when travelling directly up or down the slope.
+%In both of these cases, ignoring slight variations due to \texttt{OVERCLIP}, this causes wishspeed to have a magnitude of $320$. However, the $xy$-wishspeed component is of more use as it affects circle jump speed.\\
+%Since 
 
-Sidestrafe aircontrol applies regular acceleration with an additional change of direction. The new velocity is pulled towards the yaw angle.\\
-TODO
+Wishspeed however has a magnitude other than $320$ when two movement keys are applied. This is because the projection makes the vectors no longer be perpendicular, so the $\norm{\tvec{\cmd}}$ scale factor is inaccurate. By the cosine rule, if $\tvec{\fmove_{\new}}$ and $\tvec{\rmove_{\new}}$ are obtusely angled i.e. $\tvec{\fmove_{\new}}\cdot \tvec{\rmove_{\new}} < 0$ then $s < 320$, and vice versa. One instance where this happens is while travelling roughly up or down the slope.
+
+$s$ and $\flat{s}$ are derived as follows.
+\begin{align*}
+\tvec{\frmove} &= \tuvec*{\fmove_{\new}} + \tuvec*{\rmove_{\new}},\\
+\frmove &= \norm*{\tuvec*{\fmove_{\new}} + \tuvec*{\rmove_{\new}}}\\
+%&= \norm*{\frac{\tvec{\fmove_{\new}}}{\sqrt{1 - \left(\tuvec*{\flat{\fmove}}\cdot \vec{n} \right)^2 \left(2O - O^2 \right)}} + \frac{\tvec{\rmove_{\new}}}{\sqrt{1 - \left(\tuvec*{\flat{\rmove}}\cdot \vec{n} \right)^2 \left(2O - O^2 \right)}}}\\
+&= \sqrt{\left(\tuvec*{\fmove_{\new}} + \tuvec*{\rmove_{\new}} \right)^T \left(\tuvec*{\fmove_{\new}} + \tuvec*{\rmove_{\new}} \right)}\\
+&= \sqrt{\norm*{\tuvec*{\fmove_{\new}}}^2 + \norm*{\tuvec*{\rmove_{\new}}}^2 + 2\norm*{\tuvec*{\fmove_{\new}}}\norm*{\tuvec*{\rmove_{\new}}}\cos{\acos\left(\frac{\tvec{\fmove_{\new}}\cdot \tvec{\rmove_{\new}}}{\norm*{\tvec{\fmove_{\new}}}\norm*{\tvec{\rmove_{\new}}}} \right)}}\\
+&= \sqrt{2} \sqrt{1 + \tuvec*{\fmove_{\new}}\cdot \tuvec*{\rmove_{\new}}},\\
+\flat{\frmove} &= \sqrt{\norm*{\tvec{\frmove}}^2 - \norm*{\tvec{\frmove_z}}^2}\\\nonumber
+&= \sqrt{2\left(1 + \tuvec*{\fmove_{\new}}\cdot \tuvec*{\rmove_{\new}} \right) - \left(\frac{-n_3 O\left(\tuvec*{\flat{\fmove}}\cdot \vec{n} \right)}{\sqrt{1 - \left(\tuvec*{\flat{\fmove}}\cdot \vec{n} \right)^2 \left(2O - O^2 \right)}} + \frac{-n_3 O\left(\tuvec*{\flat{\rmove}}\cdot \vec{n} \right)}{\sqrt{1 - \left(\tuvec*{\flat{\rmove}}\cdot \vec{n} \right)^2 \left(2O - O^2 \right)}} \right)^2}\\
+&= TODO,
+\end{align*}
+\begin{align}
+\nonumber
+s &= \frac{\texttt{g\_speed}}{\sqrt{2}} \frmove\\
+\label{eq:slope_fm_rm_s}
+&= \texttt{g\_speed} \sqrt{1 + \tuvec*{\fmove_{\new}}\cdot \tuvec*{\rmove_{\new}}},\\\nonumber
+\flat{s} &= s \frac{\flat{\frmove}}{\frmove}\\
+\label{eq:slope_fm_rm_flat_s}
+&= \frac{\texttt{g\_speed}}{\sqrt{2}} \flat{\frmove}.
+\end{align}
+TODO: finish
 
 
 \subsection{Speed gains from air strafing}
 \label{sec:accel_air}
 Acceleration from strafing can be obtained using equation \eqref{eq:sAT}.
-From below code, acceleration is applied per axis in direction of unit \texttt{wishdir} with magnitude of \texttt{accelspeed}, i.e. $\uvec{\flat{s}_x}\flat{a}$ and $\uvec{\flat{s}_y}\flat{a}$.
+From below code, acceleration is applied per axis in direction of unit \texttt{wishdir} with magnitude of \texttt{accelspeed}, i.e. $\uvec{\flat{s}}_x\flat{a}$ and $\uvec{\flat{s}}_y\flat{a}$.
 \codeFromFile{firstline=256,lastline=258,gobble=1}{code/game/bg_pmove.c}
 Thus, acceleration is dependent on angle $\delta$.
-
-W.l.o.g., assume current velocity $\flat{v}$ is solely on the $x$-axis. Then the resulting new velocity $\vec{r}$ becomes
+%W.l.o.g., assume current velocity $\vec{\flat{v}}$ is solely on the $x$-axis.
+%Then the resulting new velocity $\vec{r}$ becomes
+%\begin{align*}
+%\vec{r} &=
+%\begin{pmatrix}
+%\flat{v} + \tilde{\flat{a}}\cos\delta \\ \tilde{\flat{a}}\sin\delta \\ 0
+%\end{pmatrix}.
+%\end{align*}
+Given $\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$ and using equation \eqref{eq:r}, the function of new velocity\footnote{When strafing at angle $\delta$ to $\vec{\flat{v}}$ for a single frame.} $r\left(\flat{v}\ ;\delta \right)$ is given by
 \begin{align*}
-\vec{r} =
-\begin{pmatrix}
-\flat{v} + \flat{a}\cos\delta\\\flat{a}\sin\delta\\0
-\end{pmatrix}.
-\end{align*}
-Given $\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$, function of new velocity\footnote{When strafing at angle $\delta$ to $\vec{\flat{v}}$ for a single frame.} $r\left(\flat{v}\ ;\delta \right)$ is given by
-\begin{align*}
-r\left(\flat{v}\ ;\delta \right) &= \sqrt{\left(\flat{v} + \flat{a}\cos\delta \right)^2 + \left(\flat{a}\sin\delta \right)^2}\\
+%r\left(\flat{v}\ ;\delta \right) &= \sqrt{\left(\flat{v} + \flat{a}\cos\delta \right)^2 + \left(\flat{a}\sin\delta \right)^2}\\
+r\left(\flat{v}\ ;\delta \right) &= \norm*{\vec{\flat{v}} + \vec{\flat{a}}}\\
+&= \sqrt{(\vec{\flat{v}} + \vec{\flat{a}})^T (\vec{\flat{v}} + \vec{\flat{a}})}\\
 &= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos\delta + \flat{a}^2}
 \end{align*}
 and likewise gain in speed $G\left(\flat{v}\ ;\delta \right) = \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos\delta + \flat{a}^2} - \flat{v}$.\\
 
 Now provided that the player is strafing at $\delta_{\opt}$,
-\begin{align*}
-r\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos{\acos\left( \frac{s - \flat{a}}{\flat{v}} \right)} + \flat{a}^2}\\
-&= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\frac{s - \flat{a}}{\flat{v}} + \flat{a}^2}\ \ldots\ \frac{s - \flat{a}}{\flat{v}}\le 1
-\end{align*}
 \begin{align}
+\nonumber
+r\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\cos{\acos\left( \frac{s - \flat{a}}{\flat{v}} \right)} + \flat{a}^2}\\\nonumber
+&= \sqrt{\flat{v}^2 + 2\flat{v}\flat{a}\frac{s - \flat{a}}{\flat{v}} + \flat{a}^2}\ \ldots\ \frac{s - \flat{a}}{\flat{v}}\le 1\\
 \label{eq:accel_opt_air}
-\therefore\ r\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\flat{v}^2 + 2s\flat{a} - \flat{a}^2}\ \ldots\ \flat{v}\ge s - \flat{a}.
+\therefore\ r\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\flat{v}^2 + 2s\flat{a} - \flat{a}^2}\ \ldots\ \flat{v}\ge s - \flat{a}\\\nonumber
+&= \sqrt{\flat{v}^2 + s^2 AT(2 - AT)}.
 \end{align}\\
 
 For normal strafing, $s = 320$, $A = 1$. These values are the same for CPM and VQ3. Using \eqref{eq:accel_opt_air},
@@ -391,35 +526,39 @@ These functions intersect when $\flat{v} = 140.47$. Therefore, normal strafing i
 \subsection{Speed gains from ground strafing}
 \label{sec:accel_ground}
 Deriving formulas for ground strafing works similarly to air strafing, however friction needs to be accounted for.
-As friction is applied before acceleration, $\flat{v}_f = (1 - \iota cT)\flat{v}$. Thus, assuming w.l.o.g. $\flat{v}$ is solely on the $x$-axis,
+As friction is applied before acceleration, $\flat{v}_f = (1 - \tilde{f}T)\flat{v}$. Equation \eqref{eq:r} becomes %assuming w.l.o.g. $\flat{v}$ is solely on the $x$-axis,
 \begin{align*}
-\vec{r} =
-\begin{pmatrix}
-(1 - \iota cT)\flat{v} + \flat{a}\cos\delta\\\flat{a}\sin\delta\\0
-\end{pmatrix}.
+\vec{r} &= (1 - \tilde{f}T)\vec{\flat{v}} + \vec{\tilde{\flat{a}}}.
+%\vec{r} &=
+%\begin{pmatrix}
+%(1 - \tilde{f}T)\flat{v} + \tilde{\flat{a}}\cos\delta \\ \tilde{\flat{a}}\sin\delta \\ 0
+%\end{pmatrix}.
 \end{align*}
 Then with $\delta \in [\delta_{\opt}, 2\pi - \delta_{\opt}]$,
 \begin{align*}
-r\left(\flat{v}\ ;\delta \right) = \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2(1 - \iota cT)\flat{v}\flat{a}\cos\delta + \flat{a}^2}
+%r\left(\flat{v}\ ;\delta \right) &= \sqrt{((1 - \tilde{f}T)\flat{v})^2 + 2(1 - \tilde{f}T)\flat{v}\flat{a}\cos\delta + \flat{a}^2}
+r\left(\flat{v}\ ;\delta \right) &= \sqrt{\left((1 - \tilde{f}T)\vec{\flat{v}} + \vec{\flat{a}} \right)^T \left((1 - \tilde{f}T)\vec{\flat{v}} + \vec{\flat{a}} \right)}\\
+&= \sqrt{\left((1 - \tilde{f}T)\flat{v} \right)^2 + 2(1 - \tilde{f}T)\flat{v}\flat{a}\cos\delta + \flat{a}^2}
 \end{align*}
-and likewise gain in speed $G\left(\flat{v}\ ;\delta \right) = \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2(1 - \iota cT)\flat{v}\flat{a}\cos\delta + \flat{a}^2} - \flat{v}$.\\
+and likewise gain in speed $G\left(\flat{v}\ ;\delta \right) = \sqrt{\left((1 - \tilde{f}T)\flat{v} \right)^2 + 2(1 - \tilde{f}T)\flat{v}\flat{a}\cos\delta + \flat{a}^2} - \flat{v}$.\\
 
 Now provided that the player is strafing at $\delta_{\opt}$,
 \begin{align}
 \label{eq:accel_opt_ground}
-r\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 2s\flat{a} - \flat{a}^2}\ \ldots\ \flat{v}_f\ge s - \flat{a}.
+r\left(\flat{v}\ ;\delta_{\opt} \right) = \sqrt{\left((1 - \tilde{f}T)\flat{v} \right)^2 + 2s\flat{a} - \flat{a}^2}\ \ldots\ \flat{v}_f\ge s - \flat{a}\\\nonumber
+&= \sqrt{\left((1 - \tilde{f}T)\flat{v} \right)^2 + s^2 AT(2 - AT)}.
 \end{align}
 
 For CPM,
 \begin{align*}
-\flat{a} = 320\cdot 15\cdot 0.008 = 38.4, && r_{\text{CPM-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 23101.44}\ \ldots\ \flat{v}_f\ge 281.6.
+\flat{a} = 320\cdot 15\cdot 0.008 = 38.4, && r_{\text{CPM-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \tilde{f}T)\flat{v} \right)^2 + 23101.44}\ \ldots\ \flat{v}_f\ge 281.6.
 \end{align*}
 For VQ3,
 \begin{align*}
-\flat{a} = 320\cdot 10\cdot 0.008 = 25.6, && r_{\text{VQ3-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \iota cT)\flat{v} \right)^2 + 15728.64}\ \ldots\ \flat{v}_f\ge 294.4.
+\flat{a} = 320\cdot 10\cdot 0.008 = 25.6, && r_{\text{VQ3-ground-strafe}}\left(\flat{v}\ ;\delta_{\opt} \right) &= \sqrt{\left((1 - \tilde{f}T)\flat{v} \right)^2 + 15728.64}\ \ldots\ \flat{v}_f\ge 294.4.
 \end{align*}
 
-\eqref{eq:accel_opt_ground} can also be used to derive $\flat{v}_{\max}$ from \eqref{eq:flat_v_max}, done in Appendix \ref{app:derive_flat_v_max_alternative}.
+Equation \eqref{eq:accel_opt_ground} can also be used to derive $\flat{v}_{\max}$ from \eqref{eq:flat_v_max}, done in Appendix \ref{app:derive_flat_v_max_alternative}.
 
 
 \subsection{Swimming and flying}
@@ -429,34 +568,36 @@ After friction is applied, the current velocity vector becomes
 \vec{v}_f &=
 \begin{pmatrix}
 v_{fx} \\ v_{fy} \\ v_{fz}
-\end{pmatrix} = \norm*{\vec{v}_f} \uvec{v} = (1-cT)\vec{v},
+\end{pmatrix} = \norm*{\vec{v}_f} \uvec{v} = (1 - \tilde{f}T)\vec{v},
 \end{align*}
 with a magnitude
 \begin{align*}
 %\label{eq:vf}
-\norm*{\vec{v}_f} &= \sqrt{\vec{v}_f^T \vec{v}_f} = \sqrt{v_{fx}^2 + v_{fy}^2 + v_{fz}^2} = v_f = (1-cT)v,
+\norm*{\vec{v}_f} &= \sqrt{\vec{v}_f^T \vec{v}_f} = \sqrt{v_{fx}^2 + v_{fy}^2 + v_{fz}^2} = v_f = (1 - \tilde{f}T)v,
 \end{align*}
-with $c = 3$ the friction factor when using flight (\texttt{pm\_flightfriction}).
+with $f = 3$ the friction factor when using flight (\texttt{pm\_flightfriction}).
 
+To simplify the equations, albeit a limitation, use \eqref{eq:fm_rm_um} but assume roll $\sigma = 0$.
 \begin{align*}
-\vec{\fmove} &= \norm{\vec{\fmove}} \uvec{\fmove} = \fmove
+\tvec{\fmove} &= \norm{\tvec{\fmove}} \tuvec*{\fmove} = \fmove
 \begin{pmatrix}
 \cos\rho\cos\gamma \\ \cos\rho\sin\gamma \\ -\sin\rho
 \end{pmatrix},\\
 %
-\vec{\rmove} &= \norm{\vec{\rmove}} \uvec{\rmove} = \rmove
+\tvec{\rmove} &= \norm{\tvec{\rmove}} \tuvec*{\rmove} = \rmove
 \begin{pmatrix}
 \hphantom{-}\sin\gamma \\ -\cos\gamma \\ 0
 \end{pmatrix},\\
 %
-\vec{\umove} &= \norm{\vec{\umove}} \uvec{\umove} = \umove
+\tvec{\umove} &= \norm{\tvec{\umove}} \tuvec*{\umove} = \umove
 \begin{pmatrix}
 \sin\rho\cos\gamma \\ \sin\rho\sin\gamma \\ \cos\rho
-\end{pmatrix},
+\end{pmatrix}.
 \end{align*}
 
+When swimming or flying, wishvel is defined as
 \begin{align*}
-\texttt{wishvel} &= \vec{\fmove} + \vec{\rmove} + \umove
+\texttt{wishvel} &= \tvec{\fmove} + \tvec{\rmove} + \umove
 \begin{pmatrix}
 0\\0\\1
 \end{pmatrix} =
@@ -465,7 +606,7 @@ with $c = 3$ the friction factor when using flight (\texttt{pm\_flightfriction})
 \fmove \cos\rho\sin\gamma - \rmove \cos\gamma\\
 -\fmove \sin\rho + \umove
 \end{pmatrix},\\
-\vec{\fmove} + \vec{\rmove} + \vec{\umove} &=
+\tvec{\fmove} + \tvec{\rmove} + \tvec{\umove} &=
 \begin{pmatrix}
 (\fmove \cos\rho + \umove \sin\rho)\cos\gamma + \rmove \sin\gamma\\
 (\fmove \cos\rho + \umove \sin\rho)\sin\gamma - \rmove \cos\gamma\\
@@ -480,7 +621,7 @@ with $c = 3$ the friction factor when using flight (\texttt{pm\_flightfriction})
 \end{align*}
 \begin{align*}
 \norm{\texttt{wishvel}} &= \sqrt{(\fmove \cos\rho)^2 + \rmove^2 + (-\fmove \sin\rho + \umove)^2} = \sqrt{\fmove^2 + \rmove^2 + \umove^2  - 2\fmove\umove\sin\rho},\\
-\norm{\vec{\fmove} + \vec{\rmove} + \vec{\umove}} &= \sqrt{(\fmove \cos\rho + \umove \sin\rho)^2 + \rmove^2 + (-\fmove \sin\rho + \umove \cos\rho)^2} = \sqrt{\fmove^2 + \rmove^2 + \umove^2} = \norm{\vec{\cmd}},
+\norm{\tvec{\fmove} + \tvec{\rmove} + \tvec{\umove}} &= \sqrt{(\fmove \cos\rho + \umove \sin\rho)^2 + \rmove^2 + (-\fmove \sin\rho + \umove \cos\rho)^2} = \sqrt{\fmove^2 + \rmove^2 + \umove^2} = \norm{\tvec{\cmd}},
 \end{align*}
 Using the law of cosines $\fumove^2 = \fmove^2 + \umove^2 - 2\fmove\umove\cos\left(\frac{\pi}{2} - \rho \right)$ and
 \begin{align*}
@@ -494,7 +635,7 @@ Using the law of cosines $\fumove^2 = \fmove^2 + \umove^2 - 2\fmove\umove\cos\le
 \fmove \cos\rho\sin\gamma - \rmove \cos\gamma\\
 -\fmove \sin\rho + \umove
 \end{pmatrix},
-%\frac{\vec{\fmove} + \vec{\rmove} + \vec{\umove}}{\norm{\vec{\fmove} + \vec{\rmove} + \vec{\umove}}} &=
+%\frac{\tvec{\fmove} + \tvec{\rmove} + \tvec{\umove}}{\norm{\tvec{\fmove} + \tvec{\rmove} + \tvec{\umove}}} &=
 %%\frac{1}{\flat{\cmd} \flat{v}}
 %%\begin{pmatrix}
 %%(\hphantom{-}\fmove v_x + \rmove v_y)\cos\delta + (\rmove v_x - \fmove v_y)\sin\delta\\
@@ -510,24 +651,25 @@ Using the law of cosines $\fumove^2 = \fmove^2 + \umove^2 - 2\fmove\umove\cos\le
 \end{align*}
 
 \begin{align*}
-\texttt{wishspeed} &= s = 320\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\norm{\texttt{wishvel}}}{\norm{\vec{\cmd}}} = 320\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\sqrt{\fmove^2 + \rmove^2 + \umove^2  - 2\fmove\umove\sin\rho}}{\norm{\vec{\cmd}}},\\
-\norm{\vec{a}} &= a = sAT = 320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\norm{\texttt{wishvel}}}{\norm{\vec{\cmd}}},
+\texttt{wishspeed} &= s = 320\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\norm{\texttt{wishvel}}}{\norm{\tvec{\cmd}}} = 320\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\sqrt{\fmove^2 + \rmove^2 + \umove^2  - 2\fmove\umove\sin\rho}}{\norm{\tvec{\cmd}}},\\
+\norm{\vec{a}} &= a = sAT = 320AT\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\norm{\texttt{wishvel}}}{\norm{\tvec{\cmd}}},
 \end{align*}
 with $A = 8$ (\texttt{pm\_flyaccelerate}).
 
 However, in order to gain the full acceleration, $a$, we need the angle to be a bit larger, so we avoid the special case mentioned above. Therefore the optimal angle is the smallest angle at which we receive the full acceleration, $a$, which is given by
 \begin{align*}
 s(1-AT) = \vec{v}_f^T \uvec{a},\\
-320\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd}(1-AT) &= v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove)
+320\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd}(1-AT) &= v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove)
 \end{align*}
 
+With $S$ and $A$ distinct from \texttt{stopspeed} and \texttt{pm\_accelerate},
 \begin{align}
 \label{eq:ABCD}
 A + B\sin\rho + C\sin\gamma + D\cos\rho\cos\gamma = 0,
 \end{align}
 
 \begin{align*}
-S &= \frac{320\norm{\vec{\cmd}}_{\infty}(1-AT)}{127},\\
+S &= \frac{320\norm{\tvec{\cmd}}_{\infty}(1-AT)}{127},\\
 A &= S\cmd         - v_{fz}\umove,\\
 B &= -\frac{2S}{\cmd}\fmove\umove + v_{fz}\fmove,\\
 C &= -v_{fx}\rmove,\\
@@ -549,21 +691,21 @@ tmp2(tmp2 < -pi) = tmp2(tmp2 < -pi) + 2*pi;
 \norm*{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= \norm{\vec{v}}^2,\\
 2\vec{a}^T \vec{v}_f + \vec{a}^T \vec{a} &= \vec{v}^T \vec{v} - \vec{v}_f^T \vec{v}_f,\\
 2\norm{\vec{a}} \vec{v}_f^T \uvec{a} + \norm{\vec{a}}^2 &= \norm{\vec{v}}^2 - \norm*{\vec{v}_f}^2,\\
-320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) ) +\\
-320^2 A^2 T^2\frac{\norm{\vec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd^2} &= v_x^2 + v_z^2 - v_{fx}^2 - v_{fz}^2,
+320AT\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) ) +\\
+320^2 A^2 T^2\frac{\norm{\tvec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd^2} &= v_x^2 + v_z^2 - v_{fx}^2 - v_{fz}^2,
 \end{align*}
 
 \begin{align*}
-S' &= \frac{320AT\norm{\vec{\cmd}}_{\infty}}{127} = \frac{320\norm{\vec{\cmd}}_{\infty}}{127} - S,\\
-S &= \frac{320\norm{\vec{\cmd}}_{\infty}}{127} - S',\\
+S' &= \frac{320AT\norm{\tvec{\cmd}}_{\infty}}{127} = \frac{320\norm{\tvec{\cmd}}_{\infty}}{127} - S,\\
+S &= \frac{320\norm{\tvec{\cmd}}_{\infty}}{127} - S',\\
 A' &= \hphantom{-}\frac{2S'}{\cmd}v_{fz}\umove + S'^2 - v_x^2 - v_z^2 + v_{fx}^2 + v_{fz}^2 = A - S\cmd + \left(\frac{2S'}{\cmd} + 1\right)v_{fz}\umove + S'^2 - v_x^2 - v_z^2 + v_{fx}^2 + v_{fz}^2,\\
 B' &= -\frac{2S'}{\cmd}v_{fz}\fmove - \frac{2S'^2}{\cmd^2}\fmove\umove,\\
 C' &= \hphantom{-}\frac{2S'}{\cmd}v_{fx}\rmove = -\frac{2S'}{\cmd}C,\\
 D' &= \hphantom{-}\frac{2S'}{\cmd}v_{fx}\fmove = -\frac{2S'}{\cmd}D,
 \end{align*}
 \begin{align*}
-S' &= \frac{320AT\norm{\vec{\cmd}}_{\infty}}{127},\\
-S &= \frac{320\norm{\vec{\cmd}}_{\infty}}{127} - S',\\
+S' &= \frac{320AT\norm{\tvec{\cmd}}_{\infty}}{127},\\
+S &= \frac{320\norm{\tvec{\cmd}}_{\infty}}{127} - S',\\
 -\frac{2S'}{\cmd}\\
 A' &= -v_{fz}\umove - \frac{\cmd}{2S'}(S'^2 - v_x^2 - v_z^2 + v_{fx}^2 + v_{fz}^2),\\
 B' &= -\frac{S'}{\cmd}\fmove\umove + v_{fz}\fmove,\\
@@ -572,14 +714,14 @@ D' &= -v_{fx}\fmove,
 \end{align*}
 
 \begin{align*}
-\frac{d}{d\rho}\norm*{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= 0,\\
-\frac{d}{d\rho}2\vec{a}^T \vec{v}_f + \frac{d}{d\rho}\vec{a}^T \vec{a} &= 0,\\
-\frac{d}{d\rho}2\norm{\vec{a}} \vec{v}_f^T \uvec{a} + \frac{d}{d\rho}\norm{\vec{a}}^2 &= 0,\\
-\frac{d}{d\rho}320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) ) +\\
-\frac{d}{d\rho}320^2 A^2 T^2\frac{\norm{\vec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd^2} &= 0,\\
+\frac{\diff}{\diff\rho}\norm*{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= 0,\\
+\frac{\diff}{\diff\rho}2\vec{a}^T \vec{v}_f + \frac{\diff}{\diff\rho}\vec{a}^T \vec{a} &= 0,\\
+\frac{\diff}{\diff\rho}2\norm{\vec{a}} \vec{v}_f^T \uvec{a} + \frac{\diff}{\diff\rho}\norm{\vec{a}}^2 &= 0,\\
+\frac{\diff}{\diff\rho}320AT\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) ) +\\
+\frac{\diff}{\diff\rho}320^2 A^2 T^2\frac{\norm{\tvec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd^2} &= 0,\\
 %
-\frac{d}{d\rho}320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}\fmove \cos\rho\cos\gamma - v_{fz}\fmove \sin\rho ) - \frac{d}{d\rho}320^2 A^2 T^2\frac{\norm{\vec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{2\fmove\umove}{\cmd^2}\sin\rho &= 0,\\
--320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}\fmove \sin\rho\cos\gamma + v_{fz}\fmove \cos\rho ) - 320^2 A^2 T^2\frac{\norm{\vec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{2\fmove\umove}{\cmd^2}\cos\rho &= 0,
+\frac{\diff}{\diff\rho}320AT\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}\fmove \cos\rho\cos\gamma - v_{fz}\fmove \sin\rho ) - \frac{\diff}{\diff\rho}320^2 A^2 T^2\frac{\norm{\tvec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{2\fmove\umove}{\cmd^2}\sin\rho &= 0,\\
+-320AT\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}\fmove \sin\rho\cos\gamma + v_{fz}\fmove \cos\rho ) - 320^2 A^2 T^2\frac{\norm{\tvec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{2\fmove\umove}{\cmd^2}\cos\rho &= 0,
 \end{align*}
 
 \begin{align*}
@@ -587,20 +729,20 @@ A\sin\rho\cos\gamma + B\cos\rho &= 0,
 \end{align*}
 
 \begin{align*}
-S &= \frac{320AT\norm{\vec{\cmd}}_{\infty}}{127},\\
+S &= \frac{320AT\norm{\tvec{\cmd}}_{\infty}}{127},\\
 A &= -\frac{2S}{\cmd}v_{fx}\fmove,\\
 B &= -\frac{2S}{\cmd}v_{fz}\fmove - \frac{2S^2}{\cmd^2}\fmove\umove,
 \end{align*}
 
 \begin{align*}
-\frac{d}{d\rho}\norm*{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= 0,\\
-\frac{d}{d\rho}2\vec{a}^T \vec{v}_f + \frac{d}{d\rho}\vec{a}^T \vec{a} &= 0,\\
-\frac{d}{d\rho}2\norm{\vec{a}} \vec{v}_f^T \uvec{a} + \frac{d}{d\rho}\norm{\vec{a}}^2 &= 0,\\
-\frac{d}{d\gamma}320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) ) +\\
-\frac{d}{d\gamma}320^2 A^2 T^2\frac{\norm{\vec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd^2} &= 0,\\
+\frac{\diff}{\diff\rho}\norm*{\vec{v}_f + \norm{\vec{a}}\uvec{a}}^2 &= 0,\\
+\frac{\diff}{\diff\rho}2\vec{a}^T \vec{v}_f + \frac{\diff}{\diff\rho}\vec{a}^T \vec{a} &= 0,\\
+\frac{\diff}{\diff\rho}2\norm{\vec{a}} \vec{v}_f^T \uvec{a} + \frac{\diff}{\diff\rho}\norm{\vec{a}}^2 &= 0,\\
+\frac{\diff}{\diff\gamma}320AT\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) ) +\\
+\frac{\diff}{\diff\gamma}320^2 A^2 T^2\frac{\norm{\tvec{\cmd}}^2_{\infty}}{127^2\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd^2} &= 0,\\
 %
-\frac{d}{d\gamma}320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma)) &= 0,\\
--320AT\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\sin\gamma - \rmove \cos\gamma)) &= 0,
+\frac{\diff}{\diff\gamma}320AT\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma)) &= 0,\\
+-320AT\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{1}{\cmd}2 (v_{fx}(\fmove \cos\rho\sin\gamma - \rmove \cos\gamma)) &= 0,
 \end{align*}
 
 \begin{align*}
@@ -608,7 +750,7 @@ A\cos\rho\sin\gamma + B\cos\gamma &= 0,
 \end{align*}
 
 \begin{align*}
-S &= \frac{320AT\norm{\vec{\cmd}}_{\infty}}{127},\\
+S &= \frac{320AT\norm{\tvec{\cmd}}_{\infty}}{127},\\
 A &= -\frac{2S}{\cmd}v_{fx}\fmove,\\
 B &= \hphantom{-}\frac{2S}{\cmd}v_{fx}\rmove,
 \end{align*}
@@ -621,11 +763,11 @@ C\cos\gamma - D\cos\rho\sin\gamma &= 0,
 Grey area:
 \begin{align*}
 s = \vec{v}_f^T \uvec{a},\\
-320\frac{\norm{\vec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd} &= v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove)
+320\frac{\norm{\tvec{\cmd}}_{\infty}}{127\hphantom{_{\infty}}} \frac{\cmd^2  - 2\fmove\umove\sin\rho}{\cmd} &= v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove)
 \end{align*}
 \eqref{eq:ABCD}
 \begin{align*}
-S &= \frac{320\norm{\vec{\cmd}}_{\infty}}{127},\\
+S &= \frac{320\norm{\tvec{\cmd}}_{\infty}}{127},\\
 A &= S\cmd         - v_{fz}\umove,\\
 B &= -\frac{2S}{\cmd}\fmove\umove + v_{fz}\fmove,\\
 C &= -v_{fx}\rmove,\\
@@ -640,6 +782,6 @@ D &= -v_{fx}\fmove,
 2\left(s - \vec{v}_f^T \uvec{a} \right)\uvec{a}^T \vec{v}_f + \left(s - \vec{v}_f^T \uvec{a} \right)^2\uvec{a}^T\uvec{a} &= \vec{v}^T \vec{v} - \vec{v}_f^T \vec{v}_f,\\
 2\left(s - \vec{v}_f^T \uvec{a} \right)\vec{v}_f^T \uvec{a} + \left(s - \vec{v}_f^T \uvec{a} \right)^2 &= \norm{\vec{v}}^2 - \norm*{\vec{v}_f}^2,\\
 s^2 - \left(\vec{v}_f^T \uvec{a}\right)^2 &= v^2 - v_f^2,\\
-320^2\frac{\norm{\vec{\cmd}}_{\infty}^2}{127^2\hphantom{_{\infty}}} \frac{(\cmd^2  - 2\fmove\umove\sin\rho)^2}{\cmd^2} -\\ \left(v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) \right)^2 &= \left(v_x^2 + v_z^2 - v_{fx}^2 - v_{fz}^2 \right) \left(\cmd^2  - 2\fmove\umove\sin\rho \right),
+320^2\frac{\norm{\tvec{\cmd}}_{\infty}^2}{127^2\hphantom{_{\infty}}} \frac{(\cmd^2  - 2\fmove\umove\sin\rho)^2}{\cmd^2} -\\ \left(v_{fx}(\fmove \cos\rho\cos\gamma + \rmove \sin\gamma) + v_{fz}(-\fmove \sin\rho + \umove) \right)^2 &= \left(v_x^2 + v_z^2 - v_{fx}^2 - v_{fz}^2 \right) \left(\cmd^2  - 2\fmove\umove\sin\rho \right),
 \end{align*}
 which is too complex to calculate efficiently.

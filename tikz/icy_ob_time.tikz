@@ -1,0 +1,52 @@
+\begin{tikzpicture}[%
+holdot/.style={color=mycolor0,fill=white,mark size=1pt,only marks,mark=*}%
+]
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+xmin=0,
+xmax=50,
+xtick={0,10,20,30,40,50},
+minor x tick num=4,
+xlabel={Velocity [\unit{ups}]},
+ymin=0,
+ymax=40,
+ytick={0,10,20,30,40},
+minor y tick num=4,
+ylabel={Time [\unit{s}]},
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white}
+]
+
+\addplot[domain=0:50,samples=500, mycolor1] {(0.25/0.0064) * ((x^2 + 0.00004096) / (x^2 + 40.96))^0.5};
+\addplot[domain=0:50,samples=500, mycolor5] {(0.144/0.0064) * ((x^2 + 0.00004096) / (x^2 + 40.96))^0.5};
+
+% Open dot
+\addplot[holdot] coordinates{(0,0)};
+
+% Dashed lines
+\addplot [color=mycolor0,dashed, forget plot]
+table[row sep=crcr]{%
+	10.5921449899	33.4333979398\\
+	10.5921449899	0\\
+};
+\addplot [color=mycolor0,dashed, forget plot]
+table[row sep=crcr]{%
+	10.5921449899	33.4333979398\\
+	0	33.4333979398\\
+};
+\addplot [color=mycolor0,dashed, forget plot]
+table[row sep=crcr]{%
+	10.5921449899	19.2576372133\\
+	0	19.2576372133\\
+};
+
+\end{axis}
+\end{tikzpicture}%
+
