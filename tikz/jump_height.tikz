@@ -1,0 +1,150 @@
+\begin{tikzpicture}[%
+dot/.style={circle,fill=mycolor1,inner sep=0.7pt}%
+]
+
+\definecolor{mycolor5lighter}{rgb}{0.73300,0.83700,0.59400}%
+
+\begin{axis}[%
+width=\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+xmin=0,
+xmax=0.016,
+xtick={0,0.002,0.004,0.006,0.008,0.01,0.012,0.014,0.016},
+minor x tick num=1,
+xticklabel style={
+	/pgf/number format/fixed,
+	/pgf/number format/precision=3
+},
+scaled x ticks=false,
+xlabel={$T$ [\unit{s}]},
+ymin=20,
+ymax=70,
+ytick={20,30,40,50,60,70},
+minor y tick num=4,
+ylabel={Jump height [\unit{units}]},
+set layers,
+axis on top,
+every outer x axis line/.append style={white!40!black},
+every x tick label/.append style={font=\color{white!40!black}},
+every outer y axis line/.append style={white!40!black},
+every y tick label/.append style={font=\color{white!40!black}},
+axis background/.style={fill=white},
+]
+\shade[
+	left color=mycolor5lighter,
+	right color=white
+] (axis cs:0,36.477) -- (axis cs:0,54.594) -- (axis cs:0.000125,54.594) -- (axis cs:0.000125,36.477);
+
+\addplot [color=mycolor0,dashed, forget plot]
+table[row sep=crcr]{%
+	0.001	36.477\\
+	0.001	20\\
+};
+\addplot [color=mycolor0,dashed, forget plot]
+table[row sep=crcr]{%
+	0.001	36.477\\
+	0	36.477\\
+};
+\addplot [color=mycolor0,dashed, forget plot]
+table[row sep=crcr]{%
+	0.003	54.594\\
+	0.003	20\\
+};
+\addplot [color=mycolor0,dashed, forget plot]
+table[row sep=crcr]{%
+	0.003	54.594\\
+	0	54.594\\
+};
+\addplot [color=mycolor0,dashed, forget plot]
+table[row sep=crcr]{%
+	0.008	48.528\\
+	0.008	20\\
+};
+\addplot [color=mycolor0,dashed, forget plot]
+table[row sep=crcr]{%
+	0.008	48.528\\
+	0	48.528\\
+};
+
+% Coordinates
+\coordinate (L1) at (axis cs:0.000625,22.8234375);
+\coordinate (L2) at (axis cs:0.001875,34.23515625);
+\coordinate (L3) at (axis cs:0.003125,38.0390625);
+\coordinate (L4) at (axis cs:0.004375,39.939375);
+\coordinate (L5) at (axis cs:0.005625,41.0821875);
+\coordinate (L6) at (axis cs:0.006875,41.84296875);
+\coordinate (L7) at (axis cs:0.008125,42.38203125);
+\coordinate (L8) at (axis cs:0.009375,42.7921875);
+\coordinate (L9) at (axis cs:0.010625,43.1109375);
+\coordinate (L10) at (axis cs:0.011875,43.36453125);
+\coordinate (L11) at (axis cs:0.013125,43.55859375);
+\coordinate (L12) at (axis cs:0.014375,43.72515625);
+\coordinate (L13) at (axis cs:0.015625,43.88671875);
+\coordinate (U1) at (axis cs:0.001875,68.2171875);
+\coordinate (U2) at (axis cs:0.003125,56.84765625);
+\coordinate (U3) at (axis cs:0.004375,53.0578125);
+\coordinate (U4) at (axis cs:0.005625,51.16078125);
+\coordinate (U5) at (axis cs:0.006875,50.0259375);
+\coordinate (U6) at (axis cs:0.008125,49.26796875);
+\coordinate (U7) at (axis cs:0.009375,48.71953125);
+\coordinate (U8) at (axis cs:0.010625,48.3171875);
+\coordinate (U9) at (axis cs:0.011875,48.0046875);
+\coordinate (U10) at (axis cs:0.013125,47.75203125);
+\coordinate (U11) at (axis cs:0.014375,47.52734375);
+\coordinate (U12) at (axis cs:0.015625,47.3515625);
+\coordinate (U13) at (axis cs:0.016875,47.22046875);
+
+% Graph lines
+\draw [mycolor1] (L1) -- (U1);
+\draw [mycolor1] (L2) -- (U2);
+\draw [mycolor1] (L3) -- (U3);
+\draw [mycolor1] (L4) -- (U4);
+\draw [mycolor1] (L5) -- (U5);
+\draw [mycolor1] (L6) -- (U6);
+\draw [mycolor1] (L7) -- (U7);
+\draw [mycolor1] (L8) -- (U8);
+\draw [mycolor1] (L9) -- (U9);
+\draw [mycolor1] (L10) -- (U10);
+\draw [mycolor1] (L11) -- (U11);
+\draw [mycolor1] (L12) -- (U12);
+\draw [mycolor1] (L13) -- (U13);
+
+% Dotted lines
+\draw [dotted,mycolor1] (L2) -- (U1);
+\draw [dotted,mycolor1] (L3) -- (U2);
+\draw [dotted,mycolor1] (L4) -- (U3);
+\draw [dotted,mycolor1] (L5) -- (U4);
+\draw [dotted,mycolor1] (L6) -- (U5);
+\draw [dotted,mycolor1] (L7) -- (U6);
+\draw [dotted,mycolor1] (L8) -- (U7);
+\draw [dotted,mycolor1] (L9) -- (U8);
+\draw [dotted,mycolor1] (L10) -- (U9);
+\draw [dotted,mycolor1] (L11) -- (U10);
+\draw [dotted,mycolor1] (L12) -- (U11);
+\draw [dotted,mycolor1] (L13) -- (U12);
+
+% doesn't work
+%\addplot [color=mycolor1,fill=white,only marks,mark=*] coordinates {(U1)(U2)(U3)(U4)(U5)(U6)(U7)(U8)(U9)(U10)(U11)(U12)(U13)};
+%\addplot [color=mycolor1,only marks,mark=*] coordinates {(L1)(L2)(L3)(L4)(L5)(L6)(L7)(L8)(L9)(L10)(L11)(L12)(L13)};
+
+% Points
+\node at (axis cs:0.001,36.477) [dot]{};
+\node at (axis cs:0.002,36.504) [dot]{};
+\node at (axis cs:0.003,54.594) [dot]{};
+\node at (axis cs:0.004,48.564) [dot]{};
+\node at (axis cs:0.005,45.56) [dot]{};
+\node at (axis cs:0.006,43.7724) [dot]{};
+\node at (axis cs:0.007,42.588) [dot]{};
+\node at (axis cs:0.008,48.528) [dot]{};
+\node at (axis cs:0.009,46.8234) [dot]{};
+\node at (axis cs:0.01,45.56) [dot]{};
+\node at (axis cs:0.011,44.583) [dot]{};
+\node at (axis cs:0.012,43.8048) [dot]{};
+\node at (axis cs:0.013,47.3148) [dot]{};
+\node at (axis cs:0.014,46.34) [dot]{};
+\node at (axis cs:0.015,45.54) [dot]{};
+
+\end{axis}
+\end{tikzpicture}%

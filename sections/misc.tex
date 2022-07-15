@@ -5,75 +5,13 @@ Features/Phenomenon which didn't fit into any other category.
 
 \subsection{Influence of movement keys}
 \label{sec:movementkeys}
-\begin{align*}
-\vec{\cmd} =
-\begin{pmatrix}
-\fmove \\ \rmove \\ \umove
-\end{pmatrix}, \qquad \vec{\flat{\cmd}} =
-\begin{pmatrix}
-\fmove \\ \rmove \\ 0
-\end{pmatrix},
-\end{align*}
-The direction of acceleration $\uvec{\flat{a}}$ \eqref{eq:accel_direction} can be chosen by using your mouse and the movement keys. Relative to $\nu = \atan\left(\frac{v_y}{v_x}\right)$
-\begin{align*}
-\uvec{\flat{v}} = \frac{1}{\flat{v}}
-\begin{pmatrix}
-v_x \\ v_y \\ 0
-\end{pmatrix}
-\end{align*}
-
-\begin{figure}[H]
-	\centering
-	\begin{subfigure}[t]{.5\textwidth}
-		\centering
-		\setlength\figureheight{5.5cm}
-		\setlength\figurewidth{5.5cm}
-		\includetikz{tikz/cmd}
-		\caption{}
-	\end{subfigure}%
-	\begin{subfigure}[t]{.5\textwidth}
-		\centering
-		\setlength\figureheight{5.5cm}
-		\setlength\figurewidth{5.5cm}
-		\includetikz{tikz/cmd3d} % TODO: merge cmd3d_2
-		\caption{}
-	\end{subfigure}%
-	\caption{The current velocity $\vec{\flat{v}}_f$ (\yellowarrow), the acceleration $\vec{a}$ (\orangearrow) and the resulting new velocity $\vec{\flat{r}}$ (\bluearrow). (a) is the top view of (b). key plane (\lightorangearea). $\theta = \atan\sqrt{2}$}
-	\label{fig:cmd}
-\end{figure}
-
-% TODO: make projections of 2 vs 1 key combinations
-
-where $\gamma = \delta + \nu$ represents the yaw angle.
-
-Appendix \ref{app:angle_vectors}
-
-The current velocity vector is defined as
-\begin{align*}
-\uvec{\fmove} &=
-\begin{pmatrix}
-	\cos\rho\cos\gamma\\
-	\cos\rho\sin\gamma\\
-	-\sin\rho
-\end{pmatrix},\\
-\uvec{\rmove} &=
-\begin{pmatrix}
-	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
-	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
-	-\sin\sigma\cos\rho
-\end{pmatrix},\\
-\uvec{\umove} &=
-\begin{pmatrix}
-	\cos\sigma\sin\rho\cos\gamma + \sin\sigma\sin\gamma\\
-	\cos\sigma\sin\rho\sin\gamma - \sin\sigma\cos\gamma\\
-	\cos\sigma\cos\rho
-\end{pmatrix},
-\end{align*}
-
+In most instances where $\fmove$ and $\rmove$ are involved, current velocity is first projected down onto the $xy$-plane and normalized.
 \codeFromFile{firstline=621,lastline=625,gobble=1}{code/game/bg_pmove.c}
 
+Using \eqref{eq:cmd} and \eqref{eq:fm_rm_um},
+
 \begin{align*}
-\uvec{\flat{\fmove}} &=
+\tuvec*{\flat{\fmove}} &=
 \begin{pmatrix}
 	\cos\rho\cos\gamma\\
 	\cos\rho\sin\gamma\\
@@ -84,21 +22,28 @@ The current velocity vector is defined as
 	\sin\gamma\\
 	0
 \end{pmatrix},\\
-\uvec{\flat{\rmove}} &=
+\tuvec*{\flat{\rmove}} &=
 \begin{pmatrix}
 	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
 	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
 	0
-\end{pmatrix} \frac{1}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
+\end{pmatrix} \frac{1}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}.
+\end{align*}
+
+Finding the dot product,
+\begin{align*}
+\tuvec*{\flat{\fmove}} \cdot \tuvec*{\flat{\rmove}} &= \tuvec*{\flat{\fmove}}^T \tuvec*{\flat{\rmove}} = \frac{-\sin\sigma\sin\rho\cos^2\gamma + \cos\sigma\sin\gamma\cos\gamma - \sin\sigma\sin\rho\sin^2\gamma - \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}\\
+&= \frac{-\sin\sigma\sin\rho}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}.
+\end{align*}
+
+When in air or on flat ground, wishvel is equated as
+\begin{align*}
+\texttt{wishvel} &= \fmove \tuvec*{\flat{\fmove}} + \rmove \tuvec*{\flat{\rmove}}\\
+&= \tvec{\flat{\fmove}} + \tvec{\flat{\rmove}}
 \end{align*}
 
 \begin{align*}
-\uvec{\flat{\fmove}}^T \uvec{\flat{\rmove}} &= \frac{-\sin\sigma\sin\rho\cos^2\gamma + \cos\sigma\sin\gamma\cos\gamma - \sin\sigma\sin\rho\sin^2\gamma - \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}\\
-&= \frac{-\sin\sigma\sin\rho}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}}
-\end{align*}
-
-\begin{align*}
-\vec{\flat{\fmove}} + \vec{\flat{\rmove}} = \texttt{wishvel} &= \fmove
+\texttt{wishvel} &= \fmove
 \begin{pmatrix}
 	\cos\gamma\\
 	\sin\gamma\\
@@ -112,7 +57,7 @@ The current velocity vector is defined as
 \end{align*}
 
 \begin{align*}
-\norm*{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \norm{\texttt{wishvel}}^2 = &\fmove^2 \cos^2\gamma + \rmove^2 \frac{\sin^2\sigma\sin^2\rho\cos^2\gamma + \cos^2\sigma\sin^2\gamma - \sin\sigma\cos\sigma\sin\rho\sin\gamma\cos\gamma}{\sin^2\sigma\sin^2\rho + \cos^2\sigma} +\\
+\norm{\texttt{wishvel}}^2 = &\fmove^2 \cos^2\gamma + \rmove^2 \frac{\sin^2\sigma\sin^2\rho\cos^2\gamma + \cos^2\sigma\sin^2\gamma - \sin\sigma\cos\sigma\sin\rho\sin\gamma\cos\gamma}{\sin^2\sigma\sin^2\rho + \cos^2\sigma} +\\
 &\fmove^2 \sin^2\gamma + \rmove^2 \frac{\sin^2\sigma\sin^2\rho\sin^2\gamma + \cos^2\sigma\cos^2\gamma + \sin\sigma\cos\sigma\sin\rho\sin\gamma\cos\gamma}{\sin^2\sigma\sin^2\rho + \cos^2\sigma} +\\
 &2\fmove\rmove\frac{-\sin\sigma\sin\rho\cos^2\gamma + \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}} +\\
 &2\fmove\rmove\frac{-\sin\sigma\sin\rho\sin^2\gamma - \cos\sigma\sin\gamma\cos\gamma}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},\\
@@ -120,47 +65,47 @@ The current velocity vector is defined as
 = &\fmove^2 + \rmove^2 + 2\fmove\rmove\frac{-\sin\sigma\sin\rho}{\sqrt{\sin^2\sigma\sin^2\rho + \cos^2\sigma}},
 \end{align*}
 
-Derivative
+which has the derivative
 \begin{align*}
-\frac{\mathrm{d}}{\mathrm{d}\rho} \norm*{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \frac{\mathrm{d}}{\mathrm{d}\rho} \norm{\texttt{wishvel}}^2 = 2\fmove\rmove\frac{-\sin\sigma\cos^2\sigma\cos\rho}{\left( \sin^2\sigma\sin^2\rho + \cos^2\sigma \right)^{3/2}},
+\frac{\diff}{\diff\rho} \norm{\texttt{wishvel}}^2 = 2\fmove\rmove\frac{-\sin\sigma\cos^2\sigma\cos\rho}{\left( \sin^2\sigma\sin^2\rho + \cos^2\sigma \right)^{3/2}}.
 \end{align*}
 This is $0$ when
 \[
 \begin{cases}
-	\rho = \hphantom{-}\frac{\pi}{2} + 2k\pi, &k \in \symbb{N},\\
+	\rho = \hphantom{-}\frac{\pi}{2} + 2k\pi, &k \in \symbb{N}\\
 	\rho = -\frac{\pi}{2} + 2k\pi, &k \in \symbb{N}.
 \end{cases}
 \]
 
 With optimal $\rho$ filled in, we get
 \begin{align*}
-\uvec{\flat{\fmove}}^T \uvec{\flat{\rmove}} &= -\sin\sigma,\\
+\tuvec*{\flat{\fmove}}^T \tuvec*{\flat{\rmove}} &= -\sin\sigma,\\
 &= \sin\sigma,
 \end{align*}
 \begin{align*}
-\norm*{\vec{\flat{\fmove}} + \vec{\flat{\rmove}}}^2 = \norm{\texttt{wishvel}}^2 &= \fmove^2 + \rmove^2 - 2\fmove\rmove\sin\sigma,\\
-&= \fmove^2 + \rmove^2 + 2\fmove\rmove\sin\sigma,
+\norm{\texttt{wishvel}}^2 &= \fmove^2 + \rmove^2 - 2\fmove\rmove\sin\sigma,\\
+&= \fmove^2 + \rmove^2 + 2\fmove\rmove\sin\sigma.
 \end{align*}
 
-Appendix \ref{app:cmd_scale}
-
-\begin{align*}
-\texttt{scale} = \frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}},
-\end{align*}
-
+Appendix \ref{app:cmd_scale} gives rise to the formulae
+\begin{align}
+\label{eq:scale}
+\texttt{scale} = \frac{\texttt{g\_speed}\norm{\tvec{\cmd}}_{\infty}}{127\norm{\tvec{\cmd}}},
+\end{align}
 \begin{align*}
 \texttt{wishspeed} &= \texttt{scale} \norm{\texttt{wishvel}} =
-\frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}} \norm{\texttt{wishvel}},\\
-\norm*{\vec{\flat{a}}} &= \flat{a} = AT \texttt{wishspeed} = AT\frac{\texttt{speed}\norm{\vec{\cmd}}_{\infty}}{127\norm{\vec{\cmd}}} \norm{\texttt{wishvel}},
+\frac{\texttt{g\_speed}\norm{\tvec{\cmd}}_{\infty}}{127\norm{\tvec{\cmd}}} \norm{\texttt{wishvel}},\\
+\norm*{\vec{\flat{a}}} &= \flat{a} = AT \texttt{wishspeed} = AT\frac{\texttt{g\_speed}\norm{\tvec{\cmd}}_{\infty}}{127\norm{\tvec{\cmd}}} \norm{\texttt{wishvel}}.
 \end{align*}
-when $\fmove = 127$, $\rmove = 0$ and $\umove = 0$, then $s = 320$ like in the previous section.
+When $\fmove = 127$, $\rmove = 0$ and $\umove = 0$, then $s = 320$ like in the previous sections.\\
+This is also the case when $\fmove = 127$, $\rmove = 127$ and $\umove = 0$.
 
 Air:
 \begin{align}
 \nonumber
 \norm*{\projmat{a} \vec{\flat{v}}_f} + \norm*{\vec{\flat{a}}} &= s \norm*{\uvec{\flat{a}}},\\
 \nonumber
-\vec{v}_{f}^T\texttt{wishdir} + \texttt{accel}T\texttt{wishspeed} &= \texttt{wishspeed}\norm{wishdir},\\
+\vec{v}_{f}^T\texttt{wishdir} + \texttt{accel}T\texttt{wishspeed} &= \texttt{wishspeed}\norm{\texttt{wishdir}},\\
 \nonumber
 \norm*{\vec{\flat{v}}_f} \cos{\delta_{\opt}} + \texttt{accel}T\texttt{wishspeed} &= \texttt{wishspeed},\\
 \nonumber
@@ -174,14 +119,21 @@ The strafe keys in CPM do not ever affect upmove. Not true
 
 
 \subsection{Upmove effect on acceleration}
+As mentioned in Section \ref{sec:movementkeys}, upmove has an effect on acceleration while in air.
 \label{sec:upmove}
 \codeFromFile{firstline=615,lastline=634,gobble=1}{code/game/bg_pmove.c}
-From the above code listing, the current velocity is projected down to the $xy$-plane, is normalized, and then a scale factor is applied forming \texttt{wishspeed} ($s$).
-This scale factor is determined by the below code.
-\codeFromFile{firstline=306,lastline=308,gobble=1}{code/game/bg_pmove.c}
+From the above code listing, before acceleration is applied the \texttt{wishspeed} ($s$) is multiplied by a scale factor.
+This scale factor is determined by Appendix \ref{app:cmd_scale}. In combination with the above code, the \texttt{PM\_CmdScale} function results in the player inputs being normalized then projected down onto the $xy$-plane, then the magnitude is multiplied by $320$ (\texttt{g\_speed}).
+From equation \eqref{eq:scale}, in air this produces
+\begin{align}
+\nonumber
+s &= 320\frac{\max(\fmove, \rmove, \umove)}{127\sqrt{\norm*{\tvec{\fmove}}^2 + \norm*{\tvec{\rmove}}^2 + \norm*{\tvec{\umove}}^2}}\sqrt{\norm*{\fmove \tuvec*{\flat{\fmove}}}^2 + \norm*{\rmove \tuvec*{\flat{\rmove}}}^2}\\
+\label{eq:s_in_air}
+&= \frac{320\norm*{\tvec{\flat{\cmd}}}}{\norm*{\tvec{\cmd}}}.
+\end{align}
 Hence upmove increases the denominator of the scale factor, decreasing \texttt{wishspeed}.\\
-If the player is holding 3 movement keys, ($\fmove$, $\rmove$ and $\umove$), this transformation scales it by a factor of $\frac{\sqrt{2}}{\sqrt{3}}$.
-If the player is holding 2 movement keys, ($\fmove$ and $\umove$ or $\rmove$ and $\umove$), the scale factor is $\frac{\sqrt{2}}{2}$.
+If the player is holding 3 movement keys ($\fmove$, $\rmove$ and $\umove$), $s = 320\frac{\sqrt{2}}{\sqrt{3}} = \qty{261.279}{ups}$. This case is demonstrated in Figure \ref{fig:fm_rm_um_angled_view}.\\
+If the player is holding 2 movement keys ($\fmove$ and $\umove$ or $\rmove$ and $\umove$), $s = 320\frac{\sqrt{2}}{2} = \qty{226.274}{ups}$.
 
 Hence, the snap zones will change along with all CGazHUD $\delta$ angles, which explains the altered acceleration while holding moveup or movedown.
 Also, holding 2 movement keys reduces $\texttt{wishspeed}$ moreso than holding 3 movement keys, decreasing acceleration more\footnote{Thus, although insignificant, full-beat VQ3 strafing is superior to half-beat and moreso to invert.}.
@@ -192,7 +144,8 @@ Also, holding 2 movement keys reduces $\texttt{wishspeed}$ moreso than holding 3
 We can define \emph{frame rate dependency} as attributes of the game engine that act differently depending on frame rate,
 and say that an attribute of the game engine has \emph{frame independency} if the time between frames does not need to be equidistant for the physics to act the same.\\
 
-Given that acceleration is impacted directly by frame rate (by $\flat{a} = sAT$), frame rate has a large impact on speed gains from strafing.\\
+Given that acceleration is impacted directly by frame rate (by $\flat{a} = sAT$), frame rate has a large impact on speed gains from strafing.
+
 TODO: frame rate effect on strafing\\
 
 Additionally, $T$ is floored to the nearest millisecond (0.001), giving us proper-T $T_p$, and frames are delayed until $1000T_p$ milliseconds pass.
@@ -201,8 +154,11 @@ For example, with frame rate $\qty{140}{fps}$, $T$ would be floored from $1/140 
 \codeFromFile{firstline=2599,lastline=2625,gobble=1}{code/qcommon/common.c}
 Hence,
 \begin{align*}
-T_p &= \min\left(5, \max\left(0.001, \frac{\floor{1000T}}{1000} \right) \right), &&\text{when running a dedicated server or client of a remote server}\\
-T_p &= \min\left(0.2, \max\left(0.001, \frac{\floor{1000T}}{1000} \right) \right), &&\text{otherwise.}
+T_p &=
+\begin{cases}
+\min\left(5, \max\left(0.001, \dfrac{\floor{1000T}}{1000} \right) \right), & \text{when running a dedicated server or client of a remote server}\\
+\min\left(0.2, \max\left(0.001, \dfrac{\floor{1000T}}{1000} \right) \right), & \text{otherwise.}
+\end{cases}
 \end{align*}
 Also, frame rate impacts vertical ($z$-axis) velocity when in air, shown by
 \begin{align*}
@@ -215,12 +171,13 @@ r_z &= v_z - 6.4,\\
 \round{r_z} &= v_z - 6,
 \end{align*}
 and thus over one second $v_z$ is reduced by $\qty{750}{ups}$ instead of $\qty{800}{ups}$, allowing the player to jump higher and hence further.
-As a general rule, if effective-gravity $\frac{\round*{gT_p}}{T_p} < 800$ then frame rates given by $\frac{1}{T}$ allow the player to jump higher than intended.
-This is expanded upon in Section \ref{sec:x_z} (TODO).\\
+Although not entirely correct, as a general rule if effective-gravity $\frac{\round*{gT_p}}{T_p} < 800$ then frame rates given by $\frac{1}{T}$ allow the player to jump higher than intended.
+This is expanded upon in Section \ref{sec:x_z}.
 
-Another important point to note is that accelerations on one axis $a_n$ can be rounded to 0 if $a_n\le 0.5$.
+All times $T$ has been mentioned in this paper should thus be replaced with $T_p$.\\
+
+Another important point to note is that accelerations $a_n$ on an axis $n$ can be rounded to $0$ if $a_n\le 0.5$.
 This ironically places limits on the functionality of the movement physics at high frame rates, as accelerations will be more frequently nulled.
-
 % TODO: Also need to find out what happens in a situation where the flooring to T_p causes the game to try to render more frames per second than FPS(does it?)
 % Eg. 120 FPS. int minMsec = 1000 / 120 = 8.3333, floors to 8. However, T=8 implies 125 frames rendered per second, yet we only have 120 FPS.
 
@@ -230,89 +187,94 @@ Frame rate dependency with respect to overbounces is covered in Section \ref{sec
 \subsection{Approach to $z$-axis translations}
 \label{sec:x_z}
 The game engine applies vertical velocity in a slightly unintuitive way in order to make all $z$-axis position translations frame independent.
-In regards to the $z$-axis, new velocity is calculated using acceleration, velocity is to player position, and then velocity is snapped.
-However the key here is \emph{how} velocity is applied to the player position, demonstrated in \eqref{eq:x_zk+1}.
-
+On all three axes, new velocity is calculated using acceleration, velocity is to player position, and then velocity is snapped.
+However the key here is \emph{how} velocity is applied to the player position in regards to the $z$-axis, demonstrated in \eqref{eq:x_zk+1}.
+\codeFromFile{firstline=63,lastline=69,gobble=1}{code/game/bg_slidemove.c}
+On the $x$ and $y$ axes,
+\begin{align*}
+x_{x,k+1} = x_{x,k} + v_{x,k} T,\qquad x_{y,k+1} = x_{y,k} + v_{y,k} T.
+\end{align*}
+Translations on the $z$ axis are done as follows.
 \begin{align*}
 \text{Defining }&v_{z,k}\text{ as the sequence of $z$-axis velocities after snapping after $k$ frames}\\
 \text{and }&x_{z,k}\text{ as the sequence of the player's $z$-axis position after $k$ frames},
 \end{align*}
 \begin{align}
 \label{eq:v_zk+1}
-v_{z,k+1} &= v_{z,k} - \round*{gT_p}\\
+v_{z,k+1} &= v_{z,k} - \round*{gT}\\
 \label{eq:x_zk+1}
-x_{z,k+1} &= x_{z,k} + \left(v_{z,k} - \frac{gT_p}{2} \right) T_p
+x_{z,k+1} &= x_{z,k} + \left(v_{z,k} - \frac{gT}{2} \right) T
 \end{align}
 \begin{align}
 \nonumber
-v_{z,1} &= v_{z,0} - \round*{gT_p}\\\nonumber
-v_{z,2} &= v_{z,1} - \round*{gT_p}\\\nonumber
-&= v_{z,0} - 2\round*{gT_p}\\
+v_{z,1} &= v_{z,0} - \round*{gT}\\\nonumber
+v_{z,2} &= v_{z,1} - \round*{gT}\\\nonumber
+&= v_{z,0} - 2\round*{gT}\\
 \label{eq:v_zk}
-\therefore\ v_{z,k} &= v_{z,0} - k\round*{gT_p}.
+\therefore\ v_{z,k} &= v_{z,0} - k\round*{gT}.
 \end{align}
 Same approach is used to derive $x_{z,k}$, done in Appendix \ref{app:derive_x_zk}, yielding
 \begin{align}
 \label{eq:x_zk}
-x_{z,k} &= x_{z,0} + k\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - \frac{k^2}{2} \round*{gT_p} T_p\\\nonumber
-&= x_{z,0} + kT_p\left(v_{z,0} + \frac{(1 - k)\round*{gT_p} - gT_p}{2} \right).
+x_{z,k} &= x_{z,0} + k\left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) T - \frac{k^2}{2} \round*{gT} T\\\nonumber
+&= x_{z,0} + kT\left(v_{z,0} + \frac{(1 - k)\round*{gT} - gT}{2} \right).
 \end{align}
 
-To solve for the frame $n_{peak}$ that you reach the peak, differentiate $x_{z,k}$.
+To solve for the frame $k_{peak}$ that you reach the peak, differentiate $x_{z,k}$.
 \begin{align}
 \nonumber
-x_{z,k}' &= \left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - k\round*{gT_p} T_p\\\nonumber
-0 &= \left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - k\round*{gT_p} T_p\\\nonumber
-\implies k &= \frac{v_{z,0} - \frac{gT_p}{2} + \frac{\round*{gT_p}}{2}}{\round*{gT_p}}\\\nonumber
-&= \frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}} + \frac{1}{2}\\\nonumber
-\implies n_{peak} &= \round*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}} + \frac{1}{2}}\\
-\therefore\ n_{peak} &= \ceil*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}}}
+\frac{\diff x_{z,k}}{\diff k} &= \left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) T - k\round*{gT} T\\\nonumber
+0 &= \left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) T - k\round*{gT} T\\\nonumber
+\implies k &= \frac{v_{z,0} - \frac{gT}{2} + \frac{\round*{gT}}{2}}{\round*{gT}}\\\nonumber
+&= \frac{v_{z,0} - \frac{gT}{2}}{\round*{gT}} + \frac{1}{2}\\\nonumber
+\implies k_{peak} &= \round*{\frac{v_{z,0} - \frac{gT}{2}}{\round*{gT}} + \frac{1}{2}}\\
+\therefore\ k_{peak} &= \ceil*{\frac{v_{z,0} - \frac{gT}{2}}{\round*{gT}}}
 \end{align}
-With $\qty{125}{fps}$ and jump velocity $v_{z,0} = \qty{270}{ups}$, the peak is reached after $n_{peak} = \qty{45}{frames}$.\\
+With $\qty{125}{fps}$ and jump velocity $v_{z,0} = \qty{270}{ups}$, the peak is reached after $k_{peak} = \qty{45}{frames}$.\\
 
-The maximum height the player reaches in a jump is given by substituting $n_{peak}$ into $x_{z,k}$, with $x_{z,0} = 0$.
+The maximum height the player reaches in a jump is given by substituting $k_{peak}$ into $x_{z,k}$, with $x_{z,0} = 0$.
 When step-up is introduced in Section \ref{sec:stepup} this formula changes.
 \begin{align}
 \label{eq:max_jump_height}
-\ceil*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}}}\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - \frac{1}{2}\ceil*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}}}^2 \round*{gT_p} T_p
+\ceil*{\frac{v_{z,0} - \frac{gT}{2}}{\round*{gT}}}\left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) T - \frac{1}{2}\ceil*{\frac{v_{z,0} - \frac{gT}{2}}{\round*{gT}}}^2 \round*{gT} T
 \end{align}
 \\
 This implementation of $z$-axis translations is frame independent, as shown below.
 \begin{align*}
-v_{z,k} = v_{z,0} - k\round*{gT_p}\ \ldots\ \eqref{eq:v_zk}
+v_{z,k} = v_{z,0} - k\round*{gT}\ \ldots\ \eqref{eq:v_zk}
 \end{align*}
 Using trapezoidal rule,
 \begin{align*}
-&\sum_{i=0}^{k-1} \left(\left(v_{z,0} - i\round*{gT_p} \right) + \left(v_{z,0} - (i + 1) \round*{gT_p} \right)\right) \frac{T_p}{2}\\
-&\sum_{i=0}^{k-1} \left(v_{z,0} - \left(i + \frac{1}{2} \right) \round*{gT_p} \right) T_p\\
-&\implies x_{z,k} = x_{z,0} + k v_{z,0} T_p - \frac{k^2}{2}\round*{gT_p} T_p,
+&\sum_{i=0}^{k-1} \left(\left(v_{z,0} - i\round*{gT} \right) + \left(v_{z,0} - (i + 1) \round*{gT} \right)\right) \frac{T}{2}\\
+&\sum_{i=0}^{k-1} \left(v_{z,0} - \left(i + \frac{1}{2} \right) \round*{gT} \right) T\\
+&\implies x_{z,k} = x_{z,0} + k v_{z,0} T - \frac{k^2}{2}\round*{gT} T,
 \end{align*}
 but $x_{z,k}$ is
 \begin{align*}
-x_{z,0} + k\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - \frac{k^2}{2}\round*{gT_p} T_p\ \ldots\ \eqref{eq:x_zk}.
+x_{z,0} + k\left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) T - \frac{k^2}{2}\round*{gT} T\ \ldots\ \eqref{eq:x_zk}.
 \end{align*}
 Using inverse trapezoidal rule,
 \begin{align}
 \nonumber
-&\sum_{i=0}^{k-1} \left(\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) - \left(i + \frac{1}{2} \right) \round*{gT_p} \right) T_p\\\nonumber
-&\sum_{i=0}^{k-1} \left(\left(\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) - i\round*{gT_p} \right) + \left(\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) - (i + 1)\round*{gT_p} \right) \right) \frac{T_p}{2}\\
+&\sum_{i=0}^{k-1} \left(\left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) - \left(i + \frac{1}{2} \right) \round*{gT} \right) T\\\nonumber
+&\sum_{i=0}^{k-1} \left(\left(\left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) - i\round*{gT} \right) + \left(\left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) - (i + 1)\round*{gT} \right) \right) \frac{T}{2}\\
 \label{eq:corrected_v_zk}
-&\implies v_{z,k} = \left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) - k\round*{gT_p}
+&\implies v_{z,k} = \left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) - k\round*{gT}
 \end{align}
 Thus, $z$-axis position is updated using this ``corrected'' velocity, meaning $z$-axis translations are frame independent, since a fractional $k$ would still result in the correct change in position. Hence $k \in \symbb{R}^+$.\\
 
 As $x_z$ is updated using ``corrected'' velocity \eqref{eq:corrected_v_zk} rather than \eqref{eq:v_zk}, the difference in applied velocity is
 \begin{align*}
-\eqref{eq:corrected_v_zk} - \eqref{eq:v_zk} &= v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} - k\round*{gT_p} - v_{z,0} + k\round*{gT_p}\\
-&= \frac{\round*{gT_p} - gT_p}{2}.
+\eqref{eq:corrected_v_zk} - \eqref{eq:v_zk} &= v_{z,0} + \frac{\round*{gT} - gT}{2} - k\round*{gT} - v_{z,0} + k\round*{gT}\\
+&= \frac{\round*{gT} - gT}{2}.
 \end{align*}
-%Hence, in terms of $x_z$ translations, there is an initial velocity of $v_{z,0} + \frac{\round*{gT_p} - gT_p}{2}$ rather than $v_{z,0}$.
-This implementation results in a height ``error'' $h$, given by
+%Hence, in terms of $x_z$ translations, there is an initial velocity of $v_{z,0} + \frac{\round*{gT} - gT}{2}$ rather than $v_{z,0}$.
+This implementation results in a height ``error'' $h$. With $k_{gravity} \in \symbb{R}^+$ as the number of frames that gravity was applied, $h$ is given by
 \begin{align}
 \label{eq:height_error}
-h = n_{gravity}T_p\frac{\round*{gT_p} - gT_p}{2}\ \ldots\ \text{where $n_{gravity} \in \symbb{R}^+$ is the number of frames that gravity was applied}.
+h = k_{gravity}T\frac{\round*{gT} - gT}{2}.
 \end{align}
-For example, a jump at $\qty{125}{fps}$ lasts $n_{gravity} = \qty{90}{frames}$, so the final $x_z$ of the player is $h = \qty{-0.144}{units}$ relative to the starting $x_z$\footnote{Since $h < 0$ the final position is below the starting position, assuming the player didn't clip into the ground plane.}.\\
+For example, a jump at $\qty{125}{fps}$ lasts $k_{gravity} = \qty{90}{frames}$, so the final $x_z$ of the player is $h = \qty{-0.144}{units}$ relative to the starting $x_z$\footnote{Since $h < 0$ the final position is below the starting position, assuming the player didn't clip into the ground plane.}.\\
 
 As a side note, this implementation of $z$-axis translations is also frame rate independent $\Longleftrightarrow$ rounding is ignored, since
 \begin{itemize}
@@ -321,35 +283,72 @@ Vertical acceleration is linear (constant) and thus
 \item
 Ignoring rounding,
 \begin{align*}
-x_{z,k} &= x_{z,0} + k\left(v_{z,0} + \frac{gT_p - gT_p}{2} \right) T_p - \frac{k^2}{2} gT_p T_p\\
-&= x_{z,0} + kv_{z,0} T_p - \frac{k^2 g{T_p}^2}{2}\\
-&= x_{z,0} + \left(kT_p \right) v_{z,0} - \frac{\left(kT_p \right)^2 g}{2},
+x_{z,k} &= x_{z,0} + k\left(v_{z,0} + \frac{gT - gT}{2} \right) T - \frac{k^2}{2} gT T\\
+&= x_{z,0} + kv_{z,0} T - \frac{k^2 T^2 g}{2}\\
+&= x_{z,0} + (kT) v_{z,0} - (kT)^2 \frac{g}{2},
 \end{align*}
 which is the same as the physical model equation.
 Without ignoring rounding, the implementation is frame rate dependent, hence the differing jump heights by changing frame rate.
 \end{itemize}
 
-It can be shown that $T_p = 0.003$ results in the largest jump height, with effective-gravity of $666.\overline{6}$.\\
-TODO
+It can be shown that $T_p = 0.003$ results in the largest jump height, with effective-gravity of $666.\overline{6}$.
+This is demonstrated in the graph below.
+\begin{figure}[H]
+	\centering
+	\setlength\figureheight{4.8cm}
+	\setlength\figurewidth{13cm}
+	\includetikz{tikz/jump_height}
+	\caption{Graph of jump height over $T$. This graph is only valid when $T$ is a multiple of $0.001$, as proper-T $T_p$ should be used on the axis. The range of possible jump heights is shown (\greenarea).}
+	\label{fig:jump_height}
+\end{figure}
+A frame-time of $T_p = 0.003$ results in the largest possible jump height of $\qty{54.594}{units}$, while a frame-time of $T_p = 0.001$ results in the lowest jump height of $\qty{36.477}{units}$.
+The normal condition of $T_p = 0.008$ is also displayed in the graph.\\
+TODO: finish describing
 
 
 \subsection{Step-up}
 \label{sec:stepup}
-TODO: explanation of step-up, conditions, special cases (if any)\\
-
-The maximum height the player can step-up is $\qty{18}{units}$.
-Hence, to calculate the maximum height the player can jump including step-up, add $\qty{18}{units}$ to \eqref{eq:max_jump_height} giving
-\begin{align}
-\label{eq:max_jump_height_stepup}
-\ceil*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}}}\left(v_{z,0} + \frac{\round*{gT_p} - gT_p}{2} \right) T_p - \frac{1}{2}\ceil*{\frac{v_{z,0} - \frac{gT_p}{2}}{\round*{gT_p}}}^2 \round*{gT_p} T_p + 18,
-\end{align}
+TODO: explanation of step-up, special cases (if any)\\
+The maximum height the player can step-up is $\qty{18}{units}$ (\texttt{STEPSIZE}).
+Hence, to calculate the maximum height the player can jump including step-up, add $\qty{18}{units}$ to \eqref{eq:max_jump_height} %giving
+%\begin{align}
+%\label{eq:max_jump_height_stepup}
+%\ceil*{\frac{v_{z,0} - \frac{gT}{2}}{\round*{gT}}}\left(v_{z,0} + \frac{\round*{gT} - gT}{2} \right) T - \frac{1}{2}\ceil*{\frac{v_{z,0} - \frac{gT}{2}}{\round*{gT}}}^2 \round*{gT} T + 18,
+%\end{align}
 which is $\qty{66.528}{units}$ at $\qty{125}{fps}$.
-%STEPSIZE defined in bg_local.h
+
+Provided that the player is at an appropriate height for a step-up to occur, in CPM the player will step-up if $v_z \le 370$.
+However in VQ3, there are additional required conditions:
+\begin{itemize}
+\item
+Either $v_z \le 0$ or
+\item
+$v_z > 0$ as long as the player is close enough to the plane below them (less than \texttt{STEPSIZE} units above), and the plane is sufficiently flat ($\rho \ge \ang{45.572996}$),
+\end{itemize}
+contrary to what the comments state in the code.
+\codeFromFile{firstline=253,lastline=257,gobble=1}{code/game/bg_slidemove.c}
 
 
 \subsection{Skimming}
 \label{sec:skimming}
-TODO
+Skimming is a phenomenon in which the player is allowed a short window of time after jumping to continue travelling in a direction without losing speed upon colliding with a wall, instead just gliding or ``skimming'' past it.
+This is a result of the game engine only applying gravity, allowing acceleration, but not clipping velocity whenever the ``skim timer'' (\texttt{pm->ps->pm\_time}) is active.
+TODO: what the skimming code intended to achieve\\
+Note: \texttt{primal\_velocity} here would be a copy of \texttt{pm->ps->velocity} but with gravity applied.
+\codeFromFile{firstline=219,lastline=222,gobble=1}{code/game/bg_slidemove.c}
+The main method in order to start the skim timer is landing on a ground plane after jumpnig with previous $z$ velocity $< -200$.
+This sets the skim timer to $\qty{250}{ms}$.\\
+Note that skimming can still occur after a step-up rather than a normal landing, due to the code making use of the previous velocity before it is clipped to $0$.
+\codeFromFile{firstline=1184,lastline=1188,gobble=2}{code/game/bg_pmove.c}
+Another method to start the skim timer is by performing a water jump. TODO: how.
+This sets the skim timer to $\qty{2000}{ms}$.
+\codeFromFile{firstline=432,lastline=437,gobble=1}{code/game/bg_pmove.c}
+The skim timer can also be started by taking damage from something that induces knockback, for example weapons.
+This sets the skim timer to $\min(200, \max(50, \texttt{damage}\times2))$ ms. Here \texttt{knockback} is set to $\texttt{damage}\times2$.
+\codeFromFile{firstline=920,lastline=930,gobble=2}{code/game/g_combat.c}
+Finally, the skim timer can be started by going through a teleporter.
+This sets the skim timer to $\qty{160}{ms}$.
+\codeFromFile{firstline=101,lastline=101,gobble=1}{code/game/g_misc.c}
 
 
 \subsection{Overbounces}
