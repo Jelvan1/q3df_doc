@@ -3,12 +3,103 @@
 \cite{hl_physics}
 
 \subsection{Input}
-% Appendix \ref{app:angle_vectors}
+\label{sec:input}
+To help explain the game's physics, it would first be useful to define some variables and outline some notations.
+\begin{itemize}
+\item $\vec{\flat{l}}$ denotes the projection of vector $\vec{l}$ onto the $xy$-plane, such that $l_z = 0$,
+\item $\vec{v}$ is the current velocity vector,
+\item $\vec{\flat{a}}$ is the acceleration vector, not taking into account any effects of gravity,
+\item $\vec{n}$ is some normal vector,
+\item $\delta$ is the angle between $\vec{\flat{a}}$ and $\vec{\flat{v}}$,
+\item $s$ is the intended speed limit while walking. As mentioned in \ref{sec:normal_strafe}, the player is able to accelerate if the component of our current velocity in the intended movement direction is smaller than $s$,
+\item $\gamma$ is the yaw angle,
+\item $\rho$ is the pitch angle where downwards is positive,
+\item $\sigma$ is the roll angle which is fixed,
+\item $\tvec{\fmove}$ is the unclipped component of the player's intended movement direction which $\sigma$ rotates around, provided by the \texttt{+forward} and \texttt{+back} binds, by default the W and S keys,
+\item $\tvec{\rmove}$ is the unclipped component of the player's intended movement direction which $\rho$ rotates around, provided by the \texttt{+moveright} and \texttt{+moveleft} binds, by default the D and A keys,
+\item $\tvec{\umove}$ is the unclipped component of the player's intended movement direction which $\gamma$ rotates around, provided by the \texttt{+moveup} and \texttt{+movedown} binds, by default the spacebar and C keys,
+\end{itemize}
+
+$\tvec{\fmove}$, $\tvec{\rmove}$ and $\tvec{\umove}$ are all perpendicular to each other before any clipping occurs, and have magnitude $127$ (\texttt{movespeed}) or $64$ when walking which is triggered by \texttt{+speed}.\\
+When \texttt{+movedown} is pressed, $s$ is scaled by a factor of $0.25$.
+
+For some later sections, it would also be useful to define $\tvec{\cmd}$.
+\begin{align}
+\label{eq:cmd}
+\tvec{\cmd} =
+\begin{pmatrix}
+\fmove \\ \rmove \\ \umove
+\end{pmatrix}, \qquad \tvec{\flat{\cmd}} =
+\begin{pmatrix}
+\fmove \\ \rmove \\ 0
+\end{pmatrix}.
+\end{align}
+
+The direction of acceleration $\uvec{\flat{a}}$ \eqref{eq:accel_direction} can be chosen by using your mouse and the movement keys. Relative to $\nu = \atan\left(\dfrac{v_y}{v_x}\right)$, current velocity is
+\begin{align*}
+\uvec{\flat{v}} = \frac{1}{\flat{v}}
+\begin{pmatrix}
+v_x \\ v_y \\ 0
+\end{pmatrix}
+\end{align*}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm}
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/cmd}
+		\caption{}
+		\label{fig:fm_rm_um_flat_view}
+	\end{subfigure}%
+	\begin{subfigure}[t]{.5\textwidth}
+		\centering
+		\setlength\figureheight{5.5cm}
+		\setlength\figurewidth{5.5cm}
+		\includetikz{tikz/cmd3d} % TODO: merge cmd3d_2
+		\caption{}
+		\label{fig:fm_rm_um_angled_view}
+	\end{subfigure}%
+	\caption{The current velocity $\vec{\flat{v}}_f$ (\yellowarrow), the acceleration $\vec{a}$ (\orangearrow) and the resulting new velocity $\vec{\flat{r}}$ (\bluearrow). \ref{fig:fm_rm_um_flat_view} is the top view of \ref{fig:fm_rm_um_angled_view}. key plane (\lightorangearea). Here $\theta = \atan\left(\frac{\sqrt{2}}{\sqrt{3}} \right)$}
+	\label{fig:cmd}
+\end{figure}
+
+% TODO: make projections of 2 vs 1 key combinations
+
+where $\gamma = \delta + \nu$ represents the yaw angle.
+
+Using Appendix \ref{app:angle_vectors}, player's intended movement direction vector is defined in components as
+\begin{gather}
+\begin{aligned}
+\label{eq:fm_rm_um}
+\tuvec*{\fmove} &=
+\begin{pmatrix}
+	\cos\rho\cos\gamma\\
+	\cos\rho\sin\gamma\\
+	-\sin\rho
+\end{pmatrix},\\
+\tuvec*{\rmove} &=
+\begin{pmatrix}
+	-\sin\sigma\sin\rho\cos\gamma + \cos\sigma\sin\gamma\\
+	-\sin\sigma\sin\rho\sin\gamma - \cos\sigma\cos\gamma\\
+	-\sin\sigma\cos\rho
+\end{pmatrix},\\
+\tuvec*{\umove} &=
+\begin{pmatrix}
+	\cos\sigma\sin\rho\cos\gamma + \sin\sigma\sin\gamma\\
+	\cos\sigma\sin\rho\sin\gamma - \sin\sigma\cos\gamma\\
+	\cos\sigma\cos\rho
+\end{pmatrix}.
+\end{aligned}
+\end{gather}
+
 
 \subsection{Friction}
-Before any acceleration comes into play, friction is applied first. The amount of friction depends on the player's speed $v$, the friction factor $c$%
+\label{sec:friction}
+Before any acceleration comes into play, friction is applied first. The amount of friction depends on the player's speed $v$, the friction factor $f$%
 % TODO: don't use footnotes for c, T and d)
-\footnote{On the ground the friction factor $c=6$ (\texttt{pm\_friction}), but in the air $c=0$.} and the frame-time $T$\footnote{The frame-time $T = 1 / \qty{125}{fps} = \qty{0.008}{s}$.}. At lower speeds, the stopspeed limit $d$\footnote{The stopspeed limit $d = \qty{100}{ups}$ (\texttt{pm\_stopspeed}).} kicks in and brings the player to a complete stop faster. The current velocity vector before and after friction is applied can then be defined as respectively
+\footnote{On the ground the friction factor $f=6$ (\texttt{pm\_friction}), but in the air $f=0$.} and the frame-time $T$\footnote{The frame-time $T = 1 / \qty{125}{fps} = \qty{0.008}{s}$. When introduced in Section \ref{sec:framerate}, this should be replaced with $T_p$.}. At lower speeds, the stopspeed limit $S$\footnote{The stopspeed limit $S = \qty{100}{ups}$ (\texttt{pm\_stopspeed}).} kicks in and brings the player to a complete stop faster. The current velocity vector before and after friction is applied can then be defined as respectively
 \begin{align*}
 \vec{v} =
 \begin{pmatrix}
@@ -23,19 +114,20 @@ v_{fx} \\ v_{fy} \\ v_{fz}
 with the same direction $\uvec{v}$ and the magnitude relation
 \begin{align}
 \label{eq:vf}
-v_f = (1 - \iota cT) v,
+v_f = (1 - \tilde{f}T) v,
 \end{align}
-assuming $cT \le 1$ and where
-\begin{align*}
-\iota = \max\left(1, \min\left(\frac{d}{\flat{v}}, \frac{1}{cT}\right)\right)\protect\footnotemark{},
+assuming $fT \le 1$ and where
+\begin{align}
+\label{eq:f_tilde}
+\tilde{f} = f\cdot\max\left(1, \min\left(\frac{S}{v}, \frac{1}{fT}\right)\right)\protect\footnotemark{},
 \footnotetext{This is a simple clamping operation.}%
-\end{align*}
+\end{align}
 or otherwise
 \begin{align*}
 v_f = \begin{cases}
-(1 - cT)v, &\flat{v} \ge d\\
-\left(1 - \frac{d}{\flat{v}}cT \right)v, &dcT < \flat{v} < d\\
-0, &\flat{v} \le dcT,\\
+(1 - cT)v, &v \ge d\\
+\left(1 - \frac{S}{v}fT \right)v, &S fT < v < S\\
+0, &v \le S fT,\\
 \end{cases}
 \end{align*}
 which is derived from Appendix \ref{app:friction}.\\
@@ -44,6 +136,7 @@ This means that, without acceleration, the current velocity either remains uncha
 % Appendix \ref{app:friction}
 
 \subsection{Acceleration}
+\label{sec:acceleration}
 This would not be an interesting game without the ability to increase speed and change direction. So let's define the acceleration vector as
 \begin{align*}
 \vec{a} &=
@@ -85,6 +178,12 @@ The relation between all defined vectors is summarized in Figure \ref{fig:delta_
 	\label{fig:delta_phi}
 \end{figure}
 
+Assuming w.l.o.g. $\vec{\flat{v}_f}$ is entirely on the $x$-axis,
+\begin{align}
+\label{eq:varphi}
+\varphi = \atan\left(\frac{\flat{a}\sin\delta}{\flat{v}_f + \flat{a}\cos\delta} \right).
+\end{align}
+
 The matrix that projects all vectors orthogonally onto the $xy$-plane (\greenarea) is then
 \begin{align*}
 \resprojmat{\flat{n}} = \mat{I} - \vec{\flat{n}} \vec{\flat{n}}^T &=
@@ -108,7 +207,7 @@ v_{fx} \\ v_{fy} \\0
 and the projected equivalent of equation \eqref{eq:vf} is
 \begin{align}
 \label{eq:flat_vf}
-\flat{v}_f = (1 - \iota cT) \flat{v}.
+\flat{v}_f = (1 - \tilde{f}T) \flat{v}.
 \end{align}
 Likewise, the projected acceleration vector is
 \begin{align}
@@ -123,7 +222,7 @@ with a magnitude
 \label{eq:sAT}
 \flat{a} = sAT,
 \end{align}
-where $A$ is some dimensionless constant depending on the player state\footnote{In the air, $A = 1$ (\texttt{pm\_airaccelerate}), while on the ground $A = 10$ and $A = 15$ (\texttt{pm\_accelerate}) for VQ3 and CPM, respectively.} and $s$ is the wishspeed limit (e.g. $\texttt{g\_speed} = \qty{320}{ups}$ on a flat surface under normal conditions, see more details in Section \ref{sec:movementkeys}).\\
+where $A$ is some dimensionless constant depending on the player state\footnote{In the air, $A = 1$ (\texttt{pm\_airaccelerate}), while on the ground $A = 10$ and $A = 15$ (\texttt{pm\_accelerate}) for VQ3 and CPM, respectively.} and $s$ is the wishspeed limit (e.g. $\texttt{g\_speed} = \qty{320}{ups}$ on a flat surface under normal conditions\footnote{With the haste effect, $\texttt{g\_speed} = 320\cdot 1.3 = \qty{416}{ups}$.}, see more details in Section \ref{sec:movementkeys}).\\
 Acceleration magnitude is provided by below code
 \codeFromFile{firstline=251,lastline=251,gobble=1}{code/game/bg_pmove.c}
 In the same way, the projection of the resulting new velocity becomes
